@@ -95,6 +95,7 @@ For integrted with your application, you could crate route path with name ```coi
             $request->receivedf;
             $request->recv_confirms;
             $request->payment_address;
+            $request->time_completed;
 
         */
     })->name('coinpayment.webhook');
