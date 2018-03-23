@@ -44,7 +44,8 @@ class chekcingTransactionCommand extends Command
     public function handle() {
 
         // Parameter hook
-        logs::where('status', 0)->where('expired', '>', Carbon::now())
+        $this->info('======================= CHECKING STARTING ==========================');
+        logs::whereIn('status', [0, 1])->where('expired', '>', Carbon::now())
           ->chunk(100, function($transactions){
             foreach($transactions as $trx){
               $check = CoinPayment::api_call('get_tx_info', [
@@ -61,23 +62,7 @@ class chekcingTransactionCommand extends Command
                   // Send hook
                   $query = http_build_query($data);
                   $client = new \GuzzleHttp\Client();
-                  $client->request('GET', route('coinpayment.web.hook') . '?' . $query);
-                  /* Response Hook
-                    {
-                      "time_created": "1521771495",
-                      "time_expires": "1521868695",
-                      "status": "0",
-                      "status_text": "Waiting for buyer funds...",
-                      "type": "coins",
-                      "coin": "BTC",
-                      "amount": "581190",
-                      "amountf": "0.00581190",
-                      "received": "0",
-                      "receivedf": "0.00000000",
-                      "recv_confirms": "0",
-                      "payment_address": "3HAkz2LBdN6W3GzuoY22PuTMtcp6Z5QKCg"
-                    }
-                  */
+                  $client->request('GET', route('coinpayment.webhook') . '?' . $query);
                 }
               }
             }

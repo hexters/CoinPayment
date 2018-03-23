@@ -16,7 +16,7 @@ First you should add trait class on your module ```User``` and use this trait ``
 ```
     <?php
         namespace App;
-        
+
         use Illuminate\Notifications\Notifiable;
         use Illuminate\Foundation\Auth\User as Authenticatable;
         use Hexters\CoinPayment\Entities\CoinPaymentuserRelation;
@@ -56,7 +56,7 @@ use CoinPayment; // outside the class
         'qtyItem' => 2,
         'subtotalItem' => 20 // USD
     ];
-    
+
     // # Secound item
     $trx['items'][1] = [
         'descriptionItem' => 'Product two',
@@ -64,10 +64,10 @@ use CoinPayment; // outside the class
         'qtyItem' => 3,
         'subtotalItem' => 30 // USD
     ];
-    
+
     $link_transaction = CoinPayment::url_payload($trx);
     ...
-    /* On your view 
+    /* On your view
         <a href="{{ $link_transaction }}" target="_blank">Pay Now</a>
     */
 ...
@@ -77,10 +77,10 @@ For integrted with your application, you could crate route path with name ```coi
     Route::get('/your/route/name', function(Request $request){
         // Do someting...
         /* === Output data from $request ===
-        
+
             $request->time_created;
             $request->time_expires;
-            $request->status; 
+            $request->status;
             /*  -- Status transaction --
                 0   : Waiting for buyer funds
                 1   : Funds received and confirmed, sending to you shortly
@@ -95,8 +95,7 @@ For integrted with your application, you could crate route path with name ```coi
             $request->receivedf;
             $request->recv_confirms;
             $request->payment_address;
-            
+
         */
     })->name('coinpayment.webhook');
 ```
-

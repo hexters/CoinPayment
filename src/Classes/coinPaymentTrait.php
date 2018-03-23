@@ -5,8 +5,8 @@
 
     public function api_call($cmd, $req = array()) {
     // Fill these in from your API Keys page
-    $public_key = env('COIN_PAYMENT_PUBLIC_KEY');
-    $private_key = env('COIN_PAYMENT_PRIVATE_KEY');;
+    $public_key   = config('coinpayment.public_key');
+    $private_key  = config('coinpayment.private_key');
 
     // Set the API command and required fields
     $req['version'] = 1;

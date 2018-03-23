@@ -5,6 +5,7 @@ namespace Hexters\CoinPayment\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Hexters\CoinPayment\Classes\CoinPaymentClass;
+use Hexters\CoinPayment\Console\chekcingTransactionCommand;
 
 class CoinPaymentServiceProvider extends ServiceProvider
 {
@@ -22,13 +23,26 @@ class CoinPaymentServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-      
-        $this->loadRoutesFrom(__DIR__.'/../Http/routes.php');
+
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
         $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+        $this->loadRoutesFrom(__DIR__.'/../Http/routes.php');
+
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                chekcingTransactionCommand::class,
+            ]);
+        }
+
+        $this->publishes([
+            __DIR__ . '/../config/coinpayment.php' => config_path('coinpayment.php'),
+            __DIR__ . '/../Assets/images/coinpayment.logo.png' => public_path('/coinpayment.logo.png'),
+        ], 'coinpayment-publish');
+
     }
 
     /**

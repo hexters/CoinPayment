@@ -22,7 +22,7 @@ class CoinPaymentController extends Controller {
       $aliases = [];
       $rates = CoinPayment::api_call('rates', [
         'accepted' => 1
-      ])['result'] ;
+      ])['result'];
 
       $rateBtc = $rates['BTC']['rate_btc'];
       $rateUsd = $rates['USD']['rate_btc'];
