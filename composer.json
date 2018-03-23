@@ -12,6 +12,9 @@
       "guzzlehttp/psr7": "~1.1"
     },
     "extra": {
+        "branch-alias": {
+          "dev-master": "1.0-dev"
+        },
         "laravel": {
             "providers": [
                 "Hexters\\CoinPayment\\Providers\\CoinPaymentServiceProvider"
