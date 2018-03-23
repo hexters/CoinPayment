@@ -3,6 +3,7 @@
 CoinPayment is a laravel module for handle transaction on [CoinPayment](https://www.coinpayments.net/) like a create transaction, history transaction, etc.
 
 ## Requirement
+- Laravel ^5.5
 - PHP >= ^7.1
 - GuzzleHttp
 - Nesbot/Carbon
@@ -10,6 +11,10 @@ CoinPayment is a laravel module for handle transaction on [CoinPayment](https://
 You can install the package via composer:
 ```
 $ composer require hexters/coinpayment
+```
+Publishing vendor
+```
+$ php artisan vendor:publish --tag=coinpayment-publish
 ```
 First you should add trait class on your module ```User``` and use this trait ```Hexters\CoinPayment\Entities\CoinPaymentuserRelation``` check the example below:
 
