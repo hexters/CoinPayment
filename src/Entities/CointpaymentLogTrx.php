@@ -3,6 +3,7 @@
 namespace Hexters\CoinPayment\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class cointpayment_log_trx extends Model
 {
@@ -15,4 +16,9 @@ class cointpayment_log_trx extends Model
     protected $hidden = [
       'created_at', 'updated_at'
     ];
+
+    public function user(){
+      return $this->belongsTo(User::class, 'user_id');
+    }
+
 }

@@ -7,9 +7,12 @@
     */
     'public_key' => env('COIN_PAYMENT_PUBLIC_KEY', ''),
     'private_key' => env('COIN_PAYMENT_PRIVATE_KEY', ''),
+
     /*
-    * Image Logo
+    * Header config
     */
-    'logo' => '/coinpayment.logo.png' // you can use url
+    'header_type' => 'logo', // @option-value: logo|text
+      'header_logo' => '/coinpayment.logo.png', // this is a Path Assets file
+      'header_text' => 'Your Payment Summary',
 
   ];

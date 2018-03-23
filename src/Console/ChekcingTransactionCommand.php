@@ -48,6 +48,7 @@ class chekcingTransactionCommand extends Command
         logs::whereIn('status', [0, 1])->where('expired', '>', Carbon::now())
           ->chunk(100, function($transactions){
             foreach($transactions as $trx){
+              $this->info('Payment ID: ' . $trx->payment_id);
               $check = CoinPayment::api_call('get_tx_info', [
                 'txid' => $trx->payment_id
               ]);
@@ -56,7 +57,8 @@ class chekcingTransactionCommand extends Command
                 if($data['status'] > 0){
                   $trx->update([
                     'status_text' => $data['status_text'],
-                    'status' => $data['status']
+                    'status' => $data['status'],
+                    'confirmation_at' => ((INT)$data['status'] === 100) ? date('Y-m-d H:i:s', $data['time_completed']) : null
                   ]);
 
                   $this->info('Status : ' . $data['status_text']);

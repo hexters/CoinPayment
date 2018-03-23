@@ -8,6 +8,8 @@ use Illuminate\Routing\Controller;
 
 use Hexters\CoinPayment\Entities\cointpayment_log_trx;
 
+use Hexters\CoinPayment\Http\Resources\TransactionResourceCollection;
+
 use CoinPayment;
 
 class CoinPaymentController extends Controller {
@@ -68,7 +70,7 @@ class CoinPaymentController extends Controller {
       return CoinPayment::api_call('create_transaction', $params);
     }
 
-    public function trx_info($txid){
+    public function trx_info(Request $req, $txid){
       $payment = CoinPayment::api_call('get_tx_info', [
         'txid' => $txid
       ]);
@@ -84,7 +86,10 @@ class CoinPaymentController extends Controller {
           'status' => $data['status'],
           'payment_created_at' => date('Y-m-d H:i:s', $data['time_created']),
           'expired' => date('Y-m-d H:i:s', $data['time_expires']),
-          'amount' => $data['amountf']
+          'amount' => $data['amountf'],
+          'confirms_needed' => empty($req->confirms_needed) ? 0 : $req->confirms_needed,
+          'qrcode_url' => empty($req->qrcode_url) ? '' : $req->qrcode_url,
+          'status_url' => empty($req->status_url) ? '' : $req->status_url
         ];
 
         $user->coinpayment_transactions()->create($saved);
@@ -95,5 +100,10 @@ class CoinPaymentController extends Controller {
 
     public function transactions_list(){
       return view('coinpayment::list');
+    }
+
+    public function transactions_list_any(Request $req){
+      $transaction = auth()->user()->coinpayment_transactions()->orderby('updated_at', 'desc')->paginate(5);
+      return new TransactionResourceCollection($transaction);
     }
 }

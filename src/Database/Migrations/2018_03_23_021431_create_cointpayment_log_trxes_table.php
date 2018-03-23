@@ -25,6 +25,10 @@ class CreateCointpaymentLogTrxesTable extends Migration
             $table->datetime('expired');
             $table->datetime('confirmation_at')->nullable();
             $table->double('amount', 20, 8);
+            
+            $table->integer('confirms_needed');
+            $table->string('qrcode_url');
+            $table->string('status_url');
             $table->timestamps();
         });
     }

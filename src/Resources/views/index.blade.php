@@ -12,7 +12,7 @@
     }
     .coin-items{
       overflow: auto;
-      height: 500px;
+      min-height: 500px;
       border-top: solid 1px rgba(0,0,0,.2);
     }
     .show-coin .card:hover{
@@ -51,14 +51,18 @@
 
 @section('content')
   <div id="coinpayment-vue">
-    <div class="row justify-content-md-center">
+    <div class="row justify-content-md-center mb-5">
       <div class="col-sm-12">
         <div class="row mt-5">
           <div class="col-sm-4">
             <div class="card">
               <div class="card-body">
                 <div class="text-center">
-                  <h5 class="card-title">Your Payment Summary</h5>
+                  @if(config('coinpayment.header_type') == 'logo')
+                    <img src="{{ asset(config('coinpayment.header_logo')) }}" width="170">
+                  @elseif(config('coinpayment.header_type') == 'text')
+                    <h5 class="card-title">{{ config('coinpayment.header_text') }}</h5>
+                  @endif
                 </div>
               </div>
               <div class="alert alert-danger" style="border-radius:0;" v-if="isError">
@@ -259,6 +263,10 @@
             self.total_amount_coin = json.data.coins[0].rate;
             self.coins = json.data.coins;
             self.coinAliases = json.data.aliases;
+
+            $('.coin-items').slimScroll({
+                height: '500px'
+            });
           });
       },
       selectMethod(item){
@@ -307,7 +315,9 @@
           .then(function(json){
             self.payment.first = json.data.result;
             var _self = self;
-            axios.get(`/coinpayment/ajax/trxinfo/${json.data.result.txn_id}`)
+            axios.get(`/coinpayment/ajax/trxinfo/${json.data.result.txn_id}`,{
+              params: json.data.result
+            })
               .then(function(json){
                 _self.payment.last = json.data.result;
                  var date = new Date(json.data.result.time_expires * 1000);
