@@ -1,0 +1,29 @@
+{
+    "name": "hexters/coinpayment",
+    "description": "",
+    "authors": [
+        {
+            "name": "Saifullah Syahidin",
+            "email": "hexters@gmail.com"
+        }
+    ],
+    "require":{
+      "php": "^7.1.3",
+      "guzzlehttp/psr7": "~1.1"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hexters\\CoinPayment\\Providers\\CoinPaymentServiceProvider"
+            ],
+            "aliases": {
+              "CoinPayment": "Hexters\\CoinPayment\\Providers\\CoinPaymentFacade"
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Hexters\\CoinPayment\\": "src/"
+        }
+    }
+}
