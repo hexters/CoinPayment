@@ -10,6 +10,6 @@
     /*
     * Image Logo
     */
-    'logo' => asset('/coinpayment.logo.png')
+    'logo' => '/coinpayment.logo.png' // you can use url
 
   ];
