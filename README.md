@@ -3,7 +3,7 @@
 CoinPayment is a laravel module for handle transaction on [CoinPayment](https://www.coinpayments.net/) like a create transaction, history transaction, etc.
 
 ## Requirement
-- PHP >= 7.1
+- PHP >= ^7.1
 - GuzzleHttp
 - Nesbot/Carbon
 ## Installation
