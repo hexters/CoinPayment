@@ -44,7 +44,7 @@ class chekcingTransactionCommand extends Command
     public function handle() {
 
         // Parameter hook
-        $this->info('======================= CHECKING STARTING ==========================');
+        $this->info('======================= CHECKING STARTING =======================');
         logs::whereIn('status', [0, 1])->where('expired', '>', Carbon::now())
           ->chunk(100, function($transactions){
             foreach($transactions as $trx){
@@ -59,7 +59,10 @@ class chekcingTransactionCommand extends Command
                     'status' => $data['status']
                   ]);
 
+                  $this->info('Status : ' . $data['status_text']);
+
                   // Send hook
+                  $this->info('======================= SENDING WEBHOOK =======================');
                   $query = http_build_query($data);
                   $client = new \GuzzleHttp\Client();
                   $client->request('GET', route('coinpayment.webhook') . '?' . $query);
