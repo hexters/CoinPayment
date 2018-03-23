@@ -9,7 +9,8 @@
     ],
     "require":{
       "php": ">=7.1",
-      "guzzlehttp/psr7": "~1.1"
+      "guzzlehttp/guzzle": "^6.3",
+      "nesbot/carbon": "^1.25"
     },
     "extra": {
         "laravel": {
