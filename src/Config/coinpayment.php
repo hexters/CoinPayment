@@ -15,4 +15,17 @@
       'header_logo' => '/coinpayment.logo.png', // this is a Path Assets file
       'header_text' => 'Your Payment Summary',
 
+    /*
+    * menu in histori transaction page
+    */
+    'menus' => [
+      'Home' => [
+        'url' => '/', // only link path
+        'class_icon' => 'fa fa-home'
+      ],
+      // 'Foo' => [
+      //   'url' => '/foo',
+      //   'class_icon' => 'fa fa-home'
+      // ]
+    ]
   ];

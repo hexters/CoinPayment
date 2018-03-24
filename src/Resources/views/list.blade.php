@@ -76,11 +76,15 @@
           </select>
         </div>
 
-        <div class="list-group mt-5">
-          <a href="{{ url('/') }}" class="list-group-item list-group-item-action">
-            <i class="fa fa-home"></i> Home
-          </a>
-        </div>
+        @if(!empty(config('coinpayment.menus')))
+          <div class="list-group mt-5">
+            @foreach(config('coinpayment.menus') as $key => $menu)
+            <a href="{{ url($menu['url']) }}" class="list-group-item list-group-item-action">
+              <i class="{{ $menu['class_icon'] }}"></i> {{ $key }}
+            </a>
+            @endforeach
+          </div>
+        @endif
       </div>
 
       <div class="col-sm-8">
