@@ -16,7 +16,7 @@ Publishing vendor
 ```
 $ php artisan vendor:publish --tag=coinpayment-publish
 ```
-First you should add trait class on your module ```User``` and use this trait ```Hexters\CoinPayment\Entities\CoinPaymentuserRelation``` check the example below:
+First you should add trait class on ```User``` model and use this trait ```Hexters\CoinPayment\Entities\CoinPaymentuserRelation``` check the example below:
 
 ```
     <?php
