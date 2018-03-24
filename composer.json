@@ -1,6 +1,6 @@
 {
     "name": "hexters/coinpayment",
-    "description": "CoinPayment PHP client for Laravel",
+    "description": "CoinPayment PHP client for Laravel 5",
     "keywords": ["Payment Method", "cryptocurrency", "Payment Gateway", "CoinPayment"],
     "authors": [
         {
