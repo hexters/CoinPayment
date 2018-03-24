@@ -50,7 +50,7 @@ class chekcingTransactionCommand extends Command
         logs::whereIn('status', [0, 1])->where('expired', '>', Carbon::now())
           ->chunk(100, function($transactions){
             foreach($transactions as $trx){
-              $this->async_proccess($trx, function($check){
+              $this->async_proccess($trx, function($check) use ($trx){
 
                 if($check['error'] == 'ok'){
                   $data = $check['result'];
