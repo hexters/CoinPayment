@@ -67,6 +67,16 @@
         </div>
 
         <div class="input-group mt-3 form-search">
+          <select class="form-control form-search-input" v-on:change="filterStatus($event)">
+            <option value="all">Filter Status</option>
+            <option value="0">Waiting for buyer funds</option>
+            <option value="1">Funds received and confirmed</option>
+            <option value="100">Complete</option>
+            <option value="-1">Cancelled / Timed Out</option>
+          </select>
+        </div>
+
+        <div class="input-group mt-3 form-search">
           <select class="form-control form-search-input" v-on:change="filterLimit($event)">
             <option value="5">Limit 5</option>
             <option value="10">Limit 10</option>
@@ -124,21 +134,28 @@
           </li>
         </ul>
         <hr>
-        <paginate
-          v-if="histories.length > 0"
-          :page-count="page_count"
-          :prev-text="'Prev'"
-          :next-text="'Next'"
-          :container-class="'pagination justify-content-center pagination-sm'"
-          :page-class="'page-item'"
-          :page-link-class="'page-link'"
-          :prev-class="'page-item'"
-          :prev-link-class="'page-link'"
-          :next-class="'page-item'"
-          :next-link-class="'page-link'"
-          :click-handler="paginate"
-        >
-        </paginate>
+        <div class="row">
+          <div class="col-xs-4 col-sm-4">
+            <small>Showing @{{ histories.length }} of @{{ pageInfo.total }} entries</small>
+          </div>
+          <div class="col-xs-8 col-sm-8">
+            <paginate
+              v-if="histories.length > 0"
+              :page-count="page_count"
+              :prev-text="'Prev'"
+              :next-text="'Next'"
+              :container-class="'pagination justify-content-end pagination-sm'"
+              :page-class="'page-item'"
+              :page-link-class="'page-link'"
+              :prev-class="'page-item'"
+              :prev-link-class="'page-link'"
+              :next-class="'page-item'"
+              :next-link-class="'page-link'"
+              :click-handler="paginate"
+              >
+            </paginate>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -214,7 +231,7 @@
 
 @push('scripts')
   <script src="https://unpkg.com/vuejs-paginate@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@xkeshi/vue-qrcode@0.3.0/dist/vue-qrcode.min.js" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xkeshi/vue-qrcode@0.3.0/dist/vue-qrcode.min.js"></script>
   <script type="text/javascript">
     Vue.component('qrcode', VueQrcode);
     Vue.component('paginate', VuejsPaginate);
@@ -228,8 +245,10 @@
         isLoading: false,
         params: {
           coin: '',
-          limit: 5
-        }
+          limit: 5,
+          status: 'all'
+        },
+        pageInfo: {}
       },
       mounted(){
         var self = this;
@@ -259,20 +278,22 @@
             params: {
               page: pageNum,
               coin: this.params.coin,
-              limit: this.params.limit
+              limit: this.params.limit,
+              status: this.params.status,
             }
           })
             .then(function(json){
               self.page_count = Math.ceil((json.data.meta.total / json.data.meta.per_page));
               self.histories = json.data.data;
               self.isLoading = false;
+              self.pageInfo = json.data.meta;
             });
         },
         manualCheck(e, params){
           e.preventDefault();
           var self = this;
 
-          swal('Please Wait','Transaction is checking...', {
+          swal('Please Wait','checking...', {
             closeOnClickOutside: false,
             closeOnEsc: false,
             buttons:false,
@@ -300,6 +321,10 @@
         },
         filterLimit(e){
           this.params.limit = e.target.value;
+          this.getHistories(0);
+        },
+        filterStatus(e){
+          this.params.status = e.target.value;
           this.getHistories(0);
         }
       }

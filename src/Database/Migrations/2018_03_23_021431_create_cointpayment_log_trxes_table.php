@@ -18,14 +18,13 @@ class CreateCointpaymentLogTrxesTable extends Migration
             $table->integer('user_id');
             $table->string('payment_id');
             $table->string('payment_address');
-            $table->string('coin');
+            $table->string('coin', 10);
             $table->string('status_text');
-            $table->string('status')->default(0);
+            $table->integer('status')->default(0);
             $table->datetime('payment_created_at');
             $table->datetime('expired');
             $table->datetime('confirmation_at')->nullable();
             $table->double('amount', 20, 8);
-            
             $table->integer('confirms_needed');
             $table->string('qrcode_url');
             $table->string('status_url');

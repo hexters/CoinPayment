@@ -15,7 +15,7 @@ use Hexters\CoinPayment\Jobs\webhookProccessJob;
 use CoinPayment;
 
 class CoinPaymentController extends Controller {
-  
+
     public function index($serialize) {
       $data['data'] = CoinPayment::get_payload($serialize);
       return view('coinpayment::index', $data);
@@ -108,6 +108,8 @@ class CoinPaymentController extends Controller {
       $transaction = auth()->user()->coinpayment_transactions()->orderby('updated_at', 'desc');
       if(!empty($req->coin))
         $transaction->where('coin', $req->coin);
+      if($req->status !== 'all')
+        $transaction->where('status', '=', (INT) $req->status);
 
       return new TransactionResourceCollection($transaction->paginate($req->limit));
     }
