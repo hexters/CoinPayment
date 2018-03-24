@@ -48,6 +48,12 @@ Setting schedule for checking transaction succesed in your file ```app > console
 ...
 ```
 visit the [Documentation Schedule](https://laravel.com/docs/5.6/scheduling)
+
+Install the table transaction
+```
+$ php artisan migrate
+```
+
 ## Getting Started
 Create Button transaction. Example placed on your controller
 ```
