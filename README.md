@@ -148,3 +148,9 @@ Please except the route from csrf proccess, get the file ```app > Http > Middlew
     ...
 ```
 Installation finish.
+## Route Access
+|Route Name|Route URL|Method|Description|
+|---|---|:---:|---|
+|`coinpayment.transaction.histories`|`/transactions/histories`|GET|Route for access transaction histories|
+|`coinpayment.webhook`|`*Your customization url`|POST|Route for integrated to your application|
+
