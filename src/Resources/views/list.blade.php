@@ -25,6 +25,18 @@
       background: none;
       border: none;
     }
+    .page-item.active .page-link {
+      z-index: 1;
+      color: #333;
+      background-color: rgba(0,0,0,.2);
+      border-color: rgba(0,0,0,.1);
+      }
+      .bold{
+        font-weight: bold;
+      }
+      .opacity{
+        opacity: .3;
+      }
   </style>
 @endpush
 
@@ -43,7 +55,10 @@
         </div>
 
         <div class="input-group mt-3 form-search">
-          <input autofocus type="search" placeholder="Search Coin..." value="" class="form-control form-search-input">
+          <select class="form-control form-search-input" v-on:change="filterCoin($event)">
+            <option value="">@{{ coinAliases.length == 0 ? 'Loading...' : 'Filter Coin' }}</option>
+            <option v-bind:value="coin" v-for="(val, coin) in coinAliases">@{{ val }}</option>
+          </select>
           <div class="input-group-prepend form-search-icon">
             <span class="input-group-text" id="basic-addon1">
               <i class="fa fa-search"></i>
@@ -51,10 +66,22 @@
           </div>
         </div>
 
+        <div class="input-group mt-3 form-search">
+          <select class="form-control form-search-input" v-on:change="filterLimit($event)">
+            <option value="1">Limit 1</option>
+            <option value="5">Limit 5</option>
+            <option value="10">Limit 10</option>
+            <option value="20">Limit 20</option>
+            <option value="50">Limit 50</option>
+            <option value="100">Limit 100</option>
+          </select>
+        </div>
+
       </div>
 
       <div class="col-sm-8">
-        <ul class="list-unstyled">
+        <p v-if="histories.length == 0">Transactoin not found?</p>
+        <ul v-bind:class="{ 'list-unstyled' : true, 'opacity': isLoading }" v-if="histories.length > 0">
           <li class="media mb-4" v-for="item in histories">
             <qrcode class="mr-3" v-bind:value="item.payment_address" :options="{ size: 150 }"></qrcode>
             <div class="media-body">
@@ -67,7 +94,7 @@
                     <a class="dropdown-item" v-bind:href="item.status_url" target="_blank">
                       <small>Alternative Link</small>
                     </a>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="#" @click="manualCheck(event, item)">
                       <small>Manual Check</small>
                     </a>
                   </div>
@@ -78,8 +105,12 @@
               <small class="text-muted">@{{ item.payment_created_at }} | @{{ item.status_text }}</small>
               <table>
                 <tr>
-                  <td><b>Payment ID</b></td>
-                  <td>: #@{{ item.payment_id }}</td>
+                  <td>
+                    <small><b>Payment ID</b></small>
+                  </td>
+                  <td>
+                    <small>: #@{{ item.payment_id }}</small>
+                  </td>
                 </tr>
                 <tr>
                   <td><b>Address</b></td>
@@ -94,8 +125,8 @@
           </li>
         </ul>
         <hr>
-        <div class="">
-          <paginate
+        <paginate
+          v-if="histories.length > 0"
           :page-count="page_count"
           :prev-text="'Prev'"
           :next-text="'Next'"
@@ -107,8 +138,71 @@
           :next-class="'page-item'"
           :next-link-class="'page-link'"
           :click-handler="paginate"
-          >
-          </paginate>
+        >
+        </paginate>
+      </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="showDetailManual" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Detail Transaction</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="">
+            <table class="table">
+              <tr>
+                <td class="text-right">Status:</td>
+                <td>@{{ manualDetail.status_text }}</td>
+              </tr>
+              <tr>
+                <td class="text-right">Total Amount To Send:</td>
+                <td>@{{ manualDetail.amount }} @{{ manualDetail.coin }} <span>(total confirms needed: @{{ manualDetail.confirms_needed }})</span></td>
+              </tr>
+              <tr>
+                <td class="text-right">Received So Far:</td>
+                <td>@{{ manualDetail.receivedf }} @{{ manualDetail.coin }}</td>
+              </tr>
+              <tr>
+                <td class="text-right">Balance Remaining:</td>
+                <td>
+                  @{{ manualDetail.amount }} @{{ manualDetail.coin }}
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center" colspan="2">
+                  <img v-bind:src="manualDetail.qrcode_url">
+                  <div class="text-danger">
+                    <small>Do not send value to us if address status is expired!</small>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-right">Send To Address:</td>
+                <td>@{{ manualDetail.payment_address }}</td>
+              </tr>
+              <tr>
+                <td class="text-right">Time Left For Us to Confirm Funds:</td>
+                <td>
+                  <div class="time-remaining bold">.../.../... ...:...:...</div>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-right">Payment ID:</td>
+                <td>@{{ manualDetail.payment_id }}</td>
+              </tr>
+              <tr>
+                <td class="text-center text-muted" colspan="2">
+                  <a class="text-muted" v-bind:href="manualDetail.status_url" target="_blank">Alternative Link</a>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -129,27 +223,85 @@
       'el': '#coinpayment-vue',
       data:{
         histories: [],
-        page_count: 0
+        coinAliases: [],
+        page_count: 0,
+        manualDetail: {},
+        isLoading: false,
+        params: {
+          coin: '',
+          limit: 5
+        }
       },
       mounted(){
+        var self = this;
         this.getHistories(0);
+        this.getMethods();
+
+        $('#showDetailManual').on('hidden.bs.modal', function (e) {
+          self.getHistories(0);
+        });
       },
       methods:{
+        getMethods(){
+          var self = this;
+          axios.get('{{ route('coinpayment.ajax.rate.usd', 0) }}')
+            .then(function(json){
+              self.coinAliases = json.data.aliases;
+            });
+        },
         paginate(pageNum){
           this.getHistories(pageNum);
         },
         getHistories(pageNum){
           var self = this;
           var pageNum = pageNum || 0;
+          this.isLoading = true;
           axios.get(`{{ route('coinpayment.ajax.transaction.histories') }}`,{
             params: {
-              page: pageNum
+              page: pageNum,
+              coin: this.params.coin,
+              limit: this.params.limit
             }
           })
             .then(function(json){
               self.page_count = Math.ceil((json.data.meta.total / json.data.meta.per_page));
               self.histories = json.data.data;
+              self.isLoading = false;
             });
+        },
+        manualCheck(e, params){
+          e.preventDefault();
+          var self = this;
+
+          swal('Please Wait','Transaction is checking...', {
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            buttons:false,
+            timer: 10000
+          });
+
+          axios.post('{{ route('coinpayment.ajax.transaction.manual.check') }}', params)
+            .then(function(json){
+              console.log('server',json);
+              self.manualDetail = json.data;
+              $('.time-remaining').countdown(json.data.expired, function(event){
+                $(this).html(event.strftime('%D days %H:%M:%S'));
+              });
+              swal.close();
+              $('#showDetailManual').modal('show');
+            })
+            .catch(function(err){
+              console.error(err);
+              swal('', 'Look like the something wrong!');
+            });
+        },
+        filterCoin(e){
+          this.params.coin = e.target.value;
+          this.getHistories(0);
+        },
+        filterLimit(e){
+          this.params.limit = e.target.value;
+          this.getHistories(0);
         }
       }
     });

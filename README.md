@@ -46,13 +46,13 @@ Setting Schedule for checking transaction succesed in your file ```app > console
     }
 ...
 ```
-## Geting Started
-Create Button transaction. On your controller
+## Getting Started
+Create Button transaction. Example placed on your controller
 ```
-use CoinPayment; // outside the class
+use CoinPayment; // use outside the class
 ...
-    $trx['note'] = 'Note for your transaction';
     $trx['amountTotal'] = 50; // USD
+    $trx['note'] = 'Note for your transaction';
 
     // # First item
     $trx['items'][0] = [
@@ -72,12 +72,12 @@ use CoinPayment; // outside the class
 
     $link_transaction = CoinPayment::url_payload($trx);
     ...
-    /* On your view
+    /* On your balde
         <a href="{{ $link_transaction }}" target="_blank">Pay Now</a>
     */
 ...
 ```
-For integrted with your application, you could crate route path with name ```coinpayment.transaction.histories``` the transaction check while send to the route with webhook. example create one route on your ```web.php```
+For integrating with your application, you should crate route path with name ```coinpayment.webhook```  and result Transaction will be send to the route by hook. example create route on your ```web.php```
 ```
     Route::get('/your/route/name', function(Request $request){
         // Do someting...
@@ -89,7 +89,8 @@ For integrted with your application, you could crate route path with name ```coi
             /*  -- Status transaction --
                 0   : Waiting for buyer funds
                 1   : Funds received and confirmed, sending to you shortly
-                100 : Complete
+                100 : Complete,
+                -1  : Cancelled / Timed Out
             */
             $request->status_text;
             $request->type;
@@ -100,7 +101,7 @@ For integrted with your application, you could crate route path with name ```coi
             $request->receivedf;
             $request->recv_confirms;
             $request->payment_address;
-            $request->time_completed;
+            $request->time_completed; // showing if "$request->status" is 100
 
         */
     })->name('coinpayment.webhook');

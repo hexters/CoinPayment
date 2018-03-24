@@ -10,6 +10,8 @@ use Hexters\CoinPayment\Entities\cointpayment_log_trx;
 
 use Hexters\CoinPayment\Http\Resources\TransactionResourceCollection;
 
+use Hexters\CoinPayment\Jobs\webhookProccessJob;
+
 use CoinPayment;
 
 class CoinPaymentController extends Controller {
@@ -103,7 +105,35 @@ class CoinPaymentController extends Controller {
     }
 
     public function transactions_list_any(Request $req){
-      $transaction = auth()->user()->coinpayment_transactions()->orderby('updated_at', 'desc')->paginate(5);
-      return new TransactionResourceCollection($transaction);
+      $transaction = auth()->user()->coinpayment_transactions()->orderby('updated_at', 'desc');
+      if(!empty($req->coin))
+        $transaction->where('coin', $req->coin);
+
+      return new TransactionResourceCollection($transaction->paginate($req->limit));
+    }
+
+    public function manual_check(Request $req){
+      $check = CoinPayment::api_call('get_tx_info', [
+        'txid' => $req->payment_id
+      ]);
+      if($check['error'] == 'ok'){
+        $data = $check['result'];
+        $trx = auth()->user()->coinpayment_transactions()->where('id', $req->id);
+        if($data['status'] > 0 || $data['status'] < 0){
+          $trx->update([
+            'status_text' => $data['status_text'],
+            'status' => $data['status'],
+            'confirmation_at' => ((INT) $data['status'] === 100) ? date('Y-m-d H:i:s', $data['time_completed']) : null
+          ]);
+
+          dispatch(new webhookProccessJob($data));
+        }
+
+        return response()->json($trx->first());
+      }
+
+      return response()->json([
+        'message' => 'Look like the something wrong!'
+      ], 401);
     }
 }
