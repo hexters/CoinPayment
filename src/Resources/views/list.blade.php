@@ -48,22 +48,12 @@
     <hr>
     <div class="row justify-content-md-center">
       <div class="col-sm-3">
-        <div class="list-group">
-          <a href="{{ url('/') }}" class="list-group-item list-group-item-action">
-            <i class="fa fa-home"></i> Home
-          </a>
-        </div>
-
+        <h5 class="mt-3">Filter Transaction</h5>
         <div class="input-group mt-3 form-search">
           <select class="form-control form-search-input" v-on:change="filterCoin($event)">
             <option value="">@{{ coinAliases.length == 0 ? 'Loading...' : 'Filter Coin' }}</option>
             <option v-bind:value="coin" v-for="(val, coin) in coinAliases">@{{ val }}</option>
           </select>
-          <div class="input-group-prepend form-search-icon">
-            <span class="input-group-text" id="basic-addon1">
-              <i class="fa fa-search"></i>
-            </span>
-          </div>
         </div>
 
         <div class="input-group mt-3 form-search">
@@ -86,6 +76,11 @@
           </select>
         </div>
 
+        <div class="list-group mt-5">
+          <a href="{{ url('/') }}" class="list-group-item list-group-item-action">
+            <i class="fa fa-home"></i> Home
+          </a>
+        </div>
       </div>
 
       <div class="col-sm-8">

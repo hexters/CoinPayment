@@ -315,20 +315,32 @@
           .then(function(json){
             self.payment.first = json.data.result;
             var _self = self;
-            axios.get(`/coinpayment/ajax/trxinfo/${json.data.result.txn_id}`,{
-              params: json.data.result
-            })
-              .then(function(json){
-                _self.payment.last = json.data.result;
-                 var date = new Date(json.data.result.time_expires * 1000);
-                 var time_exp = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-                $('.time-remaining').countdown(time_exp, function(event){
-                  $(this).html(event.strftime('%D days %H:%M:%S'));
-                });
-                swal.close();
-                $('#paynow').modal('show');
-              });
 
+            if(json.data.error == 'ok'){
+              var result = json.data.result;
+              var parameters = {
+                result,
+                params: {!! $params !!}
+              };
+              console.log(parameters);
+              axios.post(`{{ route('coinpayment.ajax.trxinfo') }}`, parameters)
+                .then(function(json){
+                  _self.payment.last = json.data.result;
+                   var date = new Date(json.data.result.time_expires * 1000);
+                   var time_exp = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+                  $('.time-remaining').countdown(time_exp, function(event){
+                    $(this).html(event.strftime('%D days %H:%M:%S'));
+                  });
+                  swal.close();
+                  $('#paynow').modal('show');
+                })
+                .catch(function(error){
+                  swal('Danger!', 'Look like something wrong!');
+                });
+
+            }else{
+              swal('Danger!', 'Look like something wrong!');
+            }
           })
           .catch(function(err){
             if(err !== undefined)

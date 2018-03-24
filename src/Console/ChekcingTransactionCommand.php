@@ -67,6 +67,7 @@ class chekcingTransactionCommand extends Command
 
                   // Send hook
                   $this->info('======================= SENDING WEBHOOK =======================');
+                  $data['request_type'] = 'schedule_transaction';
                   dispatch(new webhookProccessJob($data));
                 }
               }

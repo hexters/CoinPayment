@@ -30,8 +30,9 @@ class webhookProccessJob implements ShouldQueue
      * @return void
      */
     public function handle() {
-      $query = http_build_query($this->data);
       $client = new \GuzzleHttp\Client();
-      $client->request('GET', route('coinpayment.webhook') . '?' . $query);
+      $client->request('POST', route('coinpayment.webhook'), [
+        'form_params' => $this->data
+      ]);
     }
 }

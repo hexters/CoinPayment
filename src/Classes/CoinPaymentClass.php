@@ -10,6 +10,7 @@
       $data['amountTotal'] = empty($payload['amountTotal']) ? 1 : $payload['amountTotal'];
       $data['items'] = empty($payload['items']) ? [] : $payload['items'];
       $data['csrf'] = session()->token();
+      $data['params'] = empty($payload['params']) ? [] : $payload['params'];
 
       $params = base64_encode(serialize($data));
       return route('coinpayment.create.transaction', $params);

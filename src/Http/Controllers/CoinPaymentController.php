@@ -18,6 +18,7 @@ class CoinPaymentController extends Controller {
 
     public function index($serialize) {
       $data['data'] = CoinPayment::get_payload($serialize);
+      $data['params'] = empty($data['data']['params']) ? json_encode([]) : json_encode($data['data']['params']);
       return view('coinpayment::index', $data);
     }
 
@@ -72,16 +73,16 @@ class CoinPaymentController extends Controller {
       return CoinPayment::api_call('create_transaction', $params);
     }
 
-    public function trx_info(Request $req, $txid){
+    public function trx_info(Request $req){
       $payment = CoinPayment::api_call('get_tx_info', [
-        'txid' => $txid
+        'txid' => $req->result['txn_id']
       ]);
       $user = auth()->user();
-      if($payment['error'] == 'ok' && (INT) $user->coinpayment_transactions()->where('payment_id', $txid)->count('id') === 0){
+      if($payment['error'] == 'ok' && (INT) $user->coinpayment_transactions()->where('payment_id', $req->result['txn_id'])->count('id') === 0){
         $data = $payment['result'];
 
         $saved = [
-          'payment_id' => $txid,
+          'payment_id' => $req->result['txn_id'],
           'payment_address' => $data['payment_address'],
           'coin' => $data['coin'],
           'status_text' => $data['status_text'],
@@ -89,14 +90,20 @@ class CoinPaymentController extends Controller {
           'payment_created_at' => date('Y-m-d H:i:s', $data['time_created']),
           'expired' => date('Y-m-d H:i:s', $data['time_expires']),
           'amount' => $data['amountf'],
-          'confirms_needed' => empty($req->confirms_needed) ? 0 : $req->confirms_needed,
-          'qrcode_url' => empty($req->qrcode_url) ? '' : $req->qrcode_url,
-          'status_url' => empty($req->status_url) ? '' : $req->status_url
+          'confirms_needed' => empty($req->result['confirms_needed']) ? 0 : $req->result['confirms_needed'],
+          'qrcode_url' => empty($req->result['qrcode_url']) ? '' : $req->result['qrcode_url'],
+          'status_url' => empty($req->result['status_url']) ? '' : $req->result['status_url']
         ];
 
         $user->coinpayment_transactions()->create($saved);
       }
 
+      $send['params'] = $req->params;
+      if($payment['error'] == 'ok')
+        $send['transaction'] = $payment['result'];
+
+      $send['request_type'] = 'create_transaction';
+      dispatch(new webhookProccessJob($send));
       return $payment;
     }
 
@@ -127,7 +134,8 @@ class CoinPaymentController extends Controller {
             'status' => $data['status'],
             'confirmation_at' => ((INT) $data['status'] === 100) ? date('Y-m-d H:i:s', $data['time_completed']) : null
           ]);
-
+          
+          $data['request_type'] = 'schedule_transaction';
           dispatch(new webhookProccessJob($data));
         }
 
