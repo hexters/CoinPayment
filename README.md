@@ -16,7 +16,7 @@ Publishing vendor
 ```
 $ php artisan vendor:publish --tag=coinpayment-publish
 ```
-First you should add trait class on ```User``` model and use this trait ```Hexters\CoinPayment\Entities\CoinPaymentuserRelation``` check the example below:
+First you should add trait class on your module ```User``` and use this trait ```Hexters\CoinPayment\Entities\CoinPaymentuserRelation``` check the example below:
 
 ```
     <?php
@@ -148,9 +148,3 @@ Please except the route from csrf proccess, get the file ```app > Http > Middlew
     ...
 ```
 Installation finish.
-## Route Access
-|Route Name|Route URL|Method|Description|
-|---|---|:---:|---|
-|`coinpayment.transaction.histories`|`/transactions/histories`|GET|Route for access transaction histories|
-|`coinpayment.webhook`|`*Your customization url`|POST|Route for integrated to your application|
-

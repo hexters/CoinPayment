@@ -98,11 +98,10 @@ class CoinPaymentController extends Controller {
         $user->coinpayment_transactions()->create($saved);
       }
 
-      $send['params'] = $req->params;
-      if($payment['error'] == 'ok')
-        $send['transaction'] = $payment['result'];
-
       $send['request_type'] = 'create_transaction';
+      $send['params'] = empty($req->params) ? [] : $req->params;
+      $send['transaction'] = $payment['error'] == 'ok' ? $payment['result'] : [];
+
       dispatch(new webhookProccessJob($send));
       return $payment;
     }
@@ -134,7 +133,7 @@ class CoinPaymentController extends Controller {
             'status' => $data['status'],
             'confirmation_at' => ((INT) $data['status'] === 100) ? date('Y-m-d H:i:s', $data['time_completed']) : null
           ]);
-          
+
           $data['request_type'] = 'schedule_transaction';
           dispatch(new webhookProccessJob($data));
         }
