@@ -15,7 +15,7 @@ use Hexters\CoinPayment\Jobs\webhookProccessJob;
 use CoinPayment;
 
 class CoinPaymentController extends Controller {
-
+  
     public function index($serialize) {
       $data['data'] = CoinPayment::get_payload($serialize);
       return view('coinpayment::index', $data);

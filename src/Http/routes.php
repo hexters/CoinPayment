@@ -1,7 +1,11 @@
 <?php
 
 Route::group([
-  'middleware' => ['web', 'auth'],
+  'middleware' => [
+    'web',
+    'auth',
+    Hexters\CoinPayment\Http\Middleware\listenConfigFileMiddleware::class
+  ],
   'prefix' => 'coinpayment',
   'namespace' => 'Hexters\CoinPayment\Http\Controllers'
 ],

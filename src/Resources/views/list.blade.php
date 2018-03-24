@@ -68,7 +68,6 @@
 
         <div class="input-group mt-3 form-search">
           <select class="form-control form-search-input" v-on:change="filterLimit($event)">
-            <option value="1">Limit 1</option>
             <option value="5">Limit 5</option>
             <option value="10">Limit 10</option>
             <option value="20">Limit 20</option>
