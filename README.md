@@ -37,7 +37,7 @@ COIN_PAYMENT_PUBLIC_KEY=
 COIN_PAYMENT_PRIVATE_KEY=
 ```
 
-Setting Schedule for checking transaction succesed in your file ```app > console > kernel```. example:
+Setting schedule for checking transaction succesed in your file ```app > console > kernel```. example:
 ```
 ...
     protected function schedule(Schedule $schedule) {
@@ -46,6 +46,7 @@ Setting Schedule for checking transaction succesed in your file ```app > console
     }
 ...
 ```
+visit the [Documentation Schedule](https://laravel.com/docs/5.6/scheduling)
 ## Getting Started
 Create Button transaction. Example placed on your controller
 ```
