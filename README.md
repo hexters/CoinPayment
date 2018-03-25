@@ -125,6 +125,7 @@ For integrating with your application, you should crate route path with name ```
 
         /* === Output data $request from task schedule === */
         $request->request_type = 'schedule_transaction';
+        $request->payload; // <--- Your payload data
         $request->time_created;
         $request->time_expires;
         $request->status;
