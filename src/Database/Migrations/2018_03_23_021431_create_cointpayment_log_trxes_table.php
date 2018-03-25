@@ -28,6 +28,7 @@ class CreateCointpaymentLogTrxesTable extends Migration
             $table->integer('confirms_needed');
             $table->string('qrcode_url');
             $table->string('status_url');
+            $table->text('payload');
             $table->timestamps();
         });
     }

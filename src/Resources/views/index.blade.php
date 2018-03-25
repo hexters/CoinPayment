@@ -320,9 +320,9 @@
               var result = json.data.result;
               var parameters = {
                 result,
-                params: {!! $params !!}
+                params: {!! $params !!},
+                payload: {!! $payload !!}
               };
-              console.log(parameters);
               axios.post(`{{ route('coinpayment.ajax.trxinfo') }}`, parameters)
                 .then(function(json){
                   _self.payment.last = json.data.result;

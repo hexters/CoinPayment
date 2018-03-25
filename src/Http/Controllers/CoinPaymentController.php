@@ -19,6 +19,7 @@ class CoinPaymentController extends Controller {
     public function index($serialize) {
       $data['data'] = CoinPayment::get_payload($serialize);
       $data['params'] = empty($data['data']['params']) ? json_encode([]) : json_encode($data['data']['params']);
+      $data['payload'] = empty($data['data']['payload']) ? json_encode([]) : json_encode($data['data']['payload']);
       return view('coinpayment::index', $data);
     }
 
@@ -92,7 +93,8 @@ class CoinPaymentController extends Controller {
           'amount' => $data['amountf'],
           'confirms_needed' => empty($req->result['confirms_needed']) ? 0 : $req->result['confirms_needed'],
           'qrcode_url' => empty($req->result['qrcode_url']) ? '' : $req->result['qrcode_url'],
-          'status_url' => empty($req->result['status_url']) ? '' : $req->result['status_url']
+          'status_url' => empty($req->result['status_url']) ? '' : $req->result['status_url'],
+          'payload' => empty($req->payload) ? json_encode([]) : json_encode($req->payload),
         ];
 
         $user->coinpayment_transactions()->create($saved);
@@ -100,6 +102,7 @@ class CoinPaymentController extends Controller {
 
       $send['request_type'] = 'create_transaction';
       $send['params'] = empty($req->params) ? [] : $req->params;
+      $send['payload'] = empty($req->payload) ? [] : $req->payload;
       $send['transaction'] = $payment['error'] == 'ok' ? $payment['result'] : [];
 
       dispatch(new webhookProccessJob($send));
@@ -133,8 +136,9 @@ class CoinPaymentController extends Controller {
             'status' => $data['status'],
             'confirmation_at' => ((INT) $data['status'] === 100) ? date('Y-m-d H:i:s', $data['time_completed']) : null
           ]);
-
+          $trx = $trx->first();
           $data['request_type'] = 'schedule_transaction';
+          $data['payload'] = json_decode($trx->payload);
           dispatch(new webhookProccessJob($data));
         }
 
