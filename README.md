@@ -112,7 +112,7 @@ use CoinPayment; // use outside the class
     $link_transaction = CoinPayment::url_payload($trx);
     ...
     /*
-    *   On your balde
+    *   On your blade
     *   <a href="{{ $link_transaction }}" target="_blank">Pay Now</a>
     */
 ...
