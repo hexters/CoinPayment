@@ -119,7 +119,7 @@ use CoinPayment; // use outside the class
 ```
 For integrating with your application, you should crate route path with name ```coinpayment.webhook```  and result Transaction will be send to the route by hook. example create route on your ```web.php```
 ```
-    Route::get('/your/route/url', function(Request $request){
+    Route::post('/your/route/url', function(Request $request){
         // Do someting...
 
         /* === Output data $request from task schedule === */
