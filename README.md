@@ -86,7 +86,7 @@ use CoinPayment; // use outside the class
         'subtotalItem' => 30 // USD
     ];
 
-    /*
+    /* 
     *   Your custom data
     *   This data will be sent to the webhook with data transaction
     */
@@ -98,7 +98,7 @@ use CoinPayment; // use outside the class
         ]
         // other...
     ];
-
+    
     /*
     *   if you want to remember your data at a later date, you can add the parameter below
     */
@@ -106,7 +106,7 @@ use CoinPayment; // use outside the class
         // your cusotm array here
         'foo' => [
             'foo' => 'bar'
-        ]
+        ] 
     ];
 
     $link_transaction = CoinPayment::url_payload($trx);
@@ -148,6 +148,7 @@ For integrating with your application, you should crate route path with name ```
     /* === Output data $request from Create Transaction === */
         $request->request_type = 'create_transaction';
         $request->params; // <--- Your custom params
+        $request->payload; // <--- Your payload data
         $request->transaction['time_created'];
         $request->transaction['time_expires'];
         $request->transaction['status'];
@@ -180,3 +181,4 @@ Installation finish.
 |---|---|:---:|---|
 |`coinpayment.transaction.histories`|`/transactions/histories`|GET|Route for access transaction histories|
 |`coinpayment.webhook`|`*Your customization url`|POST|Route for integrated to your application|
+
