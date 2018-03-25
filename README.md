@@ -59,10 +59,16 @@ Create Button transaction. Example placed on your controller
 ```
 use CoinPayment; // use outside the class
 ...
+    /*
+    *   @required true
+    */
     $trx['amountTotal'] = 50; // USD
     $trx['note'] = 'Note for your transaction';
 
-    // # First item
+    /*
+    *   @required true
+    *   @example first item
+    */
     $trx['items'][0] = [
         'descriptionItem' => 'Product one',
         'priceItem' => 10, // USD
@@ -70,7 +76,9 @@ use CoinPayment; // use outside the class
         'subtotalItem' => 20 // USD
     ];
 
-    // # Secound item
+    /*
+    *   @example secound item
+    */
     $trx['items'][1] = [
         'descriptionItem' => 'Product two',
         'priceItem' => 10, // USD
@@ -78,8 +86,10 @@ use CoinPayment; // use outside the class
         'subtotalItem' => 30 // USD
     ];
 
-    // Your custom data
-    // This data will be sent to the webhook with data transaction
+    /*
+    *   Your custom data
+    *   This data will be sent to the webhook with data transaction
+    */
     $trx['params'] = [
         'foo' => 'bar',
         'foo_a' => [
@@ -89,10 +99,21 @@ use CoinPayment; // use outside the class
         // other...
     ];
 
+    /*
+    *   if you want to remember your data at a later date, you can add the parameter below
+    */
+    $trx['payload'] = [
+        // your cusotm array here
+        'foo' => [
+            'foo' => 'bar'
+        ]
+    ];
+
     $link_transaction = CoinPayment::url_payload($trx);
     ...
-    /* On your balde
-        <a href="{{ $link_transaction }}" target="_blank">Pay Now</a>
+    /*
+    *   On your balde
+    *   <a href="{{ $link_transaction }}" target="_blank">Pay Now</a>
     */
 ...
 ```
@@ -159,4 +180,3 @@ Installation finish.
 |---|---|:---:|---|
 |`coinpayment.transaction.histories`|`/transactions/histories`|GET|Route for access transaction histories|
 |`coinpayment.webhook`|`*Your customization url`|POST|Route for integrated to your application|
-
