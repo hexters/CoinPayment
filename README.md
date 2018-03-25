@@ -96,7 +96,7 @@ use CoinPayment; // use outside the class
             'foo_a_a' => 'bar A',
             'foo_a_b' => 'bar B',
         ]
-        // other...
+        // any other...
     ];
     
     /*
@@ -106,7 +106,8 @@ use CoinPayment; // use outside the class
         // your cusotm array here
         'foo' => [
             'foo' => 'bar'
-        ] 
+        ]
+        // any other...
     ];
 
     $link_transaction = CoinPayment::url_payload($trx);
