@@ -301,7 +301,6 @@
 
           axios.post('{{ route('coinpayment.ajax.transaction.manual.check') }}', params)
             .then(function(json){
-              console.log('server',json);
               self.manualDetail = json.data;
               $('.time-remaining').countdown(json.data.expired, function(event){
                 $(this).html(event.strftime('%D days %H:%M:%S'));
