@@ -11,6 +11,7 @@ use Hexters\CoinPayment\Entities\cointpayment_log_trx;
 use Hexters\CoinPayment\Http\Resources\TransactionResourceCollection;
 
 use Hexters\CoinPayment\Jobs\webhookProccessJob;
+use App\Jobs\coinPaymentCallbackProccedJob;
 
 use CoinPayment;
 
@@ -106,6 +107,7 @@ class CoinPaymentController extends Controller {
       $send['transaction'] = $payment['error'] == 'ok' ? $payment['result'] : [];
 
       dispatch(new webhookProccessJob($send));
+      dispatch(new coinPaymentCallbackProccedJob($send));
       return $payment;
     }
 
@@ -140,6 +142,7 @@ class CoinPaymentController extends Controller {
           $data['request_type'] = 'schedule_transaction';
           $data['payload'] = json_decode($trx->payload);
           dispatch(new webhookProccessJob($data));
+          dispatch(new coinPaymentCallbackProccedJob($data));
         }
 
         return response()->json($trx->first());

@@ -9,6 +9,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
+use Route;
+
 class webhookProccessJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -30,9 +32,11 @@ class webhookProccessJob implements ShouldQueue
      * @return void
      */
     public function handle() {
-      $client = new \GuzzleHttp\Client();
-      $client->request('POST', route('coinpayment.webhook'), [
-        'form_params' => $this->data
-      ]);
+      if(Route::has('coinpayment.webhook')){
+        $client = new \GuzzleHttp\Client();
+        $client->request('POST', route('coinpayment.webhook'), [
+          'form_params' => $this->data
+        ]);
+      }
     }
 }

@@ -38,9 +38,13 @@ class CoinPaymentServiceProvider extends ServiceProvider
             ]);
         }
 
+        if(!is_dir(app_path('/Jobs')))
+          mkdir(app_path('/Jobs'));
+
         $this->publishes([
             __DIR__ . '/../config/coinpayment.php' => config_path('coinpayment.php'),
             __DIR__ . '/../Assets/images/coinpayment.logo.png' => public_path('/coinpayment.logo.png'),
+            __DIR__ . '/../Jobs/coinPaymentCallbackProccedJob.php' => app_path('/Jobs/coinPaymentCallbackProccedJob.php'),
         ], 'coinpayment-publish');
 
     }

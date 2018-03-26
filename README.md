@@ -53,7 +53,7 @@ Install the table transaction
 ```
 $ php artisan migrate
 ```
-
+Installation finish.
 ## Getting Started
 Create Button transaction. Example placed on your controller
 ```
@@ -86,7 +86,7 @@ use CoinPayment; // use outside the class
         'subtotalItem' => 30 // USD
     ];
 
-    /* 
+    /*
     *   Your custom data
     *   This data will be sent to the webhook with data transaction
     */
@@ -96,9 +96,9 @@ use CoinPayment; // use outside the class
             'foo_a_a' => 'bar A',
             'foo_a_b' => 'bar B',
         ]
-        // any other...
+        // other...
     ];
-    
+
     /*
     *   if you want to remember your data at a later date, you can add the parameter below
     */
@@ -107,25 +107,23 @@ use CoinPayment; // use outside the class
         'foo' => [
             'foo' => 'bar'
         ]
-        // any other...
     ];
 
     $link_transaction = CoinPayment::url_payload($trx);
     ...
     /*
-    *   On your blade
+    *   On your balde
     *   <a href="{{ $link_transaction }}" target="_blank">Pay Now</a>
     */
 ...
 ```
 For integrating with your application, you should crate route path with name ```coinpayment.webhook```  and result Transaction will be send to the route by hook. example create route on your ```web.php```
 ```
-    Route::post('/your/route/url', function(Request $request){
-        // Do something...
+    Route::get('/your/route/name', function(Request $request){
+        // Do someting...
 
         /* === Output data $request from task schedule === */
         $request->request_type = 'schedule_transaction';
-        $request->payload; // <--- Your payload data
         $request->time_created;
         $request->time_expires;
         $request->status;
@@ -150,7 +148,6 @@ For integrating with your application, you should crate route path with name ```
     /* === Output data $request from Create Transaction === */
         $request->request_type = 'create_transaction';
         $request->params; // <--- Your custom params
-        $request->payload; // <--- Your payload data
         $request->transaction['time_created'];
         $request->transaction['time_expires'];
         $request->transaction['status'];
@@ -172,15 +169,15 @@ Please except the route from csrf proccess, get the file ```app > Http > Middlew
     ...
     protected $except = [
         ...
-        '/your/route/url'
+        '/your/route/name'
         ...
     ];
     ...
 ```
-Installation finish.
+you can also use the job process, please check the file `app > Jobs > coinPaymentCallbackProccedJob.php`
+
 ## Route Access
 |Route Name|Route URL|Method|Description|
 |---|---|:---:|---|
 |`coinpayment.transaction.histories`|`/transactions/histories`|GET|Route for access transaction histories|
 |`coinpayment.webhook`|`*Your customization url`|POST|Route for integrated to your application|
-
