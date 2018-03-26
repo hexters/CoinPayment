@@ -7,6 +7,7 @@ CoinPayment is a laravel module for handle transaction from [**CoinPayment**](ht
 - PHP >= ^7.1
 - GuzzleHttp
 - Nesbot/Carbon
+- Bootstrap 4
 ## Installation
 You can install the package via composer:
 ```
