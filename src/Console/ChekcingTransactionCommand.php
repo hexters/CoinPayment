@@ -7,10 +7,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 use Hexters\CoinPayment\Jobs\webhookProccessJob;
+use App\Jobs\coinPaymentCallbackProccedJob;
 
 use Hexters\CoinPayment\Entities\cointpayment_log_trx as logs;
 use Carbon\Carbon;
 use CoinPayment;
+
+use Route;
 
 class chekcingTransactionCommand extends Command
 {
@@ -66,9 +69,12 @@ class chekcingTransactionCommand extends Command
 
                     // Send hook
                     $this->info('======================= SENDING WEBHOOK =======================');
-                    $data['payload'] = json_decode($trx->payload);
+                    $data['payload'] = (Array) json_decode($trx->payload, true);
                     $data['request_type'] = 'schedule_transaction';
-                    dispatch(new webhookProccessJob($data));
+                    if(Route::has('coinpayment.webhook')){
+                      dispatch(new webhookProccessJob($data));
+                    }
+                    dispatch(new coinPaymentCallbackProccedJob($data));
                   }
                 }
               });

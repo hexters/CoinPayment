@@ -14,6 +14,7 @@ use Hexters\CoinPayment\Jobs\webhookProccessJob;
 use App\Jobs\coinPaymentCallbackProccedJob;
 
 use CoinPayment;
+use Route;
 
 class CoinPaymentController extends Controller {
 
@@ -105,8 +106,9 @@ class CoinPaymentController extends Controller {
       $send['params'] = empty($req->params) ? [] : $req->params;
       $send['payload'] = empty($req->payload) ? [] : $req->payload;
       $send['transaction'] = $payment['error'] == 'ok' ? $payment['result'] : [];
-
-      dispatch(new webhookProccessJob($send));
+      if(Route::has('coinpayment.webhook')){
+        dispatch(new webhookProccessJob($send));
+      }
       dispatch(new coinPaymentCallbackProccedJob($send));
       return $payment;
     }
@@ -140,8 +142,10 @@ class CoinPaymentController extends Controller {
           ]);
           $trx = $trx->first();
           $data['request_type'] = 'schedule_transaction';
-          $data['payload'] = json_decode($trx->payload);
-          dispatch(new webhookProccessJob($data));
+          $data['payload'] = (Array) json_decode($trx->payload, true);
+          if(Route::has('coinpayment.webhook')){
+            dispatch(new webhookProccessJob($data));
+          }
           dispatch(new coinPaymentCallbackProccedJob($data));
         }
 
