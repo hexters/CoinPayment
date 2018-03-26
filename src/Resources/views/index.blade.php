@@ -199,7 +199,7 @@
               </tr>
               <tr>
                 <td class="text-center" colspan="2">
-                  <img v-bind:src="payment.first.qrcode_url">
+                  <qrcode v-bind:value="payment.first.address" :options="{ size: 200 }"></qrcode>
                   <div class="text-danger">
                     <small>Do not send value to us if address status is expired!</small>
                   </div>
@@ -233,7 +233,9 @@
 @stop
 
 @push('scripts')
+  <script src="https://cdn.jsdelivr.net/npm/@xkeshi/vue-qrcode@0.3.0/dist/vue-qrcode.min.js"></script>
   <script type="text/javascript">
+  Vue.component('qrcode', VueQrcode);
   var vue = new Vue({
     el: '#coinpayment-vue',
     data: {
