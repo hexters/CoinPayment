@@ -33,27 +33,49 @@ class CoinPaymentController extends Controller {
       ])['result'];
 
       $rateBtc = $rates['BTC']['rate_btc'];
-      $rateUsd = $rates['USD']['rate_btc'];
+      $rateUsd = $rates[config('coinpayment.default_currency')]['rate_btc'];
       $rateAmount = $rateUsd * $usd;
-
+      $fiat = [];
+      $coins_accept = [];
       foreach($rates as $i => $coin){
-        if($coin['accepted']){
+        if((INT) $coin['is_fiat'] === 0){
           $rate = ($rateAmount / $rates[$i]['rate_btc']);
           $coins[] = [
             'name' => $coin['name'],
             'rate' => number_format($rate,8,'.',''),
             'iso' => $i,
             'icon' => 'https://www.coinpayments.net/images/coins/' . $i . '.png',
-            'selected' => $i == 'BTC' ? true : false
+            'selected' => $i == 'BTC' ? true : false,
+            'accepted' => $coin['accepted']
           ];
 
           $aliases[$i] = $coin['name'];
         }
+
+        if((INT) $coin['is_fiat'] === 0 && $coin['accepted'] == 1){
+          $rate = ($rateAmount / $rates[$i]['rate_btc']);
+          $coins_accept[] = [
+            'name' => $coin['name'],
+            'rate' => number_format($rate,8,'.',''),
+            'iso' => $i,
+            'icon' => 'https://www.coinpayments.net/images/coins/' . $i . '.png',
+            'selected' => $i == 'BTC' ? true : false,
+            'accepted' => $coin['accepted']
+          ];
+        }
+
+
+        if((INT) $coin['is_fiat'] === 1){
+          $fiat[$i] = $coin;
+        }
+
       }
 
       return response()->json([
         'coins' => $coins,
-        'aliases' => $aliases
+        'coins_accept' => $coins_accept,
+        'aliases' => $aliases,
+        'fiats' =>$fiat
       ]);
     }
 
@@ -69,7 +91,7 @@ class CoinPaymentController extends Controller {
 
       $params = [
         'amount' => $req->amount,
-        'currency1' => 'USD',
+        'currency1' => config('coinpayment.default_currency'),
         'currency2' => $req->payment_method,
       ];
 
@@ -88,6 +110,7 @@ class CoinPaymentController extends Controller {
           'payment_id' => $req->result['txn_id'],
           'payment_address' => $data['payment_address'],
           'coin' => $data['coin'],
+          'fiat' => config('coinpayment.default_currency'),
           'status_text' => $data['status_text'],
           'status' => $data['status'],
           'payment_created_at' => date('Y-m-d H:i:s', $data['time_created']),

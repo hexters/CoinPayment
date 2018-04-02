@@ -92,11 +92,11 @@
                     <td>
                       {{ $item['descriptionItem'] }}
                       <div>
-                        <small class="text-muted">Item Price: ${{ $item['priceItem'] }}</small><br>
+                        <small class="text-muted">Item Price: {{ $item['priceItem'] }} {{ config('coinpayment.default_currency') }}</small><br>
                         <small class="text-muted">Quantity: {{ $item['qtyItem'] }}</small>
                       </div>
                     </td>
-                    <td class="text-right">${{ $item['subtotalItem'] }}</td>
+                    <td class="text-right">{{ $item['subtotalItem'] }} {{ config('coinpayment.default_currency') }}</td>
                   </tr>
                   @php
                   $itemTotal += $item['subtotalItem']
@@ -108,11 +108,11 @@
                 <tfoot>
                   <tr>
                     <th>Item Total</th>
-                    <th class="text-right">${{ number_format($itemTotal, 2) }}</th>
+                    <th class="text-right">{{ number_format($itemTotal, 2) }} {{ config('coinpayment.default_currency') }}</th>
                   </tr>
                   <tr>
-                    <td class="text-right">Total Amount USD</td>
-                    <td class="text-right">$ {{ $data['amountTotal'] }}</td>
+                    <td class="text-right">Total Amount {{ config('coinpayment.default_currency') }}</td>
+                    <td class="text-right">{{ $data['amountTotal'] }} {{ config('coinpayment.default_currency') }}</td>
                   </tr>
                   <tr>
                     <td class="text-right">Payment Method</td>
@@ -263,7 +263,7 @@
           .then(function(json){
             self.paymentMethod = json.data.coins[0].iso;
             self.total_amount_coin = json.data.coins[0].rate;
-            self.coins = json.data.coins;
+            self.coins = json.data.coins_accept;
             self.coinAliases = json.data.aliases;
 
             $('.coin-items').slimScroll({

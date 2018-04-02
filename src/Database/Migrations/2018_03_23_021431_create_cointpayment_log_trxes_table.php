@@ -19,6 +19,7 @@ class CreateCointpaymentLogTrxesTable extends Migration
             $table->string('payment_id');
             $table->string('payment_address');
             $table->string('coin', 10);
+            $table->string('fiat', 10);
             $table->string('status_text');
             $table->integer('status')->default(0);
             $table->datetime('payment_created_at');

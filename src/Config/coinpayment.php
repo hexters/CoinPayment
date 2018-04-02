@@ -9,6 +9,15 @@
     'private_key' => env('COIN_PAYMENT_PRIVATE_KEY', ''),
 
     /*
+    * Supported currencies
+    * @currecies : USD, CAD, EUR, ARS, AUD, AZN, BGN, BRL, BYN, CHF, CLP, CNY, COP, CZK
+    * DKK, GBP, GIP, HKD, HUF, IDR, ILS, INR, IRR, IRT, ISK, JPY, KRW, LAK, MKD, MXN, ZAR,
+    * MYR, NGN, NOK, NZD, PEN, PHP, PKR, PLN, RON, RUB, SEK, SGD, THB, TRY, TWD, UAH, VND,
+    */
+
+    'default_currency' => 'USD',
+
+    /*
     * Header config
     */
     'header_type' => 'logo', // @option-value: logo|text
