@@ -2,9 +2,9 @@
 
 namespace Hexters\CoinPayment\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\Resource;
 
-class TransactionResource extends JsonResource
+class TransactionResource extends Resource
 {
     /**
      * Transform the resource into an array.
