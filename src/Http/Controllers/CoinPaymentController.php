@@ -250,7 +250,7 @@ class CoinPaymentController extends Controller {
           'confirmation_at' => $log->confirmation_at,
           'amount' => $log->amount,
           'confirms_needed' => $log->confirms_needed,
-          'payload' => json_decode($log->payload),
+          'payload' => (Array) json_decode($log->payload),
         ]));
       }
 
