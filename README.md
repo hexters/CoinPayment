@@ -120,6 +120,13 @@ Open file `app > Jobs > coinPaymentCallbackProccedJob.php` for handle transactio
 
 And Open `app > Jobs > IPNHandlerCoinPaymentJob.php` for handle IPN proccess
 
+## IPN Setting
+Visit [**CoinPayment**](https://www.coinpayments.net/index.php?ref=3dc0c5875304cc5cc1d98782c2741cb5) open seting page on `Account > Account Settings > Marchant etting (tab)` and insert
+- IPN Secret
+- IPN URL
+- Status/Log Email
+
+![Example](https://github.com/hexters/CoinPayment/blob/master/setting.png?raw=true)
 
 ## Route Access
 |Route Name|Route URL|Method|Description|
