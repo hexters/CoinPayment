@@ -5,7 +5,9 @@ namespace Hexters\CoinPayment\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Hexters\CoinPayment\Classes\CoinPaymentClass;
+
 use Hexters\CoinPayment\Console\chekcingTransactionCommand;
+use Hexters\CoinPayment\Console\EnabledIPNCommand;
 
 class CoinPaymentServiceProvider extends ServiceProvider
 {
@@ -35,6 +37,7 @@ class CoinPaymentServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 chekcingTransactionCommand::class,
+                EnabledIPNCommand::class
             ]);
         }
 
@@ -45,6 +48,7 @@ class CoinPaymentServiceProvider extends ServiceProvider
             __DIR__ . '/../config/coinpayment.php' => config_path('coinpayment.php'),
             __DIR__ . '/../Assets/images/coinpayment.logo.png' => public_path('/coinpayment.logo.png'),
             __DIR__ . '/../Jobs/coinPaymentCallbackProccedJob.php' => app_path('/Jobs/coinPaymentCallbackProccedJob.php'),
+            __DIR__ . '/../Jobs/IPNHandlerCoinPaymentJob.php' => app_path('/Jobs/IPNHandlerCoinPaymentJob.php')
         ], 'coinpayment-publish');
 
     }

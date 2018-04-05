@@ -9,6 +9,14 @@
     'private_key' => env('COIN_PAYMENT_PRIVATE_KEY', ''),
 
     /*
+    * IPN Configuration
+    */
+    'coinpayment_merchant_id' => env('COIN_PAYMENT_MARCHANT_ID', ''),
+    'coinpayment_ipn_secret' => env('COIN_PAYMENT_IPN_SECRET', ''),
+    'coinpayment_ipn_debug_email' => env('COIN_PAYMENT_IPN_DEBIG_EMAIL', ''),
+
+
+    /*
     * Supported currencies
     * @currecies : USD, CAD, EUR, ARS, AUD, AZN, BGN, BRL, BYN, CHF, CLP, CNY, COP, CZK
     * DKK, GBP, GIP, HKD, HUF, IDR, ILS, INR, IRR, IRT, ISK, JPY, KRW, LAK, MKD, MXN, ZAR,

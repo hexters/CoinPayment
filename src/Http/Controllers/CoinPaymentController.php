@@ -12,6 +12,9 @@ use Hexters\CoinPayment\Http\Resources\TransactionResourceCollection;
 
 use Hexters\CoinPayment\Jobs\webhookProccessJob;
 use App\Jobs\coinPaymentCallbackProccedJob;
+use App\Jobs\IPNHandlerCoinPaymentJob;
+
+use Hexters\CoinPayment\Events\IPNErrorReportEvent as SendEmail;
 
 use CoinPayment;
 use Route;
@@ -179,4 +182,72 @@ class CoinPaymentController extends Controller {
         'message' => 'Look like the something wrong!'
       ], 401);
     }
+
+    public function receive_webhook(Request $req){
+      /*
+        $txn_id = $_POST['txn_id'];
+        $item_name = $_POST['item_name'];
+        $item_number = $_POST['item_number'];
+        $amount1 = floatval($_POST['amount1']);
+        $amount2 = floatval($_POST['amount2']);
+        $currency1 = $_POST['currency1'];
+        $currency2 = $_POST['currency2'];
+        $status = intval($_POST['status']);
+        $status_text = $_POST['status_text'];
+      */
+      $cp_merchant_id   = config('coinpayment.coinpayment_merchant_id');
+      $cp_ipn_secret    = config('coinpayment.coinpayment_ipn_secret');
+      $cp_debug_email   = config('coinpayment.coinpayment_ipn_debug_email');
+
+      /* Filtering */
+      if(!empty($req->merchant) && $req->merchant != trim($cp_merchant_id)){
+        if(!empty($cp_debug_email))
+          event(new SendEmail([
+            'email' => $cp_debug_email,
+            'message' => 'No or incorrect Merchant ID passed'
+          ]));
+      }
+
+      $request = file_get_contents('php://input');
+      if ($request === FALSE || empty($request)) {
+        if(!empty($cp_debug_email))
+          event(new SendEmail([
+            'email' => $cp_debug_email,
+            'message' => 'Error reading POST data'
+          ]));
+      }
+
+      $hmac = hash_hmac("sha512", $request, trim($cp_ipn_secret));
+      if (!hash_equals($hmac, $_SERVER['HTTP_HMAC'])) {
+        if(!empty($cp_debug_email))
+          event(new SendEmail([
+            'email' => $cp_debug_email,
+            'message' => 'HMAC signature does not match'
+          ]));
+      }
+
+      $log = cointpayment_log_trx::where('payment_id', $req->txn_id)->first();
+      if($log != null){
+        $log->update([
+          'status' => $req->status,
+          'status_text' => $req->status_text,
+        ]);
+
+        dispatch(new IPNHandlerCoinPaymentJob([
+          'payment_id' => $log->payment_id,
+          'payment_address' => $log->payment_address,
+          'coin' => $log->coin,
+          'fiat' => $log->fiat,
+          'status_text' => $log->status_text,
+          'status' => $log->status,
+          'payment_created_at' => $log->payment_created_at,
+          'confirmation_at' => $log->confirmation_at,
+          'amount' => $log->amount,
+          'confirms_needed' => $log->confirms_needed,
+          'payload' => json_decode($log->payload),
+        ]));
+      }
+
+    }
+
 }
