@@ -28,6 +28,10 @@ class IPNErrorReportMail extends Mailable implements ShouldQueue {
      * @return $this
      */
     public function build() {
-        return $this->view('coinpayment::emails.error_reporting', $this->data);
+        return $this
+          ->subject(date('Y/m/d') . ' CoinPayments IPN Error')
+          ->view('coinpayment::emails.error_reporting', [
+            'data' => $this->data
+          ]);
     }
 }

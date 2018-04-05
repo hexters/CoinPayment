@@ -6,7 +6,7 @@ use Illuminate\Queue\SerializesModels;
 
 use Hexters\CoinPayment\Emails\IPNErrorReportMail;
 
-use Email;
+use Mail;
 
 class IPNErrorReportEvent {
 
@@ -20,8 +20,7 @@ class IPNErrorReportEvent {
      * @return void
      */
     public function __construct($data) {
-      Email::to($data['email'])
-        ->subject(date('Y/m/d') . ' CoinPayments IPN Error')
+      Mail::to($data['email'])
         ->send(new IPNErrorReportMail($data));
     }
 }

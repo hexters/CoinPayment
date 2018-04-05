@@ -206,6 +206,8 @@ class CoinPaymentController extends Controller {
             'email' => $cp_debug_email,
             'message' => 'No or incorrect Merchant ID passed'
           ]));
+
+        return response('No or incorrect Merchant ID passed', 401);
       }
 
       $request = file_get_contents('php://input');
@@ -215,6 +217,8 @@ class CoinPaymentController extends Controller {
             'email' => $cp_debug_email,
             'message' => 'Error reading POST data'
           ]));
+
+          return response('Error reading POST data', 401);
       }
 
       $hmac = hash_hmac("sha512", $request, trim($cp_ipn_secret));
@@ -224,6 +228,8 @@ class CoinPaymentController extends Controller {
             'email' => $cp_debug_email,
             'message' => 'HMAC signature does not match'
           ]));
+
+        return response('HMAC signature does not match', 401);
       }
 
       $log = cointpayment_log_trx::where('payment_id', $req->txn_id)->first();

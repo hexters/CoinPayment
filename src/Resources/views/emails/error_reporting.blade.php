@@ -7,8 +7,8 @@
   <body>
     <h3>CoinPayment IPN Fatal Error</h3>
 
-    <p>{{ $message }}</p>
+    <p>{!! $data['message'] !!}</p>
 
-    
+
   </body>
 </html>

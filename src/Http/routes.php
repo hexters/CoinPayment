@@ -21,5 +21,12 @@ function() {
     Route::post('/ajax/transaction/manual/check', 'CoinPaymentController@manual_check')->name('coinpayment.ajax.transaction.manual.check');
 
     Route::get('/transactions/histories', 'CoinPaymentController@transactions_list')->name('coinpayment.transaction.histories');
-    Route::post('/ipn', 'CoinPaymentController@receive_webhook')->name('coinpayment.ipn.received');
+});
+
+Route::group([
+    'namespace' => 'Hexters\CoinPayment\Http\Controllers'
+], function(){
+  Route::post('/coinpayment/ipn', 'CoinPaymentController@receive_webhook')
+    ->middleware('web')
+    ->name('coinpayment.ipn.received');
 });
