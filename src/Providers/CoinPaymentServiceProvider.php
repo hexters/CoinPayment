@@ -45,7 +45,7 @@ class CoinPaymentServiceProvider extends ServiceProvider
           mkdir(app_path('/Jobs'));
 
         $this->publishes([
-            __DIR__ . '/../config/coinpayment.php' => config_path('coinpayment.php'),
+            __DIR__ . '/../Config/coinpayment.php' => config_path('coinpayment.php'),
             __DIR__ . '/../Assets/images/coinpayment.logo.png' => public_path('/coinpayment.logo.png'),
             __DIR__ . '/../Jobs/coinPaymentCallbackProccedJob.php' => app_path('/Jobs/coinPaymentCallbackProccedJob.php'),
             __DIR__ . '/../Jobs/IPNHandlerCoinPaymentJob.php' => app_path('/Jobs/IPNHandlerCoinPaymentJob.php')
