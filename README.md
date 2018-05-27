@@ -1,12 +1,14 @@
 # CoinPayment
 
-CoinPayment is a laravel module for handle transaction from [**CoinPayment**](https://www.coinpayments.net/index.php?ref=3dc0c5875304cc5cc1d98782c2741cb5) like a create transaction, history transaction, etc.
+CoinPayment is a Laravel module for handling transactions from [**CoinPayment**](https://www.coinpayments.net/index.php?ref=3dc0c5875304cc5cc1d98782c2741cb5) like a create transaction, history transaction, etc.
 ![Example](https://github.com/hexters/CoinPayment/blob/master/example.png?raw=true)
+
 ## Requirement
 - Laravel ^5.6
 - PHP >= ^7.1
 - GuzzleHttp
 - Nesbot/Carbon
+
 ## Installation
 You can install the package via composer:
 ```
@@ -36,7 +38,7 @@ Install CoinPayment configuration
 $ php artisan coinpayment:install
 ```
 
-Setting schedule for checking transaction succesed in your file ```app > console > kernel```. example:
+Setting schedule for checking if transaction succeeded in your file ```app > console > kernel```. example:
 ```
 ...
     protected function schedule(Schedule $schedule) {
@@ -78,7 +80,7 @@ use CoinPayment; // use outside the class
     ];
 
     /*
-    *   @example secound item
+    *   @example second item
     */
     $trx['items'][1] = [
         'descriptionItem' => 'Product two',
@@ -91,7 +93,7 @@ use CoinPayment; // use outside the class
     *   if you want to remember your data at a later date, you can add the parameter below
     */
     $trx['payload'] = [
-        // your cusotm array here
+        // your custom array here
         'foo' => [
             'foo' => 'bar'
         ]
@@ -100,13 +102,13 @@ use CoinPayment; // use outside the class
     $link_transaction = CoinPayment::url_payload($trx);
     ...
     /*
-    *   On your balde
+    *   On your blade
     *   <a href="{{ $link_transaction }}" target="_blank">Pay Now</a>
     */
 ...
 ```
 
-Please except the route from csrf proccess, get the file ```app > Http > Middleware > VerifyCsrfToken.php```
+Please except the route from csrf process in the file ```app > Http > Middleware > VerifyCsrfToken.php```
 ```
     ...
     protected $except = [
@@ -116,9 +118,9 @@ Please except the route from csrf proccess, get the file ```app > Http > Middlew
     ];
     ...
 ```
-Open file `app > Jobs > coinPaymentCallbackProccedJob.php` for handle transaction proccess
+Open file `app > Jobs > coinPaymentCallbackProccedJob.php` for handling transaction process
 
-And Open `app > Jobs > IPNHandlerCoinPaymentJob.php` for handle IPN proccess
+And Open `app > Jobs > IPNHandlerCoinPaymentJob.php` for handling IPN process
 
 
 ## Route Access
