@@ -88,7 +88,7 @@
       </div>
 
       <div class="col-sm-8">
-        <p v-if="histories.length == 0">Transactoin not found?</p>
+        <p v-if="histories.length == 0">Transaction not found?</p>
         <ul v-bind:class="{ 'list-unstyled' : true, 'opacity': isLoading }" v-if="histories.length > 0">
           <li class="media mb-4" v-for="item in histories">
             <qrcode class="mr-3" v-bind:value="item.payment_address" :options="{ size: 150 }"></qrcode>

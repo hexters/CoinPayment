@@ -20,7 +20,7 @@ class EnabledIPNCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Instalatin coinpayment';
+    protected $description = 'Installation of coinpayment';
 
     /**
      * Create a new command instance.
@@ -56,7 +56,7 @@ class EnabledIPNCommand extends Command
 
         $ipn  = 'COIN_PAYMENT_MARCHANT_ID=' . $marchatid . PHP_EOL
               . 'COIN_PAYMENT_IPN_SECRET=' . $ipn_secret . PHP_EOL
-              . 'COIN_PAYMENT_IPN_DEBIG_EMAIL=' . $email;
+              . 'COIN_PAYMENT_IPN_DEBUG_EMAIL=' . $email;
       }
 
       $env  = 'COIN_PAYMENT_PUBLIC_KEY=' . $public_key . PHP_EOL
