@@ -313,7 +313,7 @@
           payment_method: this.paymentMethod
         };
 
-        axios.post(`{{ route('coinpayment.ajax.store.transaction') }}`, params)
+        axios.post(`{{ route('coinpayment.ajax.store.transaction').'?token='.request()->token }}`, params)
           .then(function(json){
             self.payment.first = json.data.result;
             var _self = self;
@@ -325,7 +325,7 @@
                 params: {!! $params !!},
                 payload: {!! $payload !!}
               };
-              axios.post(`{{ route('coinpayment.ajax.trxinfo') }}`, parameters)
+              axios.post(`{{ route('coinpayment.ajax.trxinfo').'?token='.request()->token }}`, parameters)
                 .then(function(json){
                   _self.payment.last = json.data.result;
                    var date = new Date(json.data.result.time_expires * 1000);
