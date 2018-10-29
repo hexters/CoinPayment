@@ -325,6 +325,7 @@
                 params: {!! $params !!},
                 payload: {!! $payload !!}
               };
+
               axios.post(`{{ route('coinpayment.ajax.trxinfo').'?token='.request()->token }}`, parameters)
                 .then(function(json){
                   _self.payment.last = json.data.result;
