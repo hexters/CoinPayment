@@ -127,3 +127,6 @@ And Open `app > Jobs > IPNHandlerCoinPaymentJob.php` for handling IPN process
 |Route Name|Route URL|Method|Description|
 |---|---|:---:|---|
 |`coinpayment.transaction.histories`|`/transactions/histories`|GET|Route for access transaction histories|
+
+### Give me a coffee
+BTC: `1388MHjeHmq6kUC7WpSS6pPtgG7hm7fCau`
