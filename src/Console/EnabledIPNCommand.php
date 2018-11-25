@@ -52,6 +52,7 @@ class EnabledIPNCommand extends Command
 
       $this->line('2. Activated IPN for webhook handle proccess.');
       $confirm = $this->confirm('Do you want to enable IPN mode ?');
+      
       if($confirm){
         $marchatid = $this->ask('Please insert merchant ID ?');
         $email = $this->ask('Please insert email address for debuging ?');
