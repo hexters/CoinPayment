@@ -42,6 +42,8 @@ class EnabledIPNCommand extends Command
       $ipn = '';
       $path = base_path('.env');
       $ipn_secret = str_random(20);
+      $email = '';
+      $marchatid = '';
 
       $this->line(PHP_EOL);
       $this->line('1. Configuration .env file.');
