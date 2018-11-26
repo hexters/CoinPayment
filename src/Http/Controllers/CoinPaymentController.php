@@ -41,6 +41,9 @@ class CoinPaymentController extends Controller {
       $fiat = [];
       $coins_accept = [];
       foreach($rates as $i => $coin){
+          if ($rates[$i]['status'] !== 'online') continue;
+          if ($rates[$i]['rate_btc'] == 0) continue;
+
         if((INT) $coin['is_fiat'] === 0){
           $rate = ($rateAmount / $rates[$i]['rate_btc']);
           $coins[] = [
