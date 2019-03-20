@@ -41,38 +41,38 @@ class CoinPaymentController extends Controller {
       $fiat = [];
       $coins_accept = [];
       foreach($rates as $i => $coin){
-
-        if((INT) $coin['is_fiat'] === 0){
-          $rate = $rates[$i]['rate_btc'] === 0 ? 0 : ($rateAmount / $rates[$i]['rate_btc']);
-          $coins[] = [
-            'name' => $coin['name'],
-            'rate' => number_format($rate,8,'.',''),
-            'iso' => $i,
-            'icon' => 'https://www.coinpayments.net/images/coins/' . $i . '.png',
-            'selected' => $i == 'BTC' ? true : false,
-            'accepted' => $coin['accepted']
-          ];
-
-          $aliases[$i] = $coin['name'];
+        if((FLOAT) $rates[$i]['rate_btc'] > 0) {
+          if((INT) $coin['is_fiat'] === 0){
+            $rate = ($rateAmount / $rates[$i]['rate_btc']);
+            $coins[] = [
+              'name' => $coin['name'],
+              'rate' => number_format($rate,8,'.',''),
+              'iso' => $i,
+              'icon' => 'https://www.coinpayments.net/images/coins/' . $i . '.png',
+              'selected' => $i == 'BTC' ? true : false,
+              'accepted' => $coin['accepted']
+            ];
+  
+            $aliases[$i] = $coin['name'];
+          }
+  
+          if((INT) $coin['is_fiat'] === 0 && $coin['accepted'] == 1){
+            $rate = ($rateAmount / $rates[$i]['rate_btc']);
+            $coins_accept[] = [
+              'name' => $coin['name'],
+              'rate' => number_format($rate,8,'.',''),
+              'iso' => $i,
+              'icon' => 'https://www.coinpayments.net/images/coins/' . $i . '.png',
+              'selected' => $i == 'BTC' ? true : false,
+              'accepted' => $coin['accepted']
+            ];
+          }
+  
+  
+          if((INT) $coin['is_fiat'] === 1){
+            $fiat[$i] = $coin;
+          }
         }
-
-        if((INT) $coin['is_fiat'] === 0 && $coin['accepted'] == 1){
-          $rate = $rates[$i]['rate_btc'] === 0 ? 0 : ($rateAmount / $rates[$i]['rate_btc']);
-          $coins_accept[] = [
-            'name' => $coin['name'],
-            'rate' => number_format($rate,8,'.',''),
-            'iso' => $i,
-            'icon' => 'https://www.coinpayments.net/images/coins/' . $i . '.png',
-            'selected' => $i == 'BTC' ? true : false,
-            'accepted' => $coin['accepted']
-          ];
-        }
-
-
-        if((INT) $coin['is_fiat'] === 1){
-          $fiat[$i] = $coin;
-        }
-
       }
 
       return response()->json([
