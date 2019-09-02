@@ -116,4 +116,7 @@ return \CoinPayment::getstatusbytxnid("CPDA4VUGSBHYLXXXXXXXXXXXXXXX");
 \CoinPayment::gettransactions()->where('status', 0')->get();
 ```
 
-gift me a coffee BTC: 1388MHjeHmq6kUC7WpSS6pPtgG7hm7fCau ☕☕☕☕
+Gift me a coffee ☕☕☕☕
+```
+BTC: 1388MHjeHmq6kUC7WpSS6pPtgG7hm7fCau 
+```
