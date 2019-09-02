@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import '~bootstrap/scss/bootstrap';
+@import '~vue-loading-overlay/dist/vue-loading.css';
+
+body {
+  font-size:10pt;
+}
+.coinpayment {
+  button {
+    font-size: 10pt;
+  }
+  table {
+    .header-color {
+      background: #ddd;
+    }
+    tr {
+      td, th {
+        padding: 5px;
+      }
+    }
+  }
+  .coin-search{
+    border: solid 1px #ddd;
+    padding:5px;
+    
+    input {
+      border-left: none;
+      border-bottom: none;
+      border-top: none;
+      box-shadow: none;
+      border-right:solid 1px #ddd;
+      font-size: 10pt;
+    }
+
+    button {
+      background: none;
+      border-radius:0;
+      font-size: 10pt;
+      &:active,
+      &:focus {
+        box-shadow: none;
+      }
+    }
+  }
+ 
+  .support-coin {
+    .media {
+      border: solid 1px #ddd;
+      cursor: pointer;
+      &.active {
+        border: red solid 1px;
+      }
+      &:hover {
+        background: rgba(0,0,0,.05);
+      }
+    }
+  }
+  
+  @keyframes placeHolderShimmer{
+      0%{
+          background-position: -900px 0
+      }
+      100%{
+          background-position: 900px 0
+      }
+  }
+  .animated-background {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    position: relative;
+  }
+
+  .mobile-version {
+    display: none;
+  }
+  .web-version {
+    display: block;
+  }
+  @media (max-width: 767px) {
+    .mobile-version {
+      display: block;
+    }
+    .web-version {
+      display: none;
+    }
+  }
+
+}

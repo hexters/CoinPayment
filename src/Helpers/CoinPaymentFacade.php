@@ -1,5 +1,5 @@
 <?php
-namespace Hexters\CoinPayment\Providers;
+namespace Hexters\CoinPayment\Helpers;
 
 use Illuminate\Support\Facades\Facade;
 
