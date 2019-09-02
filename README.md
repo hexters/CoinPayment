@@ -8,6 +8,8 @@
 
 CoinPayment is a Laravel module for handling transactions from [**CoinPayment**](https://www.coinpayments.net/index.php?ref=3dc0c5875304cc5cc1d98782c2741cb5) like a create transaction, history transaction, etc.
 
+![Example Image](https://github.com/hexters/CoinPayment/blob/master/example.png?raw=true)
+
 ### Version support
 | version | laravel |
 |-|-|
