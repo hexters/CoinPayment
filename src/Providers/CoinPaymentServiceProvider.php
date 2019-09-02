@@ -57,6 +57,7 @@ class CoinPaymentServiceProvider extends ServiceProvider
              */
             __DIR__.'/../Resources/assets/prod/css/coinpayment.css' => public_path('css/coinpayment.css'),
             __DIR__.'/../Resources/assets/prod/js/coinpayment.js' => public_path('js/coinpayment.js'),
+            __DIR__.'/../Resources/assets/images' => public_path('/'),
             /**
              * Publishing Jobs
              *
