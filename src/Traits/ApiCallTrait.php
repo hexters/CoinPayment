@@ -1,7 +1,7 @@
 <?php
-  namespace Hexters\CoinPayment\Classes;
+  namespace Hexters\CoinPayment\Traits;
 
-  trait coinPaymentTrait {
+  trait ApiCallTrait {
 
     public function api_call($cmd, $req = array()) {
     // Fill these in from your API Keys page
@@ -50,5 +50,5 @@
     } else {
         return array('error' => 'cURL error: '.curl_error($ch));
     }
-}
   }
+}

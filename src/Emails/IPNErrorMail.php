@@ -7,11 +7,11 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class IPNErrorReportMail extends Mailable implements ShouldQueue {
-
+class IPNErrorMail extends Mailable
+{
     use Queueable, SerializesModels;
 
-    private $data;
+    protected $data;
 
     /**
      * Create a new message instance.
@@ -28,10 +28,10 @@ class IPNErrorReportMail extends Mailable implements ShouldQueue {
      * @return $this
      */
     public function build() {
-        return $this
-          ->subject(date('Y/m/d') . ' CoinPayments IPN Error')
-          ->view('coinpayment::emails.error_reporting', [
-            'data' => $this->data
-          ]);
+
+        return $this->subject(env('APP_NAME') . date(' - Y/m/d - ') . ' CoinPayments IPN Error')
+            ->view('coinpayment::emails.error_reporting', [
+                'data' => $this->data
+            ]);
     }
 }

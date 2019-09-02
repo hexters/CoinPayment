@@ -9,10 +9,8 @@
         "Hexters\\CoinPayment\\Providers\\CoinPaymentServiceProvider"
     ],
     "aliases": {
-      "CoinPayment": "Hexters\\CoinPayment\\Providers\\CoinPaymentFacade"
+        "CoinPayment": "Hexters\\CoinPayment\\Helpers\\CoinPaymentFacade"
     },
-    "files": [
-        "start.php"
-    ],
+    "files": [],
     "requires": []
 }
