@@ -17,7 +17,7 @@ CoinPayment is a Laravel module for handling transactions from [**CoinPayment**]
 |[v2.0.0](https://github.com/hexters/CoinPayment)|^5.8|
 
 ## Requirement
-* Laravel 5.7
+* Laravel ^5.8
 * PHP >= ^7.2
 
 ## Installation
