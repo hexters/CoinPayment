@@ -113,7 +113,7 @@ return \CoinPayment::getstatusbytxnid("CPDA4VUGSBHYLXXXXXXXXXXXXXXX");
 
 ## Get histories transaction Eloquent
 ```
-\CoinPayment::gettransactions()->where('status', 0')->get();
+\CoinPayment::gettransactions()->where('status', 0)->get();
 ```
 
 Gift me a coffee ☕☕☕☕
