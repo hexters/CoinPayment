@@ -116,6 +116,22 @@ return \CoinPayment::getstatusbytxnid("CPDA4VUGSBHYLXXXXXXXXXXXXXXX");
 \CoinPayment::gettransactions()->where('status', 0)->get();
 ```
 
+# IPN Route
+
+Except this path /coinpayment/ipn into csrf proccess in `App\Http\Middleware\VerifyCsrfToken` 
+```
+. . .
+/**
+  * The URIs that should be excluded from CSRF verification.
+  *
+  * @var array
+  */
+protected $except = [
+    '/coinpayment/ipn'
+]; 
+. . .
+```
+
 Gift me a coffee ☕☕☕☕
 ```
 BTC: 1388MHjeHmq6kUC7WpSS6pPtgG7hm7fCau 
