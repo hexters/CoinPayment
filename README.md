@@ -56,9 +56,9 @@ Create Button transaction. Example placed on your controller
   */
   $transaction['items'][] = [
     'itemDescription' => 'Product one',
-    'itemPrice' => 10, // USD
-    'itemQty' => 1,
-    'itemSubtotalAmount' => 10 // USD
+    'itemPrice' => (FLOAT) 7.5, // USD
+    'itemQty' => (INT) 1,
+    'itemSubtotalAmount' => (FLOAT) 7.5 // USD
   ];
 
   /*
@@ -66,9 +66,9 @@ Create Button transaction. Example placed on your controller
   */
   $transaction['items'][] = [
     'itemDescription' => 'Product two',
-    'itemPrice' => 10, // USD
-    'itemQty' => 1,
-    'itemSubtotalAmount' => 10 // USD
+    'itemPrice' => (FLOAT) 10, // USD
+    'itemQty' => (INT) 1,
+    'itemSubtotalAmount' => (FLOAT) 10 // USD
   ];
 
   /*
@@ -76,9 +76,9 @@ Create Button transaction. Example placed on your controller
   */
   $transaction['items'][] = [
     'itemDescription' => 'Product Three',
-    'itemPrice' => 10, // USD
-    'itemQty' => 1,
-    'itemSubtotalAmount' => 10 // USD
+    'itemPrice' => (FLOAT) 10, // USD
+    'itemQty' => (INT) 2,
+    'itemSubtotalAmount' => (FLOAT) 20 // USD
   ];
 
   $transaction['payload'] = [
