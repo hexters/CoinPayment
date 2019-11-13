@@ -118,7 +118,7 @@ return \CoinPayment::getstatusbytxnid("CPDA4VUGSBHYLXXXXXXXXXXXXXXX");
 
 # IPN Route
 
-Except this path /coinpayment/ipn into csrf proccess in `App\Http\Middleware\VerifyCsrfToken` 
+Except this path `/coinpayment/ipn` into csrf proccess in `App\Http\Middleware\VerifyCsrfToken` 
 ```
 . . .
 /**
