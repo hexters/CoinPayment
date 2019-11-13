@@ -45,7 +45,7 @@ Create Button transaction. Example placed on your controller
   /*
   *   @required true
   */
-  $transaction['amountTotal'] = 30;
+  $transaction['amountTotal'] = (FLOAT) 37.5;
   $transaction['note'] = 'Note for your transaction';
   $transaction['buyer_email'] = 'buyer@mailinator.com';
   $transaction['redirect_url'] = url('/back_to_tarnsaction');
