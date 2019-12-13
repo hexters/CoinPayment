@@ -131,8 +131,11 @@ protected $except = [
 ]; 
 . . .
 ```
+# Troubleshooting
+## Cannot use object of type Illuminate\Http\JsonResponse as array
+Visit the [**CoinPayment API Keys**](https://www.coinpayments.net/index.php?cmd=acct_api_keys) page, under *Actions*, click on the *Edit Permissions* button. Enter the IP address of your API endpoint (e.g. your website server) in the *Restrict to IP/IP Range* input. Leaving it empty, may cause this error to occur.
 
-Gift me a coffee ☕☕☕☕
-```
-BTC: 1388MHjeHmq6kUC7WpSS6pPtgG7hm7fCau 
-```
+# Donate
+If this Laravel package was useful to you, please consider donating some coffee ☕☕☕☕
+
+Bitcoin (BTC): ```1388MHjeHmq6kUC7WpSS6pPtgG7hm7fCau```
