@@ -2,6 +2,7 @@
 
 namespace Hexters\CoinPayment\Console;
 
+use Str;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,7 +40,7 @@ class InstallationCommand extends Command
     public function handle() {
         $env = '';
         $path = base_path('.env');
-        $ipn_secret = str_random(20);
+        $ipn_secret = Str::random(20);
         $email = '';
         $marchatid = '';
 
