@@ -34,15 +34,16 @@ class AjaxController extends CoinPaymentController {
         $rates = $this->api_call('rates', [
             'accepted' => 1
         ]);
-
+        
         if(strtolower($rates['error']) == 'ok') {
             return $this->rates_formater($rates['result'], $usd);
         }
 
-        return response()->json([
+        return [
+            'result' => false,
             'status' => $rates['error'],
             'error' => 'Fata error, cannot getting support coin from CoinPayments.'
-        ], 401);
+        ];
 
     }
 
@@ -54,7 +55,7 @@ class AjaxController extends CoinPaymentController {
      * @return Array
      */
     protected function rates_formater(Array $rates, $usd) {
-
+            
             if(!is_array($rates)){
                 throw new Exception('The data must be an array');
             }
@@ -84,11 +85,20 @@ class AjaxController extends CoinPaymentController {
                  */
                 if((INT) $value['is_fiat'] === 0){
                     $rate = $rates[$coin]['rate_btc'] > 0 ? ($rateAmount / $rates[$coin]['rate_btc']) : 0;
+
+                    if(in_array($coin, ['BTC.LN'])) {
+                        $img = 'BTCLN';
+                    } else if(in_array($coin, ['USDT.ERC20'])) {
+                        $img = 'USDT';
+                    } else {
+                        $img = $coin;
+                    }
+
                     $coins[] = [
                       'name' => $value['name'],
                       'amount' => $rate > 0 ? number_format($rate,8,'.','') : '-',
                       'iso' => $coin,
-                      'icon' => 'https://www.coinpayments.net/images/coins/' . $coin . '.png',
+                      'icon' => 'https://www.coinpayments.net/images/coins/' . $img . '.png',
                       'selected' => $coin == 'BTC' ? true : false,
                       'accepted' => $value['accepted']
                     ];
@@ -104,11 +114,20 @@ class AjaxController extends CoinPaymentController {
                  */
                 if((INT) $value['is_fiat'] === 0 && $value['accepted'] == 1){
                     $rate = $rates[$coin]['rate_btc'] > 0 ? ($rateAmount / $rates[$coin]['rate_btc']) : 0;
+
+                    if(in_array($coin, ['BTC.LN'])) {
+                        $img = 'BTCLN';
+                    } else if(in_array($coin, ['USDT.ERC20'])) {
+                        $img = 'USDT';
+                    } else {
+                        $img = $coin;
+                    }
+
                     $coins_accept[] = [
                         'name' => $value['name'],
                         'amount' => $rate > 0 ? number_format($rate,8,'.','') : '-',
                         'iso' => $coin,
-                        'icon' => 'https://www.coinpayments.net/images/coins/' . $coin . '.png',
+                        'icon' => 'https://www.coinpayments.net/images/coins/' . $img . '.png',
                         'selected' => $coin == 'BTC' ? true : false,
                         'accepted' => $value['accepted']
                     ];
@@ -123,6 +142,7 @@ class AjaxController extends CoinPaymentController {
             }
 
             return [
+                'result' => true,
                 'coins' => $coins,
                 'accepted_coin' => $coins_accept,
                 'aliases' => $aliases,
@@ -154,7 +174,10 @@ class AjaxController extends CoinPaymentController {
              * Get support currencies data
              */
             $rates = $this->rates($payload['amountTotal']);
-
+            
+            if(!$rates['result']) {
+                throw new \Exception($rates['status']);
+            }
             /**
              * Default coin
              */
