@@ -23,11 +23,10 @@ Route::as('coinpayment.')->prefix('coinpayment')
              */
             Route::group([
                 'prefix' => 'ajax',
-                'as' => 'ajax.'
             ], function() {
-                Route::get('/rates/{usd}', 'AjaxController@rates');
-                Route::post('/payload', 'AjaxController@encrypt_payload');
-                Route::post('/create', 'AjaxController@create_transaction');
+                Route::get('/rates/{usd}', 'AjaxController@rates')->name('rates');
+                Route::post('/payload', 'AjaxController@encrypt_payload')->name('encrypt.payload');
+                Route::post('/create', 'AjaxController@create_transaction')->name('create.transaction');
             });
         });
 
@@ -35,5 +34,5 @@ Route::as('coinpayment.')->prefix('coinpayment')
          * IPN handler
          * Please except into csrf proccess /coinpayment/ipn
          */
-        Route::post('/ipn', 'IPNController');
+        Route::post('/ipn', 'IPNController')->name('ipn');
     });
