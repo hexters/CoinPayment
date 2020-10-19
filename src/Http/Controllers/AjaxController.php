@@ -208,7 +208,7 @@ class AjaxController extends CoinPaymentController {
             return response()->json([
                 'result' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 400);
         }
 
     }
@@ -235,7 +235,7 @@ class AjaxController extends CoinPaymentController {
             }
 
             $data = [
-                'amount' => $request->amountTotal,
+                'amount' => (FLOAT) $request->amountTotal,
                 'currency1' => config('coinpayment.default_currency'),
                 'currency2' => $request->coinIso,
                 'buyer_email' => $request->buyer_email
@@ -274,7 +274,7 @@ class AjaxController extends CoinPaymentController {
             return response()->json([
                 'result' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 400);
         }
     }
 

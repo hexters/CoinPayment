@@ -22,7 +22,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Set the custom middleware 
-    | you can set the "auth" or "auth:guard"
+    | you can set the "web", "auth" or "auth:guard"
     |
     */
     

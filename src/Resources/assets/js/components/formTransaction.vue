@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <div class="text-center mb-3">
-                    <a v-bind:href="payload.redirect_url">&laquo; Cancel transaction</a>
+                    <a v-bind:href="payload.redirect_url">&laquo; Cancel Transaction</a>
                 </div>
             </div>
 
@@ -302,7 +302,7 @@ export default {
                 container: this.fullPage ? null : this.$refs.formContainer,
                 canCancel: false
             });
-
+    
             axios.post(_host + '/coinpayment/ajax/create', newPayload)
                 .then(json => {
                     self.transaction = json.data;
@@ -310,15 +310,12 @@ export default {
                     self.format_expired();
                     loader.hide()
                 })
-                .then(error => {
-                    if(error) {
-                        if(error.response.data.message != undefined) {
-                            swal(error.response.data.message, {
-                                icon: 'warning'
-                            });
-                        }
+                .catch(error => {
+                    if(error.response.status >= 400) {
+                        swal(error.response.data.message, {
+                            icon: 'warning'
+                        });
                     }
-
                     loader.hide()
                 });
         },
@@ -343,7 +340,7 @@ export default {
                 }
             })
             .catch(error => {
-                if(error.response.data.message !== undefined) {
+                if(typeof error.response.data.message !== "undefined") {
                     swal(error.response.data.message, {
                         icon: 'warning'
                     });
