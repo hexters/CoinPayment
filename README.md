@@ -43,6 +43,7 @@ Installation finish.
 ## Getting Started
 Create Button transaction. Example placed on your controller
 ```
+  use Hexters\CoinPayment\Helpers\CoinPaymentFacade as CoinPayment;
   . . . 
   /*
   *   @required true
@@ -89,7 +90,7 @@ Create Button transaction. Example placed on your controller
     ]
   ];
 
-  return \CoinPayment::generatelink($transaction);
+  return CoinPayment::generatelink($transaction);
   . . . 
 ```
 
