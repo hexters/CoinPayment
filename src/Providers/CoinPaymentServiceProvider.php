@@ -60,7 +60,7 @@ class CoinPaymentServiceProvider extends ServiceProvider
              * Publishing Jobs
              *
              */
-            __DIR__.'/../Jobs/CoinpaymentListener.php' => app_path('jobs/CoinpaymentListener.php'),
+            __DIR__.'/../Jobs/CoinpaymentListener.php' => app_path('Jobs/CoinpaymentListener.php'),
         ], 'coinpayment');
 
         $this->mergeConfigFrom(
