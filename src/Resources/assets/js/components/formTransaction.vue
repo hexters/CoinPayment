@@ -330,8 +330,6 @@ export default {
             })
             .then(json => {
                 if(json.data.result) {
-                    console.log(json.data);
-                    
                     self.rates = json.data.data.rates.accepted_coin;
                     self.header = json.data.data.config;
                     self.payload = json.data.data.payload;

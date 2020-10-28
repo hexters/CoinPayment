@@ -69,6 +69,11 @@ class AjaxController extends CoinPaymentController {
             }
 
             /**
+             * Get custom logo
+             */
+            $logos = config('coinpayment.logos', []);
+
+            /**
              * Get default coin and fiat 
              */
             $btcRate = (FLOAT) $rates['BTC']['rate_btc'];
@@ -94,11 +99,14 @@ class AjaxController extends CoinPaymentController {
                         $img = $coin;
                     }
 
+                    
+                    $icon = $logos[$value['name']] ?? 'https://www.coinpayments.net/images/coins/' . $img . '.png';
+
                     $coins[] = [
                       'name' => $value['name'],
                       'amount' => $rate > 0 ? number_format($rate,8,'.','') : '-',
                       'iso' => $coin,
-                      'icon' => 'https://www.coinpayments.net/images/coins/' . $img . '.png',
+                      'icon' => $icon,
                       'selected' => $coin == 'BTC' ? true : false,
                       'accepted' => $value['accepted']
                     ];
@@ -123,11 +131,13 @@ class AjaxController extends CoinPaymentController {
                         $img = $coin;
                     }
 
+                    $icon = $logos[$value['name']] ?? 'https://www.coinpayments.net/images/coins/' . $img . '.png';
+                    
                     $coins_accept[] = [
                         'name' => $value['name'],
                         'amount' => $rate > 0 ? number_format($rate,8,'.','') : '-',
                         'iso' => $coin,
-                        'icon' => 'https://www.coinpayments.net/images/coins/' . $img . '.png',
+                        'icon' => $icon,
                         'selected' => $coin == 'BTC' ? true : false,
                         'accepted' => $value['accepted']
                     ];
