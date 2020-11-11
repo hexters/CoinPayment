@@ -4,9 +4,11 @@
 [![Total Downloads](https://poser.pugx.org/hexters/coinpayment/downloads)](https://packagist.org/packages/hexters/coinpayment)
 [![License](https://poser.pugx.org/hexters/coinpayment/license)](https://packagist.org/packages/hexters/coinpayment)
 
-## New transform coinpayment package
+## Coinpayment Laravel Package
 
-CoinPayment is a Laravel module for handling transactions from [**CoinPayment**](https://www.coinpayments.net/index.php?ref=3dc0c5875304cc5cc1d98782c2741cb5) like a create transaction, history transaction, etc.
+[![Banner](https://www.coinpayments.net/images/b/banner6_728x90-3.jpg)](https://www.coinpayments.net/index.php?ref=3dc0c5875304cc5cc1d98782c2741cb5)
+
+CoinPayment is a Laravel package for handling transactions from CoinPayment like a create transaction, history transaction, etc.
 
 ![Example Image](https://github.com/hexters/CoinPayment/blob/master/examplev2.png?raw=true)
 
