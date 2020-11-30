@@ -30,6 +30,8 @@ Route::as('coinpayment.')->prefix('coinpayment')
                 Route::get('/rates/{usd}', 'AjaxController@rates')->name('rates');
                 Route::post('/payload', 'AjaxController@encrypt_payload')->name('encrypt.payload');
                 Route::post('/create', 'AjaxController@create_transaction')->name('create.transaction');
+                Route::get('/balances', 'AjaxController@get_balance')->name('balances');
+                Route::post('/top_up', 'AjaxController@top_up')->name('top_up');
             });
         });
 

@@ -12,6 +12,8 @@ use Illuminate\Routing\Controller;
 use Hexters\CoinPayment\Traits\ApiCallTrait;
 use Hexters\CoinPayment\Helpers\CoinPaymentHelper;
 use Hexters\CoinPayment\Entities\CoinpaymentTransaction;
+use Hexters\CoinPayment\Helpers\CoinPaymentFacade;
+
 
 class AjaxController extends CoinPaymentController {
 
@@ -161,7 +163,7 @@ class AjaxController extends CoinPaymentController {
             ];
         
     }
-
+    
     /**
      * Encrypted the payload string data
      *
@@ -246,6 +248,15 @@ class AjaxController extends CoinPaymentController {
                 throw new Exception('Type currency coin not found!');
             }
 
+            $total = 0;
+            foreach($request->items as $item) {
+                $total += $item['itemSubtotalAmount'];
+            }
+            if($total != $request->amountTotal) {
+                throw new Exception('the calculation of amountTotal and item total is different!');
+            }
+
+
             $data = [
                 'amount' => (FLOAT) $request->amountTotal,
                 'currency1' => config('coinpayment.default_currency'),
@@ -264,6 +275,7 @@ class AjaxController extends CoinPaymentController {
             }
 
             $result = array_merge($create['result'], $info['result'], [
+                'amount_total_fiat' => $request->amountTotal,
                 'order_id' => $request->order_id ?? '-',
                 'payload' => $request->payload,
                 'buyer_name' => $request->buyer_name ?? '-',
@@ -318,6 +330,52 @@ class AjaxController extends CoinPaymentController {
                 return $rate;
             }
         }
+    }
+
+    /**
+     * Get balance
+     *
+     * @return void
+     */
+    public function get_balance() {
+        $response = CoinPaymentFacade::getBalances();
+        if($response['error'] == 'ok') {
+            $blances = $response['result'];
+            $coins = [];
+            foreach($blances as $coin => $data) {
+                $coins[] = [
+                    'coin' => $coin,
+                    'balance' => number_format($data['balance'], 2),
+                    'balancef' => number_format($data['balancef'], 8),
+                    'coin_status' => $data['coin_status'],
+                    'status' => $data['status'],
+                    'address' => '',
+                    'icon' => 'https://www.coinpayments.net/images/coins/' . $coin . '.png'
+                ];
+            }
+
+            return response()->json($coins, 200);
+        }
+
+        return response()->json([
+            'message' => $response['error'] ?? 'Request balance failed!'
+        ], 400);
+    }
+
+    public function top_up(Request $request) {
+        $request->validate([
+            'currency' => ['required']
+        ]);
+        $response = CoinPaymentFacade::getDepositAddress($request->currency);
+        if($response['error'] == 'ok') {
+            return response()->json([
+                'coin' => $request->currency,
+                'address' => $response['result']['address']
+            ]);
+        }
+        return response()->json([
+            'message' => $response['error'] ?? 'Request balance failed!'
+        ], 400);
     }
 
 }

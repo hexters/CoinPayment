@@ -1,12 +1,8 @@
-import VueCountdown from '@xkeshi/vue-countdown';
-
 setTimeout(() => {
-  
-  Vue.component(VueCountdown.name, VueCountdown);
-  let vue = new Vue({
-    'el': '#app',
+  new Vue({
+    'el': '#app-coinpayment',
     components: {
-      'countDown': require('./components/Countdowns.vue')
+      'Balances': require('./components/Balances.vue')
     }
   });
 }, 1000);

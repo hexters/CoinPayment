@@ -15,6 +15,7 @@ class CoinpaymentTransaction extends Model {
         'buyer_name',
         'buyer_email',
         'address',
+        'amount_total_fiat',
         'amount',
         'amountf',
         'coin',

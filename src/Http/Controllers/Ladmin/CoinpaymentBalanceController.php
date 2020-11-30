@@ -4,28 +4,19 @@ namespace Hexters\CoinPayment\Http\Controllers\Ladmin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Hexters\CoinPayment\Datatables\CoinpaymentDatatable;
-use Hexters\CoinPayment\Entities\CoinpaymentTransaction;
-use Hexters\CoinPayment\Helpers\CoinPaymentFacade as CoinPayment;
 
-class CoinPaymentTransactionController extends Controller {
-
-    protected $model;
-
-    public function __construct(CoinpaymentTransaction $model) {
-      $this->model = $model;
-    }
-
+class CoinpaymentBalanceController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index() {
-      
-      ladmin()->allow(['administrator.coinpayment.transaction.index']);
 
-      return CoinpaymentDatatable::view();
+        ladmin()->allow(['administrator.coinpayment.balances.index']);
+
+        return view('coinpayment::ladmin.balances.index');
     }
 
     /**
@@ -55,13 +46,9 @@ class CoinPaymentTransactionController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($uuid) {
-      ladmin()->allow(['administrator.coinpayment.transaction.show']);
-
-        $data['data'] = $this->model->where('uuid', $uuid)->firstOrFail();
-
-        return view('coinpayment::ladmin.transaction.show', $data);
-
+    public function show($id)
+    {
+        //
     }
 
     /**
@@ -82,16 +69,9 @@ class CoinPaymentTransactionController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $uuid) {
-
-
-
-      $data = $this->model->where('uuid', $uuid)->firstOrFail();
-      $status = CoinPayment::getstatusbytxnid($data->txn_id);
-
-      session()->flash('success', [$status['status_text']]);
-
-      return redirect()->back();
+    public function update(Request $request, $id)
+    {
+        //
     }
 
     /**

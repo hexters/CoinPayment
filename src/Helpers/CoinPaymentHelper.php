@@ -58,8 +58,18 @@ class CoinPaymentHelper {
 		}
 	}
 
+	public function getBalances() {
+		return $this->api_call('balances');
+	}
+
 	public function gettransactions() {
 		return new CoinpaymentTransaction;
+	}
+
+	public function getDepositAddress($currency) {
+		return $this->api_call('get_deposit_address', [
+			'currency' => $currency
+		]);
 	}
 
 }

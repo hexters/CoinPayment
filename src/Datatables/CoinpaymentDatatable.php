@@ -20,13 +20,13 @@
           return '<img src="' . $this->logos($item->coin) . '" title="' . $item->coin . '" data-toggle="tooltip" data-placement="top" width="25" />';
         })
         ->editColumn('amount', function($item) {
-          return '<b class="text-danger">' . number_format($item->amount, 2) . ' ' . $item->currency_code . '</b><br /><small class="text-muted">' . number_format($item->amountf, 8) . ' ' . $item->coin . '</small>';
+          return '<b class="text-danger">' . number_format($item->amount_total_fiat, 2) . ' ' . $item->currency_code . '</b><br /><small class="text-muted">' . number_format($item->amountf, 8) . ' ' . $item->coin . '</small>';
         })
         ->addColumn('action', function($item) {
           return view('ladmin::table.action', [
             'show' => [
-              'gate' => 'administrator.coinpayment.show',
-              'url' => route('administrator.coinpayment.show', [$item->uuid, 'back' => request()->fullUrl()])
+              'gate' => 'administrator.coinpayment.transaction.show',
+              'url' => route('administrator.coinpayment.transaction.show', [$item->uuid, 'back' => request()->fullUrl()])
             ]
           ]);
         })

@@ -1,5 +1,5 @@
 <x-ladmin-layout>
-  <x-slot name="title">Detail of Transaction</x-slot>
+  <x-slot name="title">Details of Transaction</x-slot>
   
   <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
     <li class="nav-item" role="presentation">
@@ -17,7 +17,7 @@
 
           <x-ladmin-card>
             <x-slot name="flat">
-              <table class="table">
+              <table class="table m-0">
                 <tbody>
                   <tr>
                     <td>Payment ID</td>
@@ -46,9 +46,20 @@
                       </div>
                     </td>
                   </tr>
+                  
                   <tr>
-                    <td>Time Left For Us to Confirm Funds	</td>
-                    <td><count-down timeout="{{ $data->time_expires }}" /></td>
+                    <td colspan="2" class="text-right">
+
+                      <form action="{{ route('administrator.coinpayment.transaction.update', $data->uuid) }}" method="POST">
+                        @csrf 
+                        @method('PUT')
+                        <a target="_blank" class="btn btn-link" href="{{ $data->status_url }}">Alternative Link</a>
+                        @can(['administrator.coinpayment.transaction.cehck.status'])
+                          <button type="submit" class="btn btn-primary">Check Status &rarr;</button>
+                        @endcan
+                      </form>
+
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -62,12 +73,12 @@
               <table class="table">
                 <tbody>
                   <tr>
-                    <td>Payment Date</td>
-                    <td>{{ $data->created_at->format(config('coinpayment.font.date_format')) }}</td>
-                  </tr>
-                  <tr>
                     <td>Order ID</td>
                     <td>{{ $data->order_id }}</td>
+                  </tr>
+                  <tr>
+                    <td>Payment Date</td>
+                    <td>{{ $data->created_at->format(config('coinpayment.font.date_format')) }}</td>
                   </tr>
                   <tr>
                     <td>Buyer Name</td>
@@ -95,15 +106,7 @@
       <x-ladmin-card class="text-center">
         <div>
           <img src="{{ $data->qrcode_url }}" alt="Qr Code" class="img-fluid">
-          <a target="_blank" href="{{ $data->status_url }}">Alternative Link</a>
         </div>
-        <x-slot name="footer">
-          <form action="{{ route('administrator.coinpayment.update', $data->uuid) }}" method="POST">
-          @csrf 
-          @method('PUT')
-            <button type="submit" class="btn btn-primary btn-sm btn-block">Check Status &rarr;</button>
-          </form>
-        </x-slot>
       </x-ladmin-card>
     </div>
   </div>
@@ -130,14 +133,22 @@
                 <td class="text-right">{{ $item->subtotal }} {{ $item->currency_code }}</td>
               </tr>
           @empty
-              
+              <tr>
+                <td colspan="5">Item not available</td>
+              </tr>
           @endforelse
         </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" class="text-right font-weight-bold">Total</td>
+            <td class="text-right font-weight-bold">{{ $data->amount_total_fiat }} {{ $item->currency_code }}</td>
+          </tr>
+        </tfoot>
       </table>
     </x-slot>
   </x-ladmin-card>
 
-  <x-slot name="styles">
+  <x-slot name="scripts">
     <script src="{{ asset('/js/ladmin.coinpayment.js') }}"></script>
   </x-slot>
 </x-ladmin-layout>

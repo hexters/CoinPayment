@@ -25,6 +25,7 @@ class CreateCoinpaymentTransactionsTable extends Migration
             $table->string('time_expires')->nullable();
 
             $table->string('address')->nullable();
+            $table->decimal('amount_total_fiat', 10, 2)->nullable();
             $table->string('amount')->nullable();
             $table->string('amountf')->nullable();
             $table->string('coin')->nullable();
