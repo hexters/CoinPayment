@@ -59,7 +59,19 @@ class CoinPaymentPlugin {
           'route' => ['administrator.coinpayment.balances.index', []],
           'isActive' => 'coinpayment/balances*',
           'id' => '',
-          'gates' => [],
+          'gates' => [
+            [
+              'gate' => 'administrator.coinpayment.balances.topup',
+              'title' => 'Create Top Up',
+              'description' => 'User can create top up'
+            ],
+
+            [
+              'gate' => 'administrator.coinpayment.balances.withdrawal',
+              'title' => 'Create Withdrawal',
+              'description' => 'User can create Withdrawal'
+            ],
+          ],
         ]
       ]
     ];

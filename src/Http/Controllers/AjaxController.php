@@ -350,6 +350,16 @@ class AjaxController extends CoinPaymentController {
                     'coin_status' => $data['coin_status'],
                     'status' => $data['status'],
                     'address' => '',
+                    'withdrawal' => [
+                        'amount' => $data['balancef'],
+                        'add_tx_fee' => 0,
+                        'currency' => $coin,
+                        'currency2' => config('coinpayment.default_currency'),
+                        'address' => '',
+                        'pbntag' => '',
+                        'note' => ''
+                    ],
+                    'loading' => false,
                     'icon' => 'https://www.coinpayments.net/images/coins/' . $coin . '.png'
                 ];
             }
@@ -363,6 +373,11 @@ class AjaxController extends CoinPaymentController {
     }
 
     public function top_up(Request $request) {
+
+        if(config('ladmin')) {
+            ladmin()->allow(['administrator.coinpayment.balances.topup']);
+        }
+
         $request->validate([
             'currency' => ['required']
         ]);
@@ -376,6 +391,30 @@ class AjaxController extends CoinPaymentController {
         return response()->json([
             'message' => $response['error'] ?? 'Request balance failed!'
         ], 400);
+    }
+
+    public function create_withdrawal(Request $request) {
+
+        if(config('ladmin')) {
+            ladmin()->allow(['administrator.coinpayment.balances.withdrawal']);
+        }
+
+        $request->validate([
+            'amount' => ['required', 'numeric'],
+            'add_tx_fee' => ['required', 'numeric'],
+            'address' => ['required'],
+            'note' => ['nullable', 'max:60']
+        ]);
+
+        $response = CoinPaymentFacade::createWithdrawal($request->all());
+        if($response['error'] == 'ok') {
+            return response()->json($result['result']);
+        }
+
+        return response()->json([
+            'message' => $response['error'] ?? 'Request balance failed!'
+        ], 400);
+
     }
 
 }

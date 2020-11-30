@@ -15,8 +15,8 @@ class CoinpaymentBalanceController extends Controller
     public function index() {
 
         ladmin()->allow(['administrator.coinpayment.balances.index']);
-
-        return view('coinpayment::ladmin.balances.index');
+        $data['user'] = auth()->user();
+        return view('coinpayment::ladmin.balances.index', $data);
     }
 
     /**

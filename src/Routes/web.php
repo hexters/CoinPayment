@@ -32,6 +32,8 @@ Route::as('coinpayment.')->prefix('coinpayment')
                 Route::post('/create', 'AjaxController@create_transaction')->name('create.transaction');
                 Route::get('/balances', 'AjaxController@get_balance')->name('balances');
                 Route::post('/top_up', 'AjaxController@top_up')->name('top_up');
+                Route::post('/create_withdrawal', 'AjaxController@create_withdrawal')->name('create_withdrawal');
+                
             });
         });
 
