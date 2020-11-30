@@ -15,7 +15,15 @@ class CreateCoinpaymentTransactionsTable extends Migration
     {
         Schema::create('coinpayment_transactions', function (Blueprint $table) {
             $table->increments('id');
+            $table->uuid('uuid')->unique();
             $table->string('txn_id')->unique()->nullable();
+            
+            $table->string('order_id')->nullable();
+            $table->string('buyer_name')->nullable();
+            $table->string('buyer_email')->nullable();
+            $table->string('currency_code')->nullable();
+            $table->string('time_expires')->nullable();
+
             $table->string('address')->nullable();
             $table->string('amount')->nullable();
             $table->string('amountf')->nullable();

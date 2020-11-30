@@ -55,14 +55,16 @@ class CoinPaymentServiceProvider extends ServiceProvider
              */
             __DIR__.'/../Resources/assets/prod/css/coinpayment.css' => public_path('css/coinpayment.css'),
             __DIR__.'/../Resources/assets/prod/js/coinpayment.js' => public_path('js/coinpayment.js'),
+            __DIR__.'/../Resources/assets/prod/js/ladmin.coinpayment.js' => public_path('js/ladmin.coinpayment.js'),
             __DIR__.'/../Resources/assets/images' => public_path('/'),
+            __DIR__.'/../Resources/assets/icons/bitcoin.svg' => base_path('resources/assets/icons/bitcoin.svg'),
             /**
              * Publishing Jobs
              *
              */
             __DIR__.'/../Jobs/CoinpaymentListener.php' => app_path('Jobs/CoinpaymentListener.php'),
         ], 'coinpayment');
-
+        
         $this->mergeConfigFrom(
             __DIR__.'/../Config/config.php', 'coinpayment'
         );

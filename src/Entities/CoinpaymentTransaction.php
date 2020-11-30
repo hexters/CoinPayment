@@ -2,6 +2,7 @@
 
 namespace Hexters\CoinPayment\Entities;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,10 +11,15 @@ class CoinpaymentTransaction extends Model {
     use SoftDeletes;
 
     protected $fillable = [
+        'order_id',
+        'buyer_name',
+        'buyer_email',
         'address',
         'amount',
         'amountf',
         'coin',
+        'time_expires',
+        'currency_code',
         'confirms_needed',
         'payment_address',
         'qrcode_url',
@@ -57,4 +63,16 @@ class CoinpaymentTransaction extends Model {
     protected $hidden = [
         'deleted_at'
     ];
+
+    protected static function boot() {
+        parent::boot();
+
+        self::creating(function($model) {
+            $model->uuid = (String) Str::uuid();
+        });
+    }
+
+    public function items() {
+        return $this->hasMany(CoinpaymentTransactionItem::class, 'coinpayment_transaction_id', 'id');
+    }
 }

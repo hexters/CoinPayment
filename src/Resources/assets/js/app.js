@@ -9,13 +9,13 @@ Vue.component(VueCountdown.name, VueCountdown);
 
 $(function() {
   $('.product-list').slimScroll({
-    height: '200px'
+    height: '150px'
   });
   $('#support-coin-web').slimScroll({
-    height: '430px'
+    height: '400px'
   });
   $('#support-coin-mobile').slimScroll({
-    height: '400px'
+    height: '350px'
   });
 });
 

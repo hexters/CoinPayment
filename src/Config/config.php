@@ -82,7 +82,8 @@ return [
     */
 
     'font' => [
-        'family' => "'Roboto', sans-serif"
+        'family' => "'Roboto', sans-serif",
+        'date_format' => 'd/m/y H:i'
     ],
 
     /*
@@ -93,5 +94,6 @@ return [
     
     'logos' => [
         'Bitcoin' => 'https://github.com/hexters/CoinPayment/blob/master/btc.png?raw=true',
+        'Velas (Old Chain)' => 'https://www.coinpayments.net/images/coins/VLX.png'
     ]
 ];

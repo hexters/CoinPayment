@@ -14,10 +14,25 @@
                             <div class="animated-background" style="height:50px;"></div>
                         </div>
                     </div>
+                    <div class="mb-3">
+                        <table width="100%">
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-bold">Name</td>
+                                    <td class="text-right">{{ payload.buyer_name || '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">E-mail Address</td>
+                                    <td class="text-right">{{ payload.buyer_email || '-' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <table class="table mb-0">
                         <thead>
                             <tr class="header-color">
-                                <th width="70%">Description</th>
+                                <th width="50%">Description</th>
+                                <th width="20%" class="text-center">Qty</th>
                                 <th width="30%" class="text-right">Amount</th>
                             </tr>
                         </thead>
@@ -25,23 +40,27 @@
                     <div class="product-list">
                         <table class="table mt-0">
                             <tbody>
-                                <tr v-for="index in 3" v-bind:key="index" v-if="!payload.items">
-                                    <td width="70%">
-                                        <div class="animated-background mb-2" style="height:15px;"></div>
-                                        <div class="animated-background mb-2" style="height:10px;"></div>
-                                        <div class="animated-background" style="height:10px;"></div>
-                                    </td>
-                                    <td width="30%" class="clear-right">
-                                        <div class="animated-background float-right" style="width:30px;height:10px;"></div>
-                                    </td>
-                                </tr>
+                                <template v-if="!payload.items">
+                                    <tr v-for="index in 3" v-bind:key="index">
+                                        <td width="50%">
+                                            <div class="animated-background mb-2" style="height:15px;"></div>
+                                            <div class="animated-background" style="height:10px;"></div>
+                                        </td>
+                                        <td width="20%">
+                                            <div class="animated-background mb-2" style="height:15px;"></div>
+                                        </td>
+                                        <td width="30%" class="clear-right">
+                                            <div class="animated-background float-right" style="width:30px;height:10px;"></div>
+                                        </td>
+                                    </tr>
+                                </template>
                                 
-                                <tr v-for="(item, i) in payload.items" v-bind:key="i">
-                                    <td width="70%" title="">
+                                <tr v-for="(item, i) in payload.items" v-bind:key="i" :title="item.itemDescription">
+                                    <td width="50%" class="coinpayment-wraper">
                                         <strong>{{ item.itemDescription }}</strong><br>
-                                        <small class="text-muted">item price: {{ item.itemPrice }} {{ default_currency }}</small><br>
-                                        <small class="text-muted">quantity: {{ item.itemQty }}</small>
+                                        <small class="text-muted">item price: {{ item.itemPrice }} {{ default_currency }}</small>
                                     </td>
+                                    <td width="20%" class="text-center">{{ item.itemQty }}</td>
                                     <td width="30%" class="text-right">{{ item.itemSubtotalAmount }} {{ default_currency }}</td>
                                 </tr>
                             </tbody>
@@ -84,7 +103,7 @@
             </div>
 
             <div class="col-lg-7 web-version">
-                <div class="card shadow-lg p-3 mb-5 bg-white border-0">
+                <div class="card shadow-lg p-3 mb-5 bg-white border-0" style="min-height:585px;">
                     <div class="card-body">
                         <form action="">
                             <div class="input-group mb-3 coin-search">
@@ -96,17 +115,19 @@
                         </form>
                         <div id="support-coin-web" class="support-coin">
                             <div class="row">
-                                <div class="col-lg-6 col-sm-6 col-sm-12 mb-2" v-for="(index) in 10" v-bind:key="index" v-if="rates.length === 0">
-                                    <div class="media list-coins p-2">
-                                        <div class="col-3 m-0 p-0">
-                                            <div class="animated-background" style="height:35px;"></div>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="animated-background mb-2" style="height:15px;"></div>
-                                            <div class="animated-background" style="height:10px;"></div>
+                                <template v-if="rates.length === 0">
+                                    <div class="col-lg-6 col-sm-6 col-sm-12 mb-2" v-for="(index) in 10" v-bind:key="index">
+                                        <div class="media list-coins p-2">
+                                            <div class="col-3 m-0 p-0">
+                                                <div class="animated-background" style="height:35px;"></div>
+                                            </div>
+                                            <div class="col-9">
+                                                <div class="animated-background mb-2" style="height:15px;"></div>
+                                                <div class="animated-background" style="height:10px;"></div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </template>
 
                                 <div class="col-lg-6 col-sm-6 col-sm-12 mb-2" v-for="(rate, i) in filterCoin" v-bind:key="i">
                                     <div v-bind:class="'media list-coins p-2 ' + (default_coin.iso == rate.iso ? 'active' : '')" @click="set_billing(rate)">
@@ -145,17 +166,19 @@
                     </form>
                     <div id="support-coin-mobile" class="support-coin">
                         <div class="row">
-                            <div class="col-lg-6 col-sm-6 col-sm-12 mb-2" v-for="(index) in 10" v-bind:key="index" v-if="rates.length === 0">
-                                <div class="media list-coins p-2">
-                                    <div class="col-3 m-0 p-0">
-                                        <div class="animated-background" style="height:35px;"></div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="animated-background mb-2" style="height:15px;"></div>
-                                        <div class="animated-background" style="height:10px;"></div>
+                            <template v-if="rates.length === 0">
+                                <div class="col-lg-6 col-sm-6 col-sm-12 mb-2" v-for="(index) in 10" v-bind:key="index">
+                                    <div class="media list-coins p-2">
+                                        <div class="col-3 m-0 p-0">
+                                            <div class="animated-background" style="height:35px;"></div>
+                                        </div>
+                                        <div class="col-9">
+                                            <div class="animated-background mb-2" style="height:15px;"></div>
+                                            <div class="animated-background" style="height:10px;"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </template>
 
                             <div class="col-lg-6 col-sm-6 col-sm-12 mb-2" v-for="(rate, i) in filterCoin" v-bind:key="i">
                                 <div v-bind:class="'media list-coins p-2 ' + (default_coin.iso == rate.iso ? 'active' : '')" @click="set_billing(rate)">
@@ -349,3 +372,15 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.coinpayment-substr {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    display: inline-block;
+}
+.coinpayment-wraper {
+    word-wrap: break-word;
+}
+</style>

@@ -4,6 +4,7 @@ namespace Hexters\CoinPayment\Http\Controllers;
 
 use App\Jobs\CoinpaymentListener;
 
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -186,7 +187,7 @@ class AjaxController extends CoinPaymentController {
             $rates = $this->rates($payload['amountTotal']);
             
             if(!$rates['result']) {
-                throw new \Exception($rates['status']);
+                throw new Exception($rates['status']);
             }
             /**
              * Default coin
@@ -231,6 +232,7 @@ class AjaxController extends CoinPaymentController {
      */
     public function create_transaction(Request $request) {
         try{
+            DB::beginTransaction();
 
             if(empty($request->amountTotal)){
                 throw new Exception('Amount total not found!');
@@ -262,13 +264,32 @@ class AjaxController extends CoinPaymentController {
             }
 
             $result = array_merge($create['result'], $info['result'], [
-                'payload' => $request->payload
+                'order_id' => $request->order_id ?? '-',
+                'payload' => $request->payload,
+                'buyer_name' => $request->buyer_name ?? '-',
+                'buyer_email' => $request->buyer_email ?? '-',
+                'currency_code' => config('coinpayment.default_currency')
             ]);
 
+            
             /**
              * Save to database
              */
-            $this->model->create($result);
+            $transaction = $this->model->create($result);
+                
+            /**
+             * Create item transaction
+             */
+            
+            foreach($request->items as $item) {
+                $transaction->items()->create([
+                    'description' => is_object($item) ? $item->itemDescription : $item['itemDescription'],
+                    'price' => is_object($item) ? $item->itemPrice : $item['itemPrice'],
+                    'qty' => is_object($item) ? $item->itemQty : $item['itemQty'],
+                    'subtotal' => is_object($item) ? $item->itemSubtotalAmount : $item['itemSubtotalAmount'],
+                    'currency_code' => config('coinpayment.default_currency'),
+                ]);
+            }
 
             /**
              * Dispatching job
@@ -278,9 +299,11 @@ class AjaxController extends CoinPaymentController {
                 'transaction_type' => 'new'
             ])));
 
+            DB::commit();
             return response()->json($result, 200);
 
         }catch(Exception $e) {
+            DB::rollback();
             return response()->json([
                 'result' => false,
                 'message' => $e->getMessage()

@@ -50,8 +50,10 @@ Create Button transaction. Example placed on your controller
   /*
   *   @required true
   */
+  $transaction['order_id'] = 'xyz-1234'; // invoice number
   $transaction['amountTotal'] = (FLOAT) 37.5;
   $transaction['note'] = 'Note for your transaction';
+  $transaction['buyer_name'] = 'Jhone Due';
   $transaction['buyer_email'] = 'buyer@mailinator.com';
   $transaction['redirect_url'] = url('/back_to_tarnsaction');
 
