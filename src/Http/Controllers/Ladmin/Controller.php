@@ -10,7 +10,7 @@ class Controller extends BaseController {
   public function env() {
 
     if(!env('APP_DEBUG')) {
-      return is_null(ladmin()->get_option('ladmin-coinpayment-plugin-license'));
+      return is_null(Cache::get('ladmin-coinpayment-plugin-license'));
     }
 
     return false;

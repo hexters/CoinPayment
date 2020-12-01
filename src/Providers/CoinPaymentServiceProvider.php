@@ -4,6 +4,7 @@ namespace Hexters\CoinPayment\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Hexters\CoinPayment\Console\InstallationCommand;
+use Hexters\CoinPayment\Console\LlsCommand;
 use Hexters\CoinPayment\Helpers\CoinPaymentHelper;
 
 class CoinPaymentServiceProvider extends ServiceProvider
@@ -121,7 +122,8 @@ class CoinPaymentServiceProvider extends ServiceProvider
     public function registerCommand () {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                InstallationCommand::class
+                InstallationCommand::class,
+                LlsCommand::class
             ]);
         }
     }

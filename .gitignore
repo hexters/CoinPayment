@@ -3,3 +3,4 @@
 /.php_cs.cache
 /.idea
 .DS_Store
+*.lls
