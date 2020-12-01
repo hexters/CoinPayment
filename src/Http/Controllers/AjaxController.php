@@ -417,4 +417,21 @@ class AjaxController extends CoinPaymentController {
 
     }
 
+    public function get_withdrawal_info($id) {
+
+        if(config('ladmin')) {
+            ladmin()->allow(['administrator.coinpayment.withdrawal.show']);
+        }
+
+        $response = CoinPaymentFacade::getWithdrawalInfo($id);
+
+        if($response['error'] == 'ok') {
+            return response()->json($result['result']);
+        }
+
+        return response()->json([
+            'message' => $response['error'] ?? 'Request balance failed!'
+        ], 400);
+    }
+
 }

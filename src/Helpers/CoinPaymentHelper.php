@@ -128,4 +128,14 @@ class CoinPaymentHelper {
 		return $this->api_call('create_withdrawal', $body);
 	}
 
+	/**
+	 * get withdrawal info
+	 *
+	 * @param String $body
+	 * @return void
+	 */
+	public function getWithdrawalInfo($id) {
+		return $this->api_call('get_withdrawal_info', $id);
+	}
+
 }

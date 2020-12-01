@@ -63,7 +63,7 @@
                               <div class="form-group bg-white">
                                 <label for="amount">Amount</label>
                                 <div class="input-group rounded border mb-3">
-                                  <input type="number" required class="form-control bg-white border-right-0 border-0" v-model="item.withdrawal.amount" readonly>
+                                  <input type="number" required class="form-control bg-white border-right-0 border-0" v-model="item.withdrawal.amount">
                                   <div class="input-group-append">
                                     <span class="input-group-text border-left-0 bg-white border-0" id="basic-addon2">{{ item.withdrawal.currency }}</span>
                                   </div>
@@ -166,8 +166,8 @@ export default {
       item.loading = true;
       axios.post('/coinpayment/ajax/create_withdrawal', item.withdrawal)
       .then(json => {
-        console.log(json);
         item.loading = false;
+        window.location.href = '/administrator/coinpayment/withdrawal/' + json.data.id;
       })
       .catch(error => {
         if(error.response.status > 200 && error.response.status < 500 ) {
