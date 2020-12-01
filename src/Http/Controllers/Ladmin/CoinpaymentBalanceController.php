@@ -3,17 +3,15 @@
 namespace Hexters\CoinPayment\Http\Controllers\Ladmin;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 
-class CoinpaymentBalanceController extends Controller
-{
+class CoinpaymentBalanceController extends Controller {
+    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index() {
-
         ladmin()->allow(['administrator.coinpayment.balances.index']);
         $data['user'] = auth()->user();
         return view('coinpayment::ladmin.balances.index', $data);

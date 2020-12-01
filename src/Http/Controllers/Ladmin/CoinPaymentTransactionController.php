@@ -3,7 +3,6 @@
 namespace Hexters\CoinPayment\Http\Controllers\Ladmin;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Hexters\CoinPayment\Datatables\CoinpaymentDatatable;
 use Hexters\CoinPayment\Entities\CoinpaymentTransaction;
 use Hexters\CoinPayment\Helpers\CoinPaymentFacade as CoinPayment;
@@ -22,7 +21,6 @@ class CoinPaymentTransactionController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-      
       ladmin()->allow(['administrator.coinpayment.transaction.index']);
 
       return CoinpaymentDatatable::view();
