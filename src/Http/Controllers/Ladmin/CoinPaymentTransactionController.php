@@ -23,7 +23,7 @@ class CoinPaymentTransactionController extends Controller {
     public function index() {
       ladmin()->allow(['administrator.coinpayment.transaction.index']);
 
-      return CoinpaymentDatatable::view();
+      return CoinpaymentDatatable::view('coinpayment::ladmin.transaction.index');
     }
 
     /**

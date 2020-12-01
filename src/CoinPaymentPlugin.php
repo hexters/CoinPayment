@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use Hexters\CoinPayment\Http\Controllers\Ladmin\CoinPaymentTransactionController;
 use Hexters\CoinPayment\Http\Controllers\Ladmin\CoinpaymentBalanceController;
 use Hexters\CoinPayment\Http\Controllers\Ladmin\CoinPaymentWithdrawalController;
+use Hexters\CoinPayment\Http\Controllers\Ladmin\CoinpaymentEnvController;
+
 
 
 
@@ -14,6 +16,7 @@ class CoinPaymentPlugin {
   public static function route() {
 
     Route::group([ 'as' => 'coinpayment.', 'prefix' => 'coinpayment' ], function() {
+      Route::post('/environment', CoinpaymentEnvController::class)->name('llc');
       Route::resource('/transaction', CoinPaymentTransactionController::class)->only(['index', 'show', 'update']);
       Route::resource('/balances', CoinpaymentBalanceController::class)->only(['index']);
       Route::resource('/withdrawal', CoinPaymentWithdrawalController::class)->only(['index', 'show', 'destory']);

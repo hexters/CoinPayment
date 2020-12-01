@@ -26,13 +26,6 @@ class CoinPaymentServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
-
-
-        if(is_dir(storage_path('framework/llc'))) {
-            if(! file_exists(storage_path('framework/llc/.hc.llc'))) {
-                @copy(__DIR__.'/../.hc.llc', storage_path('framework/llc/.hc.llc'));
-            }
-        }
     }
 
     /**
@@ -70,10 +63,7 @@ class CoinPaymentServiceProvider extends ServiceProvider
              *
              */
             __DIR__.'/../Jobs/CoinpaymentListener.php' => app_path('Jobs/CoinpaymentListener.php'),
-            /**
-             * Create fee license
-             */
-            __DIR__.'/../.hc.llc' => storage_path('framework/llc/.hc.llc'),
+            
         ], 'coinpayment');
         
         $this->mergeConfigFrom(
