@@ -2201,7 +2201,8 @@ setTimeout(function () {
     'el': '#app-coinpayment',
     components: {
       'Balances': __webpack_require__(60),
-      'llc': __webpack_require__(66)
+      'llc': __webpack_require__(66),
+      'form-input-item-production': __webpack_require__(77)
     }
   });
 }, 1000);
@@ -3560,6 +3561,440 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-23e66b59", module.exports)
+  }
+}
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(11)
+/* script */
+var __vue_script__ = __webpack_require__(78)
+/* template */
+var __vue_template__ = __webpack_require__(79)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/Resources/assets/js/components/FormInputItemProduction.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1c7bc076", Component.options)
+  } else {
+    hotAPI.reload("data-v-1c7bc076", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LadminLayout__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LadminLayout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__LadminLayout__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['currency'],
+  components: {
+    LadminLayout: __WEBPACK_IMPORTED_MODULE_0__LadminLayout___default.a
+  },
+  data: function data() {
+    return {
+      total: 0,
+      inputForms: [{
+        itemDescription: '',
+        itemPrice: 0,
+        itemQty: 1,
+        itemSubtotalAmount: 0
+      }]
+    };
+  },
+
+  methods: {
+    addNewRow: function addNewRow() {
+      this.inputForms.push({
+        itemDescription: '',
+        itemPrice: 0,
+        itemQty: 1,
+        itemSubtotalAmount: 0
+      });
+    },
+    removeRow: function removeRow(item, i) {
+      if (i === 0) {
+        return;
+      }
+      this.inputForms.splice(i, 1);
+    },
+    calculation: function calculation(item) {
+      var subtotal = parseFloat(item.itemPrice) * parseInt(item.itemQty);
+      item.itemSubtotalAmount = subtotal;
+
+      var total = 0;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.inputForms[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          item = _step.value;
+
+          total += parseFloat(item.itemSubtotalAmount);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      this.total = total.toFixed(2);
+    }
+  }
+});
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("ladmin-layout", [
+    _c("div", { staticClass: "table-responsive" }, [
+      _c("table", { staticClass: "table mb-3" }, [
+        _c("thead", [
+          _c("tr", [
+            _c("th", { staticClass: "border-0 pl-0" }, [
+              _vm._v("Description Product *")
+            ]),
+            _vm._v(" "),
+            _c("th", { staticClass: "border-0 pl-0" }, [_vm._v("Price *")]),
+            _vm._v(" "),
+            _c("th", { staticClass: "border-0 pl-0" }, [_vm._v("Qty *")]),
+            _vm._v(" "),
+            _c("th", { staticClass: "border-0 pl-0" }, [_vm._v("Subtotal")]),
+            _vm._v(" "),
+            _c("th", { staticClass: "border-0 pl-0" })
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.inputForms, function(item, i) {
+            return _c("tr", { key: i, staticClass: "border-0" }, [
+              _c(
+                "td",
+                { staticClass: "border-0 pl-0", attrs: { width: "50%" } },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: item.itemDescription,
+                        expression: "item.itemDescription"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "itemDescription[]",
+                      required: "",
+                      placeholder: "Description product..."
+                    },
+                    domProps: { value: item.itemDescription },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(item, "itemDescription", $event.target.value)
+                      }
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "border-0 pl-0", attrs: { width: "15%" } },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: item.itemPrice,
+                        expression: "item.itemPrice"
+                      }
+                    ],
+                    staticClass: "form-control text-right",
+                    attrs: {
+                      type: "number",
+                      step: "0.01",
+                      name: "itemPrice[]",
+                      required: "",
+                      placeholder: _vm.currency + " Price"
+                    },
+                    domProps: { value: item.itemPrice },
+                    on: {
+                      change: function($event) {
+                        return _vm.calculation(item)
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(item, "itemPrice", $event.target.value)
+                      }
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "border-0 pl-0", attrs: { width: "15%" } },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: item.itemQty,
+                        expression: "item.itemQty"
+                      }
+                    ],
+                    staticClass: "form-control text-center",
+                    attrs: {
+                      type: "number",
+                      step: "1",
+                      name: "itemQty[]",
+                      required: "",
+                      placeholder: "Qty"
+                    },
+                    domProps: { value: item.itemQty },
+                    on: {
+                      change: function($event) {
+                        return _vm.calculation(item)
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(item, "itemQty", $event.target.value)
+                      }
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "border-0 pl-0", attrs: { width: "15%" } },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: item.itemSubtotalAmount,
+                        expression: "item.itemSubtotalAmount"
+                      }
+                    ],
+                    staticClass: "form-control text-right",
+                    attrs: {
+                      type: "number",
+                      step: "0.01",
+                      name: "itemSubtotalAmount[]",
+                      readonly: "",
+                      required: "",
+                      placeholder: "Subtotal"
+                    },
+                    domProps: { value: item.itemSubtotalAmount },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          item,
+                          "itemSubtotalAmount",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "border-0 pl-0", attrs: { width: "5%" } },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { disabled: i == 0 },
+                      on: {
+                        click: function($event) {
+                          return _vm.removeRow(item, i)
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fas fa-trash" })]
+                  )
+                ]
+              )
+            ])
+          }),
+          0
+        ),
+        _vm._v(" "),
+        _c("tfoot", [
+          _c("tr", [
+            _c(
+              "th",
+              { staticClass: "text-left border-0", attrs: { colspan: "2" } },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-outline-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.addNewRow }
+                  },
+                  [_vm._v("+ Add new row")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                  [_vm._v("Submit Transaction →")]
+                ),
+                _vm._v(" "),
+                _c("h5", { staticClass: "float-right" }, [
+                  _vm._v("Total Amount")
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
+              { staticClass: "text-right border-0", attrs: { colspan: "2" } },
+              [
+                _c("h5", [
+                  _vm._v(_vm._s(_vm.total) + " " + _vm._s(_vm.currency))
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c("th", { staticClass: "border-0" })
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1c7bc076", module.exports)
   }
 }
 

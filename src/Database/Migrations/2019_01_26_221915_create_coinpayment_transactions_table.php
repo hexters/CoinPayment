@@ -18,7 +18,7 @@ class CreateCoinpaymentTransactionsTable extends Migration
             $table->uuid('uuid')->unique();
             $table->string('txn_id')->unique()->nullable();
             
-            $table->string('order_id')->nullable();
+            $table->string('order_id')->unique()->nullable();
             $table->string('buyer_name')->nullable();
             $table->string('buyer_email')->nullable();
             $table->string('currency_code')->nullable();
@@ -31,16 +31,21 @@ class CreateCoinpaymentTransactionsTable extends Migration
             $table->string('coin')->nullable();
             $table->integer('confirms_needed')->nullable();
             $table->string('payment_address')->nullable();
-            $table->string('qrcode_url')->nullable();
+            $table->text('qrcode_url')->nullable();
             $table->string('received')->nullable();
             $table->string('receivedf')->nullable();
             $table->string('recv_confirms')->nullable();
             $table->string('status')->nullable();
             $table->string('status_text')->nullable();
-            $table->string('status_url')->nullable();
+            $table->text('status_url')->nullable();
             $table->string('timeout')->nullable();
+            
+            $table->longText('checkout_url')->nullable();
+            $table->longText('redirect_url')->nullable();
+            $table->longText('cancel_url')->nullable();
+
             $table->string('type')->nullable();
-            $table->text('payload')->nullable();
+            $table->longText('payload')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -18,7 +18,7 @@ class CoinPaymentPlugin {
   public static function route() {
 
     Route::group([ 'as' => 'coinpayment.', 'prefix' => 'coinpayment' ], function() {
-      Route::resource('/transaction', CoinPaymentTransactionController::class)->except(['destroy']);
+      Route::resource('/transaction', CoinPaymentTransactionController::class)->except(['edit']);
       Route::resource('/balances', CoinpaymentBalanceController::class)->only(['index']);
       
       Route::prefix('ajax')->as('ajax.')->group(function() {

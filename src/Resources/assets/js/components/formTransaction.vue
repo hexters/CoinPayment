@@ -18,6 +18,10 @@
                         <table width="100%">
                             <tbody>
                                 <tr>
+                                    <td class="font-weight-bold">Order ID</td>
+                                    <td class="text-right">{{ payload.order_id || '-' }}</td>
+                                </tr>
+                                <tr>
                                     <td class="font-weight-bold">Name</td>
                                     <td class="text-right">{{ payload.buyer_name || '-' }}</td>
                                 </tr>
@@ -98,7 +102,7 @@
                     </div>
                 </div>
                 <div class="text-center mb-3">
-                    <a v-bind:href="payload.redirect_url">&laquo; Cancel Transaction</a>
+                    <a v-bind:href="payload.cancel_url || payload.redirect_url">&laquo; Cancel Transaction</a>
                 </div>
             </div>
 
@@ -273,7 +277,7 @@
 <script>
 import swal from 'sweetalert';
 export default {
-    props: ['_host', '_payload'],
+    props: ['_host', '_payload', '_checkouturl'],
     name: 'formTransaction',
     data() {
         return {
@@ -315,11 +319,11 @@ export default {
             let self = this;
             let newPayload = {
                 ...this.payload,
+                checkout_url: this._checkouturl,
                 coinIso: this.default_coin.iso,
                 coinName: this.default_coin.name,
                 coinAmount: this.default_coin.amount
             };
-
             let loader = this.$loading.show({
                 // Optional parameters
                 container: this.fullPage ? null : this.$refs.formContainer,

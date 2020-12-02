@@ -95,5 +95,17 @@ return [
     'logos' => [
         'Bitcoin' => 'https://github.com/hexters/CoinPayment/blob/master/btc.png?raw=true',
         'Velas (Old Chain)' => 'https://www.coinpayments.net/images/coins/VLX.png'
+    ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom markdown mail
+    |--------------------------------------------------------------------------
+    */
+    'mail' => [
+        'layout' => [
+            'transaction_to_buyer' => 'coinpayment::emails.transaction.tobuyer'
+        ]
     ]
 ];

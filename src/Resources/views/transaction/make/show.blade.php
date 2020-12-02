@@ -2,6 +2,6 @@
 
 @section('content')
     <div id="app">
-        <form-transaction _host="{{ url('/') }}" _payload="{{ $payload }}"></form-transaction>
+        <form-transaction _checkouturl="{{ request()->fullurl() }}" _host="{{ url('/') }}" _payload="{{ $payload }}"></form-transaction>
     </div>
 @stop

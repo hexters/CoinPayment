@@ -17,7 +17,7 @@
           return '<b>' . $item->buyer_name . '</b><br /><small class="text-muted">' . $item->buyer_email . '</small>';
         })
         ->editColumn('coin', function($item) {
-          return '<img src="' . $this->logos($item->coin) . '" title="' . $item->coin . '" data-toggle="tooltip" data-placement="top" width="25" />';
+          return  is_null($item->coin) ? ladmin()->icon('question-mark-circle') : '<img src="' . $this->logos($item->coin) . '" title="' . $item->coin . '" data-toggle="tooltip" data-placement="top" width="25" />';
         })
         ->editColumn('amount', function($item) {
           return '<b class="text-danger">' . number_format($item->amount_total_fiat, 2) . ' ' . $item->currency_code . '</b><br /><small class="text-muted">' . number_format($item->amountf, 8) . ' ' . $item->coin . '</small>';

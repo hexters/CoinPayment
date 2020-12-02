@@ -50931,10 +50931,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['_host', '_payload'],
+    props: ['_host', '_payload', '_checkouturl'],
     name: 'formTransaction',
     data: function data() {
         return {
@@ -50980,11 +50984,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         makeTransaction: function makeTransaction() {
             var self = this;
             var newPayload = _extends({}, this.payload, {
+                checkout_url: this._checkouturl,
                 coinIso: this.default_coin.iso,
                 coinName: this.default_coin.name,
                 coinAmount: this.default_coin.amount
             });
-
             var loader = this.$loading.show({
                 // Optional parameters
                 container: this.fullPage ? null : this.$refs.formContainer,
@@ -51074,6 +51078,16 @@ var render = function() {
             _c("div", { staticClass: "mb-3" }, [
               _c("table", { attrs: { width: "100%" } }, [
                 _c("tbody", [
+                  _c("tr", [
+                    _c("td", { staticClass: "font-weight-bold" }, [
+                      _vm._v("Order ID")
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-right" }, [
+                      _vm._v(_vm._s(_vm.payload.order_id || "-"))
+                    ])
+                  ]),
+                  _vm._v(" "),
                   _c("tr", [
                     _c("td", { staticClass: "font-weight-bold" }, [
                       _vm._v("Name")
@@ -51294,9 +51308,15 @@ var render = function() {
         ),
         _vm._v(" "),
         _c("div", { staticClass: "text-center mb-3" }, [
-          _c("a", { attrs: { href: _vm.payload.redirect_url } }, [
-            _vm._v("« Cancel Transaction")
-          ])
+          _c(
+            "a",
+            {
+              attrs: {
+                href: _vm.payload.cancel_url || _vm.payload.redirect_url
+              }
+            },
+            [_vm._v("« Cancel Transaction")]
+          )
         ])
       ]),
       _vm._v(" "),

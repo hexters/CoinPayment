@@ -236,6 +236,8 @@ class AjaxController extends CoinPaymentController {
         try{
             DB::beginTransaction();
 
+            
+
             if(empty($request->amountTotal)){
                 throw new Exception('Amount total not found!');
             }
@@ -246,6 +248,16 @@ class AjaxController extends CoinPaymentController {
 
             if(empty($request->coinIso)){
                 throw new Exception('Type currency coin not found!');
+            }
+
+            if(empty($request->order_id)){
+                throw new Exception('Order ID cannot be null, please fill it with invoice number or other');
+            }
+
+            $check_transaction = $this->model->where('order_id', $request->order_id)->whereNotNull('txn_id')->first();
+
+            if($check_transaction) {
+                throw new Exception('Order ID: ' . $check_transaction->order_id . ' already exists, and the current status is ' . $check_transaction->status_text);
             }
 
             $total = 0;
@@ -276,18 +288,26 @@ class AjaxController extends CoinPaymentController {
 
             $result = array_merge($create['result'], $info['result'], [
                 'amount_total_fiat' => $request->amountTotal,
-                'order_id' => $request->order_id ?? '-',
                 'payload' => $request->payload,
                 'buyer_name' => $request->buyer_name ?? '-',
                 'buyer_email' => $request->buyer_email ?? '-',
-                'currency_code' => config('coinpayment.default_currency')
+                'currency_code' => config('coinpayment.default_currency'),
+                'redirect_url' => $request->redirect_url,
+                'cancel_url' => $request->cancel_url,
+                'checkout_url' => $request->checkout_url,
             ]);
 
             
             /**
              * Save to database
              */
-            $transaction = $this->model->create($result);
+            $transaction = $this->model->where('order_id', $request->order_id)->first();
+            if($transaction) {
+                $transaction->update($result);
+            } else {
+                $this->model->create($result);
+            }
+
                 
             /**
              * Create item transaction

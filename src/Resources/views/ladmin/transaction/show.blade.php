@@ -22,8 +22,8 @@
                   <table class="table m-0">
                     <tbody>
                       <tr>
-                        <td>Payment ID</td>
-                        <td>{{ $data->txn_id }}</td>
+                        <td>Txn ID</td>
+                        <td>{{ $data->txn_id ?? 'Waiting for buyer\'s payment' }}</td>
                       </tr>
                       <tr>
                         <td>Status</td>
@@ -44,22 +44,32 @@
                         <td>Address</td>
                         <td>
                           <div class="p-2 bg-dark text-light rounded">
-                            {{ $data->address }}
+                            {{ $data->address ?? 'Waiting for buyer\'s payment' }}
                           </div>
                         </td>
                       </tr>
                       
                       <tr>
                         <td colspan="2" class="text-right">
-    
-                          <form action="{{ route('administrator.coinpayment.transaction.update', $data->uuid) }}" method="POST">
-                            @csrf 
-                            @method('PUT')
-                            <a target="_blank" class="btn btn-link" href="{{ $data->status_url }}">Alternative Link</a>
-                            @can(['administrator.coinpayment.transaction.cehck.status'])
-                              <button type="submit" class="btn btn-primary">Check Status &rarr;</button>
-                            @endcan
-                          </form>
+                          
+                          @if (is_null($data->txn_id))
+                            <form action="{{ route('administrator.coinpayment.transaction.destroy', $data->uuid) }}" method="POST">
+                              @csrf 
+                              @method('DELETE')
+                              <button class="btn btn-light float-left">{!! ladmin()->icon('trash') !!}</button>
+                              <small class="text-muted">* Right click and copy link address &rarr;</small>
+                              <a href="{{ $data->checkout_url }}" class="btn btn-primary ml-3" target="_blank">Checkout Link</a>
+                            </form>
+                          @else
+                            <form action="{{ route('administrator.coinpayment.transaction.update', $data->uuid) }}" method="POST">
+                              @csrf 
+                              @method('PUT')
+                              <a target="_blank" class="btn btn-link" href="{{ $data->status_url }}">Alternative Link</a>
+                              @can(['administrator.coinpayment.transaction.cehck.status'])
+                                <button type="submit" class="btn btn-primary">Check Status &rarr;</button>
+                              @endcan
+                            </form>
+                          @endif
     
                         </td>
                       </tr>
@@ -107,7 +117,11 @@
         <div class="col-md-4 mb-3">
           <x-ladmin-card class="text-center">
             <div>
-              <img src="{{ $data->qrcode_url }}" alt="Qr Code" class="img-fluid">
+              @if (is_null($data->qrcode_url))
+                Waiting for buyer's payment
+              @else 
+                <img src="{{ $data->qrcode_url }}" alt="Qr Code" class="img-fluid">
+              @endif
             </div>
           </x-ladmin-card>
         </div>
@@ -130,9 +144,9 @@
                   <tr>
                     <td>{{ $i + 1 }}</td>
                     <td>{{ $item->description }}</td>
-                    <td class="text-right">{{ $item->price }} {{ $item->currency_code }}</td>
+                    <td class="text-right">{{ number_format($item->price, 2) }} {{ $item->currency_code }}</td>
                     <td class="text-center">{{ $item->qty }}</td>
-                    <td class="text-right">{{ $item->subtotal }} {{ $item->currency_code }}</td>
+                    <td class="text-right">{{ number_format($item->subtotal, 2) }} {{ $item->currency_code }}</td>
                   </tr>
               @empty
                   <tr>
@@ -143,7 +157,7 @@
             <tfoot>
               <tr>
                 <td colspan="4" class="text-right font-weight-bold">Total</td>
-                <td class="text-right font-weight-bold">{{ $data->amount_total_fiat }} {{ $item->currency_code }}</td>
+                <td class="text-right font-weight-bold">{{ number_format($data->amount_total_fiat, 2) }} {{ $item->currency_code }}</td>
               </tr>
             </tfoot>
           </table>

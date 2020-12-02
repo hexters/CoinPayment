@@ -6,13 +6,16 @@ use Illuminate\Http\Request;
 use Hexters\CoinPayment\Datatables\CoinpaymentDatatable;
 use Hexters\CoinPayment\Entities\CoinpaymentTransaction;
 use Hexters\CoinPayment\Helpers\CoinPaymentFacade as CoinPayment;
+use Hexters\CoinPayment\Repositories\CoinpaymentTransactionRepository;
 
 class CoinPaymentTransactionController extends Controller {
 
     protected $model;
+    protected $repository;
 
-    public function __construct(CoinpaymentTransaction $model) {
+    public function __construct(CoinpaymentTransaction $model, CoinpaymentTransactionRepository $repository) {
       $this->model = $model;
+      $this->repository = $repository;
     }
 
     /**
@@ -34,6 +37,7 @@ class CoinPaymentTransactionController extends Controller {
     public function create() {
       ladmin()->allow(['administrator.coinpayment.transaction.create']);
       
+      return view('coinpayment::ladmin.transaction.create');
     }
 
     /**
@@ -44,12 +48,36 @@ class CoinPaymentTransactionController extends Controller {
      */
     public function store(Request $request) {
       ladmin()->allow(['administrator.coinpayment.transaction.create']);
-      if(!$this->env()) {
+      
+      if($this->env()) {
         session()->flash('warning', [__('coinpayment::ladmin.license.forbidden')]);
         return redirect()->back();
       }
+
+      $request->validate([
+        'buyer_name' => ['required'],
+        'buyer_email' => ['required', 'email'],
+        'order_id' => ['required', 'unique:coinpayment_transactions'],
         
-      
+        'itemDescription' => ['required', 'array'],
+        'itemDescription.*' => ['required'],
+
+        'itemPrice' => ['required', 'array'],
+        'itemPrice.*' => ['required', 'numeric', 'not_in:0'],
+
+        'itemQty' => ['required', 'array'],
+        'itemQty.*' => ['required', 'numeric', 'not_in:0'],
+
+        'itemSubtotalAmount' => ['required', 'array'],
+        'itemSubtotalAmount.*' => ['required', 'numeric', 'not_in:0'],
+
+        'redirect_url' => ['required', 'url']
+
+      ]);
+        
+      return $this->repository->create_transaction($request->all());
+        
+
     }
 
     /**
@@ -103,8 +131,35 @@ class CoinPaymentTransactionController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id) {
+        
+      $transaction = $this->model->where('uuid', $id)->first();
+      if($transaction) {
+        
+        if($transaction->status == -1000) {
+          $transaction->items()->delete();
+          $transaction->delete();
+  
+          session()->flash('success', [
+            'Transactions has been deleted'
+          ]);
+  
+          return redirect()->route('administrator.coinpayment.transaction.index');
+        }
+
+        session()->flash('warning', [
+          'Transactions cannot be deleted, the current status is ' . $transaction->status_text
+        ]);
+  
+        return redirect()->back();
+      }
+
+      session()->flash('danger', [
+        'Transactions not found!'
+      ]);
+
+      return redirect()->back();
+
+
     }
 }
