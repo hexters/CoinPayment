@@ -31,7 +31,7 @@ class CoinpaymentTransactionRepository {
         'amount_total_fiat' => $product['amountTotal'],
         'currency_code' => config('coinpayment.default_currency'),
         'status' => -1000,
-        'status_text' => 'Waiting for buyer\'s payment',
+        'status_text' => 'Waiting for buyers pay',
         'checkout_url' => $checkout_url,
         'redirect_url' => $request['redirect_url'],
         'cancel_url' => $request['cancel_url'],

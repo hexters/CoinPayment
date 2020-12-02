@@ -8,7 +8,7 @@
           <a class="nav-link active" id="coinpayment-tag-tab" data-toggle="pill" href="#coinpayment-tag" role="tab" aria-controls="coinpayment-tag" aria-selected="true">Coinpayment Info</a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link" id="product-tab-tab" data-toggle="pill" href="#product-tab" role="tab" aria-controls="product-tab" aria-selected="false">Product Info</a>
+          <a class="nav-link" id="buyer-tab-tab" data-toggle="pill" href="#buyer-tab" role="tab" aria-controls="buyer-tab" aria-selected="false">Buyer Info</a>
         </li>
       </ul>
     
@@ -23,7 +23,7 @@
                     <tbody>
                       <tr>
                         <td>Txn ID</td>
-                        <td>{{ $data->txn_id ?? 'Waiting for buyer\'s payment' }}</td>
+                        <td>{{ $data->txn_id ?? 'Waiting for buyers pay' }}</td>
                       </tr>
                       <tr>
                         <td>Status</td>
@@ -44,7 +44,7 @@
                         <td>Address</td>
                         <td>
                           <div class="p-2 bg-dark text-light rounded">
-                            {{ $data->address ?? 'Waiting for buyer\'s payment' }}
+                            {{ $data->address ?? 'Waiting for buyers pay' }}
                           </div>
                         </td>
                       </tr>
@@ -53,13 +53,37 @@
                         <td colspan="2" class="text-right">
                           
                           @if (is_null($data->txn_id))
-                            <form action="{{ route('administrator.coinpayment.transaction.destroy', $data->uuid) }}" method="POST">
-                              @csrf 
-                              @method('DELETE')
-                              <button class="btn btn-light float-left">{!! ladmin()->icon('trash') !!}</button>
+
+                              <button data-toggle="modal" data-target="#modal-delete-transaction" class="btn btn-light float-left">{!! ladmin()->icon('trash') !!}</button>
                               <small class="text-muted">* Right click and copy link address &rarr;</small>
                               <a href="{{ $data->checkout_url }}" class="btn btn-primary ml-3" target="_blank">Checkout Link</a>
-                            </form>
+
+
+
+                              <div class="modal text-left fade" id="modal-delete-transaction" tabindex="-1" aria-labelledby="modal-delete-transactionLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header border-0">
+                                      <h5 class="modal-title" id="modal-delete-transactionLabel">Delete Transaction!</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      Are you sure you wan to delete this transaction?
+                                    </div>
+                                    <div class="modal-footer border-0">
+                                      <form action="{{ route('administrator.coinpayment.transaction.destroy', $data->uuid) }}" method="POST">
+                                        @csrf 
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                        <button type="submit" class="btn btn-primary">Yes</button>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            
                           @else
                             <form action="{{ route('administrator.coinpayment.transaction.update', $data->uuid) }}" method="POST">
                               @csrf 
@@ -79,7 +103,7 @@
               </x-ladmin-card>
     
             </div>
-            <div class="tab-pane fade" id="product-tab" role="tabpanel" aria-labelledby="product-tab-tab">
+            <div class="tab-pane fade" id="buyer-tab" role="tabpanel" aria-labelledby="buyer-tab-tab">
               <x-ladmin-card>
                 <x-slot name="flat">
                   <table class="table">
@@ -103,7 +127,7 @@
                       <tr>
                         <td>Total Amount</td>
                         <td>
-                          {{ number_format($data->amount, 2) }} {{ $data->currency_code }}
+                          {{ number_format($data->amount_total_fiat, 2) }} {{ $data->currency_code }}
                          </td>
                       </tr>
                     </tbody>
@@ -118,7 +142,7 @@
           <x-ladmin-card class="text-center">
             <div>
               @if (is_null($data->qrcode_url))
-                Waiting for buyer's payment
+                Waiting for buyers pay
               @else 
                 <img src="{{ $data->qrcode_url }}" alt="Qr Code" class="img-fluid">
               @endif

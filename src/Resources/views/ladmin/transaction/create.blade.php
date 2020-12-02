@@ -36,7 +36,7 @@
         <input type="url" name="cancel_url" value="{{ old('cancel_url') }}" placeholder="https://domian.com/invoice/cancel" class="form-control border-0" required>
       </x-ladmin-form-group>
 
-      <x-ladmin-form-group name="send_email" col-input="7" col-label="5" label="Send to buyer E-mail" class="border-0">
+      <x-ladmin-form-group name="send_email" col-input="7" col-label="5" label="Send to Buyer" class="border-0">
         <div class="form-control border-0">
           <input type="checkbox" name="send_email" id="send_email" checked class="mr-3">
           <label for="send_email">I want to send an email to the buyer</label>
