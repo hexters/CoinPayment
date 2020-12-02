@@ -71,7 +71,8 @@ class CoinPaymentTransactionController extends Controller {
         'itemSubtotalAmount' => ['required', 'array'],
         'itemSubtotalAmount.*' => ['required', 'numeric', 'not_in:0'],
 
-        'redirect_url' => ['required', 'url']
+        'redirect_url' => ['required', 'url'],
+        'cancel_url' => ['required', 'url']
 
       ]);
         
