@@ -29,7 +29,7 @@ class NewTransactionToBuyerMail extends Mailable implements ShouldQueue
      */
     public function build() {
 
-        return $this->subject(config('app.name') . ' - Link Checkout Order ID ' . $this->data['order_id'])
+        return $this->subject(config('app.name') . ' - Payment #' . $this->data['order_id'])
             ->markdown(config('coinpayment.mail.layout.transaction_to_buyer'), [ 'data' => $this->data ]);
     }
 }
