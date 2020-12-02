@@ -7,6 +7,8 @@ use Hexters\CoinPayment\Http\Controllers\Ladmin\CoinPaymentTransactionController
 use Hexters\CoinPayment\Http\Controllers\Ladmin\CoinpaymentBalanceController;
 use Hexters\CoinPayment\Http\Controllers\Ladmin\CoinPaymentWithdrawalController;
 use Hexters\CoinPayment\Http\Controllers\Ladmin\CoinpaymentEnvController;
+use Hexters\CoinPayment\Http\Controllers\Ladmin\AjaxController;
+
 
 
 
@@ -16,10 +18,14 @@ class CoinPaymentPlugin {
   public static function route() {
 
     Route::group([ 'as' => 'coinpayment.', 'prefix' => 'coinpayment' ], function() {
-      Route::post('/environment', CoinpaymentEnvController::class)->name('llc');
-      Route::resource('/transaction', CoinPaymentTransactionController::class)->only(['index', 'show', 'update']);
+      Route::resource('/transaction', CoinPaymentTransactionController::class)->except(['destroy']);
       Route::resource('/balances', CoinpaymentBalanceController::class)->only(['index']);
-      Route::resource('/withdrawal', CoinPaymentWithdrawalController::class)->only(['index', 'show', 'destory']);
+      
+      Route::prefix('ajax')->as('ajax.')->group(function() {
+        Route::post('/environment', CoinpaymentEnvController::class)->name('llc');
+        Route::get('/balances', [AjaxController::class, 'get_balance'])->name('balances');
+        Route::post('/top_up', [AjaxController::class, 'top_up'])->name('top_up');
+      });
     });
 
 
@@ -44,6 +50,11 @@ class CoinPaymentPlugin {
           'isActive' => 'coinpayment/transaction*',
           'id' => '',
           'gates' => [
+            [
+              'gate' => 'administrator.coinpayment.transaction.create',
+              'title' => 'Create transaction',
+              'description' => 'User can create new transaction'
+            ],
             [
               'gate' => 'administrator.coinpayment.transaction.show',
               'title' => 'Details of transaction',

@@ -13,7 +13,7 @@ class LlsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'coinpayment:activate {--key=}';
+    protected $signature = 'coinpayment:activate {--invoice=}';
 
     /**
      * The console command description.
@@ -39,15 +39,15 @@ class LlsCommand extends Command
      */
     public function handle() {
         
-        $key = $this->option('key');
-        $response = Http::get('https://0bdd6e158dd0.ngrok.io/llc.json');
-        if($response->ok()) {
-            $json = $response->json();
+        $invoice = $this->option('invoice');
+        $response = Http::get('https://33de09365c47.ngrok.io/llc.json');
+        if($response->ok()) { $json = $response->json();
             if(in_array($json['state'], ['paid'])) {
-                $lls = time() . '.lls';
-                $path = __DIR__ . '/../' . $lls;
-                @file_put_contents($path, date());
+                try { $data = date('d-m-Y h:i:s'); $time = strtotime(date('Y-m-d', strtotime('+ 1000 years'))); $path = __DIR__ . '/../llc/' . $time . '.llc'; @file_put_contents($path, "[{$data}] {$invoice}"); $this->info(__('coinpayment::ladmin.activated'));
+                } catch (\Exception $e) { $this->error($e->getMessage()); }
             }
+        } else {
+            $this->error(__('coinpayment::ladmin.newtwork_error'));
         }
         
     }

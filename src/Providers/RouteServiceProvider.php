@@ -46,8 +46,5 @@ class RouteServiceProvider extends ServiceProvider {
     protected function mapWebRoutes() {
         Route::namespace($this->namespace)
             ->group(__DIR__ . '/../Routes/web.php');
-
-        Route::namespace($this->namespace)
-            ->group(__DIR__ . '/../Http/ladmin.php');
     }
 }

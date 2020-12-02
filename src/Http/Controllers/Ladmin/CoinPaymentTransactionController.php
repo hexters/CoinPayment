@@ -31,9 +31,9 @@ class CoinPaymentTransactionController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+      ladmin()->allow(['administrator.coinpayment.transaction.create']);
+      
     }
 
     /**
@@ -42,9 +42,14 @@ class CoinPaymentTransactionController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+      ladmin()->allow(['administrator.coinpayment.transaction.create']);
+      if(!$this->env()) {
+        session()->flash('warning', [__('coinpayment::ladmin.license.forbidden')]);
+        return redirect()->back();
+      }
+        
+      
     }
 
     /**

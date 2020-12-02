@@ -12,7 +12,7 @@ export default {
   },
   methods: {
     getDetails() {
-      axios.get('/coinpayment/ajax/withdrawal/' + this.trxid)
+      axios.get('/administrator/coinpayment/ajax/withdrawal/' + this.trxid)
         .then(json => {
           console.log(json);
         })

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <ladmin-layout>
     <div class="card border-0 shadow-sm">
       <div class="table-responsive">
         <table class="table m-0 table-striped ladmin-datatables coinpayment-datatable-base">
@@ -117,15 +117,19 @@
         </table>
       </div>
     </div>
-  </div>
+  </ladmin-layout>
 </template>
 <script>
 
 import axios from 'axios';
 import swal from 'sweetalert';
+import LadminLayout from './LadminLayout';
 
 export default {
   props: ['currency', 'cantopup', 'canwd'],
+  components: {
+    LadminLayout
+  },
   data() {
     return {
       balances: [],
@@ -138,7 +142,7 @@ export default {
   },
   methods: {
     getBalance() {
-      axios.get('/coinpayment/ajax/balances')
+      axios.get('/administrator/coinpayment/ajax/balances')
         .then(json => {
           this.balances = json.data;
           setTimeout(() => {
@@ -148,7 +152,7 @@ export default {
     },
     topUp(item) {
       item.address = '';
-      axios.post('/coinpayment/ajax/top_up', {
+      axios.post('/administrator/coinpayment/ajax/top_up', {
         currency: item.coin
       })
         .then(json => {
@@ -164,7 +168,7 @@ export default {
     },
     createWithdrawal(item) {
       item.loading = true;
-      axios.post('/coinpayment/ajax/create_withdrawal', item.withdrawal)
+      axios.post('/administrator/coinpayment/ajax/create_withdrawal', item.withdrawal)
       .then(json => {
         item.loading = false;
         window.location.href = '/administrator/coinpayment/withdrawal/' + json.data.id;

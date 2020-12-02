@@ -48,7 +48,7 @@
           [ 'name' => 'Action'],
         ],
         'options' => [
-          'topButton' => null,
+          'topButton' => view('coinpayment::ladmin.transaction._partials._button_create'),
           'processing' => true,
           'serverSide' => true,
           'ajax' => request()->fullurl(),

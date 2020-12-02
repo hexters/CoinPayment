@@ -58,7 +58,7 @@ export default {
       return `${protocol}//${domain}`;
     },
     getEnv() {
-      axios.post('/administrator/coinpayment/environment')
+      axios.post('/administrator/coinpayment/ajax/environment')
         .then(json => {
           if(json.data.result) {
             $('#modal-llc').modal('show');
