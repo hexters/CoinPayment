@@ -25,6 +25,7 @@ class CoinPaymentPlugin {
         Route::post('/environment', CoinpaymentEnvController::class)->name('llc');
         Route::get('/balances', [AjaxController::class, 'get_balance'])->name('balances');
         Route::post('/top_up', [AjaxController::class, 'top_up'])->name('top_up');
+        Route::post('/buy', [AjaxController::class, 'buy'])->name('buy');
       });
     });
 

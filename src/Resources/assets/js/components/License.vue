@@ -7,7 +7,7 @@
             <div class="modal-header border-0">
               <h5 class="modal-title" id="modal-llcLabel">Buy License $5</h5>
             </div>
-            <div class="modal-body">
+            <div v-if="!haspayment" class="modal-body">
               <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" class="form-control" v-model="body.name" required placeholder="Your name">
@@ -20,13 +20,20 @@
 
               <div class="form-group">
                 <label for="domain">Your Domain App</label>
-                <input type="text" id="domain" class="form-control" v-model="body.domain" required placeholder="domain.com">
+                <input type="text" id="domain" class="form-control" v-model="body.domain" required readonly placeholder="domain.com">
                 <small class="text-muted"></small>
               </div>
             </div>
-            <div class="modal-footer border-0">
-              <button type="submit" class="btn btn-primary">Buy Now &rarr;</button>
+            <div v-else class="card-body">
+              <h5 class="card-title">INVOICE NO <span class="text-primary">{{ invoice }}</span></h5>
+              <div v-html="activation"></div>
             </div>
+            
+            <div class="modal-footer border-0">
+              <button v-if="!haspayment" type="submit" :disabled="loading" class="btn btn-primary">Checkout &rarr;</button>
+              <a v-else class="btn btn-danger" :href="link">Pay Now &rarr;</a>
+            </div>
+
           </div>
         </form>
       </div>
@@ -38,7 +45,12 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      body: {}
+      body: {},
+      loading: false,
+      haspayment: true,
+      invoice: null,
+      link: null,
+      activation: null
     }
   },
   mounted() {
@@ -60,13 +72,32 @@ export default {
     getEnv() {
       axios.post('/administrator/coinpayment/ajax/environment')
         .then(json => {
+          
+          this.haspayment = json.data.haspayment;
+          this.invoice = json.data.invoice;
+          this.link = json.data.link;
+          this.activation = json.data.activation;
+
           if(json.data.result) {
             $('#modal-llc').modal('show');
           }
         })
     },
     buy() {
-      console.log(this.body);
+      this.loading = true;
+      axios.post('/administrator/coinpayment/ajax/buy', {
+        name: this.body.name,
+        email: this.body.email,
+      })
+        .then(json => {
+          this.loading = false;
+          window.location.href = json.data.payment_url;
+        })
+        .catch((error) => {
+          this.loading = false;
+          alert(error.response.data.message);
+        });
+      
     }
   }
 }

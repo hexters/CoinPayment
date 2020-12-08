@@ -40,11 +40,24 @@ class LlsCommand extends Command
     public function handle() {
         
         $invoice = $this->option('invoice');
-        $response = Http::get('https://33de09365c47.ngrok.io/llc.json');
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer aCKR1A655wnRJkXT998apy6Y0D3cTzVRNaSgJxvmmfV7m8ZD3lVx2F6p493wdepbxkw20qJORj7SHRC1cArXxqWFbdoT77JAKQ4S',
+        ])->post('http://192.168.100.6:8000/api/payment/invoice', [
+            'invoice' => $invoice,
+            'domain' => env('APP_URL')
+        ]);
+        
         if($response->ok()) { $json = $response->json();
-            if(in_array($json['state'], ['paid'])) {
-                try { $data = date('d-m-Y h:i:s'); $time = strtotime(date('Y-m-d', strtotime('+ 1000 years'))); $path = __DIR__ . '/../llc/' . $time . '.llc'; @file_put_contents($path, "[{$data}] {$invoice}"); $this->info(__('coinpayment::ladmin.activated'));
+            if(in_array($json['status'], ['paid'])) {
+                try { 
+                    $data = date('d-m-Y h:i:s'); $time = strtotime(date('Y-m-d', strtotime('+ 1000 years'))); $path = __DIR__ . '/../llc/' . $time . '.llc'; @file_put_contents($path, "[{$data}] {$invoice}"); $this->info(__('coinpayment::ladmin.activated'));
+                    
                 } catch (\Exception $e) { $this->error($e->getMessage()); }
+            } else if(in_array($json['status'], ['unpaid'])) {
+                $this->info(__('coinpayment::ladmin.license.unpaid'));
+                $this->info(__('coinpayment::ladmin.license.checkout_link', ['link' => $json['checkout_link']]));
             }
         } else {
             $this->error(__('coinpayment::ladmin.newtwork_error'));

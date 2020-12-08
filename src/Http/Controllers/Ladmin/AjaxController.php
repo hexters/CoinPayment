@@ -4,13 +4,17 @@ namespace Hexters\CoinPayment\Http\Controllers\Ladmin;
 
 use App\Jobs\CoinpaymentListener;
 
-use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Cache;
 use Hexters\CoinPayment\Traits\ApiCallTrait;
 use Hexters\CoinPayment\Helpers\CoinPaymentFacade;
+use Illuminate\Support\Facades\Http;
+use Hexters\Ladmin\Exceptions\LadminException;
+use Illuminate\Support\Facades\Validator;
 
 
 class AjaxController extends Controller {
@@ -117,6 +121,61 @@ class AjaxController extends Controller {
         return response()->json([
             'message' => $response['error'] ?? 'Request balance failed!'
         ], 400);
+    }
+
+    /**
+     * Buy package
+     */
+    public function buy(Request $request) {
+
+        $validator = Validator::make($request->all(), [
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer aCKR1A655wnRJkXT998apy6Y0D3cTzVRNaSgJxvmmfV7m8ZD3lVx2F6p493wdepbxkw20qJORj7SHRC1cArXxqWFbdoT77JAKQ4S',
+            ])->post('http://192.168.100.6:8000/api/payment', [
+                'domain' => env('APP_URL'),
+                'email' => $request->email,
+                'name' => $request->name,
+                'package' => 'hexters/coinpayment'
+            ]);
+                
+            
+            if($response->ok()) {
+                $response = $response->json();
+                Cache::forget('hexters-coinpayment-unpaid');
+                Cache::remember('hexters-coinpayment-unpaid', 43800, function() use ($response) {
+                    return [
+                        'invoice' => $response['invoice_no'],
+                        'link' => $response['payment_url'],
+                        'activation' => $response['activation']
+                    ];
+                });
+
+                return response()->json([
+                    'invoice_no' => $response['invoice_no'],
+                    'payment_url' => $response['payment_url'],
+                    'activation' => $response['activation']
+                ]);
+            }
+
+            throw new Exception($response->json()['message']);
+            
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
+        }
+
     }
 
 }
