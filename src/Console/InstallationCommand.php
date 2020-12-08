@@ -65,7 +65,7 @@ class InstallationCommand extends Command
             $marchatid = $this->ask('insert your merchant ID ?');
             $email = $this->ask('insert your debuging email address ?');
 
-            $env  .=  'COINPAYMENT_IPN_ACTIVATE=true'
+            $env  .=  'COINPAYMENT_IPN_ACTIVATE=true' . PHP_EOL
                     . 'COINPAYMENT_MARCHANT_ID=' . $marchatid . PHP_EOL
                     . 'COINPAYMENT_IPN_SECRET=' . $ipn_secret . PHP_EOL
                     . 'COINPAYMENT_IPN_DEBUG_EMAIL=' . $email;
