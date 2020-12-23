@@ -111,7 +111,7 @@
                     <div class="card-body">
                         <form action="">
                             <div class="input-group mb-3 coin-search">
-                                <input type="search" class="form-control" v-model="search" placeholder="search coin...">
+                                <input type="search" class="form-control" v-model="search" placeholder="Search coin...">
                                 <div class="input-group-append">
                                     <button class="btn" type="button"><i class="fas fa-search"></i></button>
                                 </div>
@@ -251,7 +251,7 @@
                                 <td>:
                                     <countdown :time="expired">
                                         <template slot-scope="props">
-                                            <strong>{{ props.minutes }}m {{ props.seconds }}s</strong>
+                                            <strong>{{ props.hours }}h {{ props.minutes }}m {{ props.seconds }}s</strong>
                                         </template>
                                     </countdown>
                                 </td>
@@ -276,6 +276,8 @@
 </template>
 <script>
 import swal from 'sweetalert';
+import moment from 'moment-timezone';
+
 export default {
     props: ['_host', '_payload', '_checkouturl'],
     name: 'formTransaction',
@@ -303,7 +305,7 @@ export default {
     },
     methods: {
         format_expired() {
-            this.expired = this.transaction.time_expires;
+            this.expired = moment.unix(this.transaction.time_expires).tz('America/Panama').unix();
         },
         paynow() {
             swal('Are you sure ?', {
@@ -366,6 +368,7 @@ export default {
                     if(!( json.data.data.transaction == null || json.data.data.transaction == 'null' )) {
                         self.transaction = json.data.data.transaction;
                         $('#createdResult').modal('show');
+                        self.format_expired();
                     }
                 }
             })

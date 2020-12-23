@@ -245,6 +245,7 @@ class AjaxController extends CoinPaymentController {
                 'status_text' => $transaction->status_text,
                 'status_url' => $transaction->status_url,
                 'timeout' => $transaction->timeout,
+                'time_expires' => $transaction->time_expires,
                 'txn_id' => $transaction->txn_id,
                 'type' => $transaction->type,
                 'payload' => $transaction->payload,
@@ -313,7 +314,6 @@ class AjaxController extends CoinPaymentController {
             if($info['error'] != 'ok'){
                 throw new Exception($info['error']);
             }
-
             $result = array_merge($create['result'], $info['result'], [
                 'order_id' => $request->order_id,
                 'amount_total_fiat' => $request->amountTotal,
