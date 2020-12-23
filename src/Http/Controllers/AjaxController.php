@@ -228,7 +228,7 @@ class AjaxController extends CoinPaymentController {
     }
 
     private function transaction_exists($order_id) {
-        $transaction = $this->model->where('order_id', $order_id)->first();
+        $transaction = $this->model->whereNotNull('txn_id')->where('order_id', $order_id)->first();
         if($transaction) {
             return [
                 'address' => $transaction->address,
@@ -330,27 +330,34 @@ class AjaxController extends CoinPaymentController {
             /**
              * Save to database
              */
-            $transaction = $this->model->where('order_id', $request->order_id)->first();
+            $transaction = $this->model->whereNull('txn_id')->where('order_id', $request->order_id)->first();
             if($transaction) {
+                /**
+                 * Update existing transaction
+                 */
                 $transaction->update($result);
             } else {
+
+                /**
+                 * Create new transaction
+                 */
                 $transaction = $this->model->create($result);
+
+                /**
+                 * Create item transaction
+                 */
+                
+                foreach($request->items as $item) {
+                    $transaction->items()->create([
+                        'description' => is_object($item) ? $item->itemDescription : $item['itemDescription'],
+                        'price' => is_object($item) ? $item->itemPrice : $item['itemPrice'],
+                        'qty' => is_object($item) ? $item->itemQty : $item['itemQty'],
+                        'subtotal' => is_object($item) ? $item->itemSubtotalAmount : $item['itemSubtotalAmount'],
+                        'currency_code' => config('coinpayment.default_currency'),
+                    ]);
+                }
             }
 
-                
-            /**
-             * Create item transaction
-             */
-            
-            foreach($request->items as $item) {
-                $transaction->items()->create([
-                    'description' => is_object($item) ? $item->itemDescription : $item['itemDescription'],
-                    'price' => is_object($item) ? $item->itemPrice : $item['itemPrice'],
-                    'qty' => is_object($item) ? $item->itemQty : $item['itemQty'],
-                    'subtotal' => is_object($item) ? $item->itemSubtotalAmount : $item['itemSubtotalAmount'],
-                    'currency_code' => config('coinpayment.default_currency'),
-                ]);
-            }
 
             /**
              * Dispatching job
