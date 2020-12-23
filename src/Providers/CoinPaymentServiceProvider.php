@@ -28,7 +28,6 @@ class CoinPaymentServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
-        $this->llcCheck();
     }
 
     /**
@@ -58,9 +57,7 @@ class CoinPaymentServiceProvider extends ServiceProvider
              */
             __DIR__.'/../Resources/assets/prod/css/coinpayment.css' => public_path('css/coinpayment.css'),
             __DIR__.'/../Resources/assets/prod/js/coinpayment.js' => public_path('js/coinpayment.js'),
-            __DIR__.'/../Resources/assets/prod/js/ladmin.coinpayment.js' => public_path('js/ladmin.coinpayment.js'),
             __DIR__.'/../Resources/assets/images' => public_path('/'),
-            __DIR__.'/../Resources/assets/icons/bitcoin.svg' => base_path('resources/assets/icons/bitcoin.svg'),
             /**
              * Publishing Jobs
              *
@@ -122,31 +119,6 @@ class CoinPaymentServiceProvider extends ServiceProvider
                 LlsCommand::class
             ]);
         }
-    }
-
-    public function llcCheck() {
-        if(is_null(config('ladmin'))) {
-            return;
-        }
-
-        $dir = __DIR__ . '/../llc/';
-        if(is_dir($dir)) {
-            $files = scandir($dir);
-            $invoices = [];
-            foreach($files as $file) {
-                if(! in_array($file, ['.', '..', '.gitignore'])) {
-                    if(preg_match('/(\d.*)\.llc/', $file)) { $content = file_get_contents($dir . $file); if(str_replace('.llc', '', $file) > time() && !empty($content)) { if(preg_match('/^\[(\d*)(\-)(\d*)(\d*)(\-)(\d*)\s(\d*)\:(\d*)\:(\d*)\]\s(.*)/', $content)) {
-                                $invoices[] = [ 'file' => $file, 'content' => $content ];
-                            }
-                        }
-                    }
-                }
-            }
-            if(count($invoices)) { Cache::rememberForever('ladmin-coinpayment-plugin-license', function () use ($invoices) { return $invoices; });
-            } else if(Cache::get('ladmin-coinpayment-plugin-license')) { Cache::forget('ladmin-coinpayment-plugin-license'); }
-            
-        }
-
     }
 
 }

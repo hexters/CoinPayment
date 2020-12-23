@@ -9,7 +9,7 @@
         "Hexters\\CoinPayment\\Providers\\CoinPaymentServiceProvider"
     ],
     "aliases": {
-        "CoinPayment": "Hexters\\CoinPayment\\Helpers\\CoinPaymentFacade"
+        "CoinPayment": "Hexters\\CoinPayment\\CoinPayment"
     },
     "files": [],
     "requires": []

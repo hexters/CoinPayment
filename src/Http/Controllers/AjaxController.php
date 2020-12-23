@@ -12,7 +12,7 @@ use Illuminate\Routing\Controller;
 use Hexters\CoinPayment\Traits\ApiCallTrait;
 use Hexters\CoinPayment\Helpers\CoinPaymentHelper;
 use Hexters\CoinPayment\Entities\CoinpaymentTransaction;
-use Hexters\CoinPayment\Helpers\CoinPaymentFacade;
+use Hexters\CoinPayment\CoinPayment;
 
 
 class AjaxController extends CoinPaymentController {
@@ -305,7 +305,7 @@ class AjaxController extends CoinPaymentController {
             if($transaction) {
                 $transaction->update($result);
             } else {
-                $this->model->create($result);
+                $transaction = $this->model->create($result);
             }
 
                 
@@ -358,7 +358,7 @@ class AjaxController extends CoinPaymentController {
      * @return void
      */
     public function get_balance() {
-        $response = CoinPaymentFacade::getBalances();
+        $response = CoinPayment::getBalances();
         if($response['error'] == 'ok') {
             $blances = $response['result'];
             $coins = [];
@@ -401,7 +401,7 @@ class AjaxController extends CoinPaymentController {
         $request->validate([
             'currency' => ['required']
         ]);
-        $response = CoinPaymentFacade::getDepositAddress($request->currency);
+        $response = CoinPayment::getDepositAddress($request->currency);
         if($response['error'] == 'ok') {
             return response()->json([
                 'coin' => $request->currency,
@@ -426,7 +426,7 @@ class AjaxController extends CoinPaymentController {
             'note' => ['nullable', 'max:60']
         ]);
 
-        $response = CoinPaymentFacade::createWithdrawal($request->all());
+        $response = CoinPayment::createWithdrawal($request->all());
         if($response['error'] == 'ok') {
             return response()->json($result['result']);
         }
@@ -443,7 +443,7 @@ class AjaxController extends CoinPaymentController {
             ladmin()->allow(['administrator.coinpayment.withdrawal.show']);
         }
 
-        $response = CoinPaymentFacade::getWithdrawalInfo($id);
+        $response = CoinPayment::getWithdrawalInfo($id);
 
         if($response['error'] == 'ok') {
             return response()->json($result['result']);

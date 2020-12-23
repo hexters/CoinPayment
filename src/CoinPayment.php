@@ -1,9 +1,9 @@
 <?php
-namespace Hexters\CoinPayment\Helpers;
+namespace Hexters\CoinPayment;
 
 use Illuminate\Support\Facades\Facade;
 
-class CoinPaymentFacade extends Facade {
+class CoinPayment extends Facade {
   /**
    * Get the registered name of the component.
    *
