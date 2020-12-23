@@ -205,7 +205,7 @@ class AjaxController extends CoinPaymentController {
              * Get default currency
              */
             $default_currency = config('coinpayment.default_currency');
-
+            
             return response()->json([
                 'result' => true,
                 'data' => [
@@ -213,7 +213,8 @@ class AjaxController extends CoinPaymentController {
                     'rates' => $rates,
                     'config' => $config,
                     'default_currency' => $default_currency,
-                    'default_coin' => $default_coin
+                    'default_coin' => $default_coin,
+                    'transaction' => $this->transaction_exists($payload['order_id'])
                 ]
             ], 200);
 
@@ -223,6 +224,34 @@ class AjaxController extends CoinPaymentController {
                 'message' => $e->getMessage()
             ], 400);
         }
+
+    }
+
+    private function transaction_exists($order_id) {
+        $transaction = $this->model->where('order_id', $order_id)->first();
+        if($transaction) {
+            return [
+                'address' => $transaction->address,
+                'amount' => $transaction->amount,
+                'amountf' => $transaction->amountf,
+                'coin' => $transaction->coin,
+                'confirms_needed' => $transaction->confirms_needed,
+                'payment_address' => $transaction->payment_address,
+                'qrcode_url' => $transaction->qrcode_url,
+                'received' => $transaction->received,
+                'receivedf' => $transaction->receivedf,
+                'recv_confirms' => $transaction->recv_confirms,
+                'status' => $transaction->status,
+                'status_text' => $transaction->status_text,
+                'status_url' => $transaction->status_url,
+                'timeout' => $transaction->timeout,
+                'txn_id' => $transaction->txn_id,
+                'type' => $transaction->type,
+                'payload' => $transaction->payload,
+            ];
+        }
+
+        return null;
 
     }
 
@@ -236,7 +265,6 @@ class AjaxController extends CoinPaymentController {
         try{
             DB::beginTransaction();
 
-            
 
             if(empty($request->amountTotal)){
                 throw new Exception('Amount total not found!');
@@ -287,6 +315,7 @@ class AjaxController extends CoinPaymentController {
             }
 
             $result = array_merge($create['result'], $info['result'], [
+                'order_id' => $request->order_id,
                 'amount_total_fiat' => $request->amountTotal,
                 'payload' => $request->payload,
                 'buyer_name' => $request->buyer_name ?? '-',

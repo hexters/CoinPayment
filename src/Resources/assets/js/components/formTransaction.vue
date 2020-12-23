@@ -362,6 +362,11 @@ export default {
                     self.payload = json.data.data.payload;
                     self.default_currency = json.data.data.default_currency;
                     self.default_coin = json.data.data.default_coin;
+
+                    if(!( json.data.data.transaction == null || json.data.data.transaction == 'null' )) {
+                        self.transaction = json.data.data.transaction;
+                        $('#createdResult').modal('show');
+                    }
                 }
             })
             .catch(error => {
