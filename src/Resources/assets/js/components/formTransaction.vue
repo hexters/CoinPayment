@@ -220,7 +220,7 @@
                             </tr>
                             <tr>
                                 <td class="text-right">Total Amount To Send</td>
-                                <td>: {{ transaction.amountf }} {{ transaction.coin }} (total confirms needed: {{ transaction.confirms_needed }})</td>
+                                <td>: <strong>{{ transaction.amountf }} {{ transaction.coin }}</strong> (total confirms needed: {{ transaction.confirms_needed }})</td>
                             </tr>
                             <tr>
                                 <td class="text-right">
@@ -244,7 +244,7 @@
                                 <td class="text-right">Send To Address</td>
                                 <td>: {{ transaction.address }} <br> <small class="text-danger">Do not send value to us if address status is expired!</small></td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <td class="text-right">
                                     Time Left For Us to Confirm Funds
                                 </td>
@@ -255,7 +255,7 @@
                                         </template>
                                     </countdown>
                                 </td>
-                            </tr>
+                            </tr> -->
                             <tr>
                                 <td class="text-right">Payment ID</td>
                                 <td>: {{ transaction.txn_id }} <br> <small class="text-muted">(have this handy if you need any support related to this transaction)</small> </td>

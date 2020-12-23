@@ -50,7 +50,7 @@ Create Button transaction. Example placed on your controller
   /*
   *   @required true
   */
-  $transaction['order_id'] = 'xyz-1234'; // invoice number
+  $transaction['order_id'] = uniqid(); // invoice number
   $transaction['amountTotal'] = (FLOAT) 37.5;
   $transaction['note'] = 'Note for your transaction';
   $transaction['buyer_name'] = 'Jhone Due';
