@@ -3,12 +3,10 @@
 namespace Hexters\CoinPayment\Entities;
 
 use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Hexters\CoinPayment\Exceptions\CoinPaymentException;
 
 class CoinpaymentTransaction extends Model {
-
-    use SoftDeletes;
 
     protected $fillable = [
         'order_id',
@@ -73,6 +71,12 @@ class CoinpaymentTransaction extends Model {
 
         self::creating(function($model) {
             $model->uuid = (String) Str::uuid();
+        });
+
+        self::deleting(function($model) {
+            if(! is_null($model->txn_id)) {
+                throw new CoinPaymentException("This transaction cannot be deleted");
+            }
         });
     }
 

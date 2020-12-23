@@ -46,7 +46,6 @@ class CreateCoinpaymentTransactionsTable extends Migration
 
             $table->string('type')->nullable();
             $table->longText('payload')->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
     }
