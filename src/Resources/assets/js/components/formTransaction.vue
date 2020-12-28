@@ -62,10 +62,17 @@
                                 <tr v-for="(item, i) in payload.items" v-bind:key="i" :title="item.itemDescription">
                                     <td width="50%" class="coinpayment-wraper">
                                         <strong>{{ item.itemDescription }}</strong><br>
-                                        <small class="text-muted">item price: {{ item.itemPrice }} {{ default_currency }}</small>
+                                        <small class="text-muted">
+                                            Item price: <money-format :value="item.itemPrice" :currency-code="default_currency">
+                                        </money-format>
+                                        </small>
                                     </td>
                                     <td width="20%" class="text-center">{{ item.itemQty }}</td>
-                                    <td width="30%" class="text-right">{{ item.itemSubtotalAmount }} {{ default_currency }}</td>
+                                    <td width="30%" class="text-right">
+                                        <money-format :value="item.itemSubtotalAmount" 
+                                            :currency-code="default_currency">
+                                        </money-format>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -75,7 +82,9 @@
                         <tbody>
                             <tr>
                                 <th width="50%" class="text-right">Amount total {{ default_currency }}</th>
-                                <th width="50%" class="text-right border-bottom">{{ payload.amountTotal }} {{ default_currency }}</th>
+                                <th width="50%" class="text-right border-bottom">
+                                    <money-format v-if="payload.amountTotal" :value="payload.amountTotal" :currency-code="default_currency"></money-format>
+                                </th>
                             </tr>
                             <tr>
                                 <th class="text-right">Convert to</th>
@@ -277,9 +286,13 @@
 <script>
 import swal from 'sweetalert';
 import moment from 'moment-timezone';
+import MoneyFormat from 'vue-money-format';
 
 export default {
     props: ['_host', '_payload', '_checkouturl'],
+    components: {
+        MoneyFormat
+    },
     name: 'formTransaction',
     data() {
         return {
