@@ -1,4 +1,4 @@
-# CoinPayments v2
+# CoinPayments v3
 
 [![Latest Stable Version](https://poser.pugx.org/hexters/coinpayment/v/stable)](https://packagist.org/packages/hexters/coinpayment)
 [![Total Downloads](https://poser.pugx.org/hexters/coinpayment/downloads)](https://packagist.org/packages/hexters/coinpayment)
@@ -10,7 +10,7 @@
 
 CoinPayment is a Laravel package for handling transactions from [CoinPayment](https://www.coinpayments.net/index.php?ref=3dc0c5875304cc5cc1d98782c2741cb5) like a create transaction, history transaction, etc.
 
-![Example Image](https://github.com/hexters/CoinPayment/blob/master/sample/examplev2.png?raw=true)
+![Example Image](https://github.com/hexters/CoinPayment/blob/master/sample/examplev3.png?raw=true)
 
 ### Version support
 | version | laravel |
@@ -18,25 +18,21 @@ CoinPayment is a Laravel package for handling transactions from [CoinPayment](ht
 |[v1.1.3](https://github.com/hexters/CoinPayment/releases/tag/v1.1.3)|5.6|
 |[v2.0.0](https://github.com/hexters/CoinPayment)|5.8|
 |[v2.0.3](https://github.com/hexters/CoinPayment)|^6.x|
-|[v2.1.0](https://github.com/hexters/CoinPayment)|^8.x|
-
-## Requirement
-* Laravel ^5.8
-* PHP >= ^7.2
+|[Current Version](https://github.com/hexters/CoinPayment)|^8.x|
 
 ## Installation
 You can install this package via composer:
-```
+```bash
 $ composer require hexters/coinpayment
 ```
 
 Publishing vendor
-```
+```bash
 $ php artisan vendor:publish --tag=coinpayment
 ```
 
 Install CoinPayment configuration
-```
+```bash
 $ php artisan coinpayment:install
 ```
 
@@ -44,18 +40,20 @@ Installation finish.
 
 ## Getting Started
 Create Button transaction. Example placed on your controller
-```
-  use Hexters\CoinPayment\Helpers\CoinPaymentFacade as CoinPayment;
+```php
+  use Hexters\CoinPayment\CoinPayment;
   . . . 
   /*
   *   @required true
   */
   $transaction['order_id'] = uniqid(); // invoice number
   $transaction['amountTotal'] = (FLOAT) 37.5;
-  $transaction['note'] = 'Note for your transaction';
+  $transaction['note'] = 'Transaction note';
   $transaction['buyer_name'] = 'Jhone Due';
-  $transaction['buyer_email'] = 'buyer@mailinator.com';
-  $transaction['redirect_url'] = url('/back_to_tarnsaction');
+  $transaction['buyer_email'] = 'buyer@mail.com';
+  $transaction['redirect_url'] = url('/back_to_tarnsaction'); // When Transaction was comleted
+  $transaction['cancel_url'] = url('/back_to_tarnsaction'); // When user click cancel link
+
 
   /*
   *   @required true
@@ -108,25 +106,33 @@ This function will execute orders without having to wait for the process from IP
 
 We can also make cron to run this function if we don't use IPN
 
-```
+```php
+use Hexters\CoinPayment\CoinPayment;
+
+. . .
+
 /**
 * this is triger function for running Job proccess
 */
-return \CoinPayment::getstatusbytxnid("CPDA4VUGSBHYLXXXXXXXXXXXXXXX");
-/**
-  output example: "celled / Timed Out"
-*/
+return CoinPayment::getstatusbytxnid("CPDA4VUGSBHYLXXXXXXXXXXXXXXX");
+// output example: "celled / Timed Out"
+
 ```
 
 ## Get histories transaction Eloquent
-```
-\CoinPayment::gettransactions()->where('status', 0)->get();
+```php
+
+use Hexters\CoinPayment\CoinPayment;
+
+. . .
+
+CoinPayment::gettransactions()->where('status', 0)->get();
 ```
 
 # IPN Route
 
 Except this path `/coinpayment/ipn` into csrf proccess in `App\Http\Middleware\VerifyCsrfToken` 
-```
+```php
 . . .
 /**
   * The URIs that should be excluded from CSRF verification.
@@ -145,4 +151,4 @@ Visit the [**CoinPayment API Keys**](https://www.coinpayments.net/index.php?cmd=
 # Donate
 If this Laravel package was useful to you, please consider donating some coffee ☕☕☕☕
 
-Bitcoin (BTC): ```1388MHjeHmq6kUC7WpSS6pPtgG7hm7fCau```
+Bitcoin (BTC): `1388MHjeHmq6kUC7WpSS6pPtgG7hm7fCau`
