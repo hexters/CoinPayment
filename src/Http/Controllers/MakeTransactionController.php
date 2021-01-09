@@ -47,11 +47,11 @@ class MakeTransactionController extends CoinPaymentController {
      */
     public function show($payload) {
         try{
-            $this->arraychekc($payload);
+            $this->array_decode($payload);
             $data['payload'] = $payload;
             return view('coinpayment::transaction.make.show', $data);
         }catch(Exception $e) {
-            return response($e->getMessage(), 500);
+            return response($e->getMessage(), 400);
         }
         
     }
@@ -82,7 +82,7 @@ class MakeTransactionController extends CoinPaymentController {
     {
     }
 
-    protected function arraychekc($payload) {
+    protected function array_decode($payload) {
         $array = $this->helper->getrawtransaction($payload);
         if(empty($array['amountTotal'])){
             throw new Exception('Oops!, index [amountTotal] not found!');

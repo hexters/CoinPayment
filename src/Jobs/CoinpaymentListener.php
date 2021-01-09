@@ -34,37 +34,39 @@ class CoinpaymentListener implements ShouldQueue
          * Handle your transaction here
          * the parameter is :
          * 
-            'address',
-            'amount',
-            'amountf',
-            'coin',
-            'confirms_needed',
-            'payment_address',
-            'qrcode_url',
-            'received',
-            'receivedf',
-            'recv_confirms',
-            'status',
-            'status_text',
-            'status_url',
-            'timeout',
-            'txn_id',
-            'type',
-            'payload',
-            'transaction_type' --> value: new | old
-
+         * address
+         * amount
+         * amountf
+         * coin
+         * confirms_needed
+         * payment_address
+         * qrcode_url
+         * received
+         * receivedf
+         * recv_confirms
+         * status
+         * status_text
+         * status_url
+         * timeout
+         * txn_id
+         * type
+         * payload
+         * transaction_type --> value: new | old
+         * 
          * ----------------- PAYMENT STATUS -------------------
-            0   : Waiting for buyer funds
-            1   : Funds received and confirmed, sending to you shortly
-            100 : Complete,
-            -1  : Cancelled / Timed Out
+         * 0   : Waiting for buyer funds
+         * 1   : Funds received and confirmed, sending to you shortly
+         * 100 : Complete,
+         * -1  : Cancelled / Timed Out
+         * 
          * ----------------------------------------------------
          *  You can use transaction_type to distinguish new transactions or old transactions
          * ----------------------------------------------------
-         * 
          * Example
-            $this->transaction['transaction_type']
+         *  $this->transaction['transaction_type']
+         *  // out: new / old
          */
 
+         return 0;
     }
 }

@@ -79,17 +79,17 @@ class InstallationCommand extends Command
             }
             $this->line(PHP_EOL);
             $this->line('---------------------------------------------------------');
-            $this->info('Visit this link https://www.coinpayments.net/acct-settings and got to the Merchant Settings tab And insert data below !');
+            $this->info('Go to this link https://www.coinpayments.net/acct-settings open tab Merchant Settings And insert data below !');
             $this->line(PHP_EOL);
             $this->line('IPN Secret         : ' . $ipn_secret);
             $this->line('IPN URL            : ' . url('/coinpayment/ipn'));
             $this->line('Status/Log Email   : ' . $email);
             $this->line(PHP_EOL);
             $this->call('migrate');
-            $this->info('installation Finish');
+            $this->info('Installation Finish');
             $this->line('---------------------------------------------------------');
           }else{
-            $this->error('installation canceled!');
+            $this->error('Installation canceled!');
           }
     }
 }

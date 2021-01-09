@@ -49,10 +49,11 @@ return [
     
     /*
     |--------------------------------------------------------------------------
-    | Currencies setting
+    | Currency setting
     |--------------------------------------------------------------------------
     |
-    | please use one currencies for convert coin amount
+    | Please use one currency for convert coin amount
+    |
     | USD, CAD, EUR, ARS, AUD, AZN, BGN, BRL, BYN, CHF, CLP, CNY, COP, CZK
     | DKK, GBP, GIP, HKD, HUF, IDR, ILS, INR, IRR, IRT, ISK, JPY, KRW, LAK, MKD, MXN, ZAR,
     | MYR, NGN, NOK, NZD, PEN, PHP, PKR, PLN, RON, RUB, SEK, SGD, THB, TRY, TWD, UAH, VND,
@@ -96,16 +97,4 @@ return [
         'Bitcoin' => 'https://github.com/hexters/CoinPayment/blob/master/btc.png?raw=true',
         'Velas (Old Chain)' => 'https://www.coinpayments.net/images/coins/VLX.png'
     ],
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Custom markdown mail
-    |--------------------------------------------------------------------------
-    */
-    'mail' => [
-        'layout' => [
-            'transaction_to_buyer' => 'coinpayment::emails.transaction.tobuyer'
-        ]
-    ]
 ];
