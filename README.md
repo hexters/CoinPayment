@@ -17,7 +17,7 @@ CoinPayment is a Laravel package for handling transactions from [CoinPayment](ht
 |-|-|
 |[v1.1.3](https://github.com/hexters/CoinPayment/releases/tag/v1.1.3)|5.6|
 |[v2.0.0](https://github.com/hexters/CoinPayment)|5.8|
-|[v2.0.3](https://github.com/hexters/CoinPayment)|^6.x|
+|[v2.0.3](https://github.com/hexters/CoinPayment)|6.x|
 |[Current Version](https://github.com/hexters/CoinPayment)|^8.x|
 
 ## Installation
