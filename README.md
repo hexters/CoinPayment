@@ -144,6 +144,23 @@ protected $except = [
 ]; 
 . . .
 ```
+
+# Promote New Features
+Now you can integrate you coinpayment transaction with [**Ladmin (Laravel Admin scaffolding)**](https://github.com/hexters/ladmin). You just buy for the package price starting at **$ 7.25** per version. 
+
+### What is the features?
+- List of the transaction from CoinPayment base on database
+- Create new transaction from admin page & send to buyer email
+- You can Check status of transaction via admin page manually
+- Remove pending transaction
+- List of CoinPayment Balance
+- Top Up balance
+- Easy and quick Installation
+
+For details source visit the pakcage [**Ladmin CoinPayment**](https://ppmarket.org/browse/hexters-ladmin-coinpayment)
+
+![Preview Plugin](https://github.com/hexters/CoinPayment/blob/master/sample/detail-trx.png?raw=true)
+
 # Troubleshooting
 ## Cannot use object of type Illuminate\Http\JsonResponse as array
 Visit the [**CoinPayment API Keys**](https://www.coinpayments.net/index.php?cmd=acct_api_keys) page, under *Actions*, click on the *Edit Permissions* button. Enter the IP address of your API endpoint (e.g. your website server) in the *Restrict to IP/IP Range* input. Leaving it empty, may cause this error to occur.
