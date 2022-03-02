@@ -41,7 +41,7 @@ class IPNController extends Controller {
         }
         return response('No or incorrect Merchant ID passed', 401);
     }
-    $request = file_get_contents('php://input');
+    $request = $req->getContent();
     if ($request === FALSE || empty($request)) {
         if(!empty($cp_debug_email)) {
             \Mail::to($cp_debug_email)->send(new SendEmail([
