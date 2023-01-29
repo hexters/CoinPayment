@@ -146,7 +146,7 @@ protected $except = [
 ```
 
 # Promote New Features
-Now you can integrate you coinpayment transaction with [**Ladmin (Laravel Admin scaffolding)**](https://github.com/hexters/ladmin). You just buy for the package price starting at **$ 7.25** per version. 
+Now you can integrate you coinpayment transaction with [**Ladmin (Laravel Admin scaffolding)**](https://github.com/hexters/ladmin). You just buy for the package price starting at **$ 36.25** per version. 
 
 ### What is the features?
 - List of the transaction from CoinPayment base on database
@@ -169,3 +169,5 @@ Visit the [**CoinPayment API Keys**](https://www.coinpayments.net/index.php?cmd=
 If this Laravel package was useful to you, please consider donating some coffee ☕☕☕☕
 
 Bitcoin (BTC): `1388MHjeHmq6kUC7WpSS6pPtgG7hm7fCau`
+
+Patreon : [hexters](https://www.patreon.com/hexters)
