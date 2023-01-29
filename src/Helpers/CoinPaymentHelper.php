@@ -15,7 +15,6 @@ class CoinPaymentHelper {
 	 * Generate link payment
 	 *
 	 * @param [type] $array
-	 * @return void
 	 */
 	public function generatelink($array) {
 		if(!is_array($array)){
@@ -28,7 +27,6 @@ class CoinPaymentHelper {
 	 * Get raw transaction
 	 *
 	 * @param [type] $string
-	 * @return void
 	 */
 	public function getrawtransaction($string) {
 		return $this->transaction_dencrypt($string);
@@ -48,7 +46,6 @@ class CoinPaymentHelper {
 	 * Decripted transaction data
 	 *
 	 * @param String $string
-	 * @return void
 	 */
 	protected function transaction_dencrypt(String $string) {
 		return unserialize(Crypt::decryptString($string));
@@ -58,7 +55,6 @@ class CoinPaymentHelper {
 	 * Get status by txn ID
 	 *
 	 * @param [type] $txn_id
-	 * @return void
 	 */
 	public function getstatusbytxnid($txn_id) {
 		try {
@@ -90,8 +86,6 @@ class CoinPaymentHelper {
 
 	/**
 	 * Get balances
-	 *
-	 * @return void
 	 */
 	public function getBalances() {
 		return $this->api_call('balances');
@@ -99,8 +93,6 @@ class CoinPaymentHelper {
 
 	/**
 	 * Return to eloquent model transactions
-	 *
-	 * @return void
 	 */
 	public function gettransactions() {
 		return new CoinpaymentTransaction;
@@ -110,7 +102,6 @@ class CoinPaymentHelper {
 	 * Geherated top up address
 	 *
 	 * @param [type] $currency
-	 * @return void
 	 */
 	public function getDepositAddress($currency) {
 		return $this->api_call('get_deposit_address', [
@@ -122,7 +113,6 @@ class CoinPaymentHelper {
 	 * Create new withdrawal
 	 *
 	 * @param Array $body
-	 * @return void
 	 */
 	public function createWithdrawal(Array $body) {
 		return $this->api_call('create_withdrawal', $body);
@@ -132,7 +122,6 @@ class CoinPaymentHelper {
 	 * get withdrawal info
 	 *
 	 * @param String $body
-	 * @return void
 	 */
 	public function getWithdrawalInfo($id) {
 		return $this->api_call('get_withdrawal_info', $id);

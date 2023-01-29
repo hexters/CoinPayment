@@ -41,7 +41,7 @@ class IPNController extends Controller {
         }
         return response('No or incorrect Merchant ID passed', 401);
     }
-    $request = file_get_contents('php://input');
+    $request = $req->getContent();
     if ($request === FALSE || empty($request)) {
         if(!empty($cp_debug_email)) {
             \Mail::to($cp_debug_email)->send(new SendEmail([
@@ -52,7 +52,7 @@ class IPNController extends Controller {
         return response('Error reading POST data', 401);
     }
     $hmac = hash_hmac("sha512", $request, trim($cp_ipn_secret));
-    if (!hash_equals($hmac, $_SERVER['HTTP_HMAC'])) {
+    if (!hash_equals($hmac, $req->server('HTTP_HMAC'))) {
         if(!empty($cp_debug_email)) {
             \Mail::to($cp_debug_email)->send(new SendEmail([
                 'message' => 'HMAC signature does not match'
