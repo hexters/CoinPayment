@@ -165,9 +165,7 @@ For details source visit the pakcage [**Ladmin CoinPayment**](https://ppmarket.o
 ## Cannot use object of type Illuminate\Http\JsonResponse as array
 Visit the [**CoinPayment API Keys**](https://www.coinpayments.net/index.php?cmd=acct_api_keys) page, under *Actions*, click on the *Edit Permissions* button. Enter the IP address of your API endpoint (e.g. your website server) in the *Restrict to IP/IP Range* input. Leaving it empty, may cause this error to occur.
 
-# Donate
-If this Laravel package was useful to you, please consider donating some coffee ☕☕☕☕
-
-Bitcoin (BTC): `1388MHjeHmq6kUC7WpSS6pPtgG7hm7fCau`
-
-Patreon : [hexters](https://www.patreon.com/hexters)
+# Supporting the project
+You can support the maintainer of this project through the referral links below
+- [**Sign up for DigitalOcean**](https://www.digitalocean.com/?refcode=36844cd4f4b4&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
+- [**PayPal**](https://paypal.me/asepss19)
