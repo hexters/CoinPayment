@@ -329,7 +329,16 @@ $trx = CoinpaymentTransaction::with('items')->where('order_id', $invoice)->first
 
 ## Testing on the Litecoin testnet (LTCT)
 
-CoinPayments' sandbox uses LTCT (Litecoin Testnet). Grab free coins from a testnet faucet such as <https://tltc.bitaps.com/> and send them to the invoice address. You don't need a local wallet. LTCT is left out of fiat totals by default.
+CoinPayments' sandbox uses LTCT (Litecoin Testnet), and they give you 5 LTCT to test with. To claim it, open <https://legacy.coinpayments.net/acct-balances>, scroll to the bottom, find Litecoin Testnet2, and press the "Get LTCT" button. The 5 LTCT lands in your account balance.
+
+To run a full payment test:
+
+1. Create a transaction from your checkout page so you have an invoice to pay.
+2. Withdraw LTCT from your balance to that invoice's address. You can do this from the Balances tab in the admin panel.
+3. Check your email and click the link to confirm the withdrawal.
+4. Wait for it to confirm. The status updates over IPN, or run `php artisan coinpayment:sync`.
+
+LTCT is left out of fiat totals by default.
 
 ## Troubleshooting
 
