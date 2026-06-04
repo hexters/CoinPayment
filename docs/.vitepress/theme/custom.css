@@ -1,0 +1,69 @@
+/* ----------------------------------------------------------------------------
+   CoinPayments for Laravel — VitePress theme overrides
+---------------------------------------------------------------------------- */
+
+:root {
+  --vp-c-brand-1: #2f6fed;
+  --vp-c-brand-2: #2861d8;
+  --vp-c-brand-3: #1f57c4;
+  --vp-c-brand-soft: rgba(47, 111, 237, 0.14);
+
+  --vp-font-family-base: 'Hanken Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --vp-home-hero-name-color: var(--vp-c-brand-1);
+
+  /* landing tokens */
+  --cp-ink: #0b1220;
+  --cp-ink-2: #131c30;
+  --cp-blue: #2f6fed;
+  --cp-blue-d: #1f57c4;
+  --cp-line: rgba(15, 23, 41, 0.08);
+}
+
+/* Distinctive display face for headings and brand */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.VPNavBarTitle .title {
+  font-family: 'Schibsted Grotesk', var(--vp-font-family-base);
+  letter-spacing: -0.02em;
+}
+
+.vp-doc h1 { font-weight: 800; }
+.vp-doc h2 { padding-top: 22px; border-top: 1px solid var(--vp-c-divider); }
+
+/* Code blocks: a touch more contrast + rounded */
+.vp-doc div[class*='language-'] {
+  border-radius: 14px;
+  box-shadow: 0 14px 30px -18px rgba(15, 23, 41, 0.4);
+}
+
+/* Nicer inline code */
+.vp-doc :not(pre) > code {
+  font-size: 0.85em;
+}
+
+/* Brand buttons a bit bolder */
+.VPButton.brand {
+  font-weight: 700;
+}
+
+/* ----------------------------------------------------------------------------
+   Landing page — make the `layout: page` index full-bleed
+---------------------------------------------------------------------------- */
+
+.VPPage {
+  padding: 0 !important;
+}
+
+.cp-landing {
+  font-family: var(--vp-font-family-base);
+}
+
+.cp-landing :where(h1, h2, h3) {
+  font-family: 'Schibsted Grotesk', var(--vp-font-family-base);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 0;
+}

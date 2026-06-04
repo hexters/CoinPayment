@@ -8,5 +8,11 @@
 composer.lock
 .DS_Store
 
+# Docs (VitePress)
+/node_modules
+package-lock.json
+docs/.vitepress/dist
+docs/.vitepress/cache
+
 # Private license keys — never commit
 LICENSE-KEY.md
