@@ -1,4 +1,4 @@
-# CoinPayments for Laravel
+# CoinPayments for Laravel 11/12/13
 
 [![Latest Stable Version](https://poser.pugx.org/hexters/coinpayment/v/stable)](https://packagist.org/packages/hexters/coinpayment)
 [![Total Downloads](https://poser.pugx.org/hexters/coinpayment/downloads)](https://packagist.org/packages/hexters/coinpayment)
