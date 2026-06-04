@@ -330,4 +330,4 @@ Found a bug or need help? Open an issue at **[github.com/hexters/CoinPayment/iss
 
 ## License
 
-Source-available. Free to use and develop with locally; production/staging use of the premium features requires a paid license (see [Premium features](#premium-features)). © Saifullah Syahidin (hexters).
+Source-available. Free to use and develop with locally; production/staging use of the premium features requires a paid license (see [Premium features](#premium-features)). © Asep SS (hexters).
