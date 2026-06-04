@@ -1,5 +1,12 @@
+/vendor
 /node_modules
 /nbproject
 /.php_cs.cache
+/.phpunit.result.cache
+/.phpunit.cache
 /.idea
+composer.lock
 .DS_Store
+
+# Private license keys — never commit
+LICENSE-KEY.md

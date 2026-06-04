@@ -2,123 +2,99 @@
 
 namespace Hexters\CoinPayment\Providers;
 
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\ServiceProvider;
 use Hexters\CoinPayment\Console\InstallationCommand;
-use Hexters\CoinPayment\Console\LlsCommand;
+use Hexters\CoinPayment\Console\SyncTransactionsCommand;
 use Hexters\CoinPayment\Helpers\CoinPaymentHelper;
+use Hexters\CoinPayment\Livewire\Admin\Balances;
+use Hexters\CoinPayment\Livewire\Admin\Transactions;
+use Hexters\CoinPayment\Livewire\Admin\Withdrawals;
+use Hexters\CoinPayment\Livewire\FormTransaction;
+use Hexters\CoinPayment\Livewire\LicenseGate;
+use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class CoinPaymentServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
+     * Register the service provider.
      */
-    protected $defer = false;
+    public function register(): void
+    {
+        $this->mergeConfigFrom(__DIR__ . '/../Config/config.php', 'coinpayment');
+
+        $this->app->singleton('CoinPayment', fn () => new CoinPaymentHelper);
+    }
 
     /**
-     * Boot the application events.
-     *
-     * @return void
+     * Boot the package services.
      */
-    public function boot() {
-        $this->registerCommand();
+    public function boot(): void
+    {
+        $this->registerCommands();
         $this->registerTranslations();
-        $this->registerConfig();
         $this->registerViews();
+        $this->registerRoutes();
+        $this->registerLivewireComponents();
+        $this->registerPublishing();
+
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register() {
-        $this->app->bind('CoinPayment', function(){
-            return new CoinPaymentHelper;
-        });
-        $this->app->register(RouteServiceProvider::class);
-    }
-
-    /**
-     * Register config.
-     *
-     * @return void
-     */
-    protected function registerConfig() {
-
-        
-        $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('coinpayment.php'),
-            /**
-             * Publishing assets
-             */
-            __DIR__.'/../Resources/assets/prod/css/coinpayment.css' => public_path('css/coinpayment.css'),
-            __DIR__.'/../Resources/assets/prod/js/coinpayment.js' => public_path('js/coinpayment.js'),
-            __DIR__.'/../Resources/assets/images' => public_path('/'),
-            /**
-             * Publishing Jobs
-             *
-             */
-            __DIR__.'/../Jobs/CoinpaymentListener.php' => app_path('Jobs/CoinpaymentListener.php'),
-            
-        ], 'coinpayment');
-        
-        $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'coinpayment'
-        );
-        
-    }
-
-    /**
-     * Register views.
-     *
-     * @return void
-     */
-    public function registerViews()
+    protected function registerRoutes(): void
     {
-        $viewPath = resource_path('views/modules/coinpayment');
-
-        $sourcePath = __DIR__.'/../Resources/views';
-
-        $this->publishes([
-            $sourcePath => $viewPath
-        ],'views');
-
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/coinpayment';
-        }, \Config::get('view.paths')), [$sourcePath]), 'coinpayment');
+        $this->loadRoutesFrom(__DIR__ . '/../Routes/web.php');
     }
 
-    /**
-     * Register translations.
-     *
-     * @return void
-     */
-    public function registerTranslations()
+    protected function registerLivewireComponents(): void
     {
-        $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'coinpayment');
-    }
-    
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [];
+        Livewire::component('coinpayment-form-transaction', FormTransaction::class);
+        Livewire::component('coinpayment-license-gate', LicenseGate::class);
+        Livewire::component('coinpayment-admin-balances', Balances::class);
+        Livewire::component('coinpayment-admin-withdrawals', Withdrawals::class);
+        Livewire::component('coinpayment-admin-transactions', Transactions::class);
     }
 
-    public function registerCommand () {
+    protected function registerViews(): void
+    {
+        $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'coinpayment');
+    }
+
+    protected function registerTranslations(): void
+    {
+        $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'coinpayment');
+    }
+
+    protected function registerCommands(): void
+    {
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallationCommand::class,
-                LlsCommand::class
+                SyncTransactionsCommand::class,
             ]);
         }
     }
 
+    protected function registerPublishing(): void
+    {
+        if (! $this->app->runningInConsole()) {
+            return;
+        }
+
+        $this->publishes([
+            __DIR__ . '/../Config/config.php' => config_path('coinpayment.php'),
+        ], 'coinpayment-config');
+
+        $this->publishes([
+            __DIR__ . '/../Resources/assets/prod/css/coinpayment.css' => public_path('vendor/coinpayment/coinpayment.css'),
+            __DIR__ . '/../Resources/assets/images' => public_path('vendor/coinpayment'),
+        ], 'coinpayment-assets');
+
+        $this->publishes([
+            __DIR__ . '/../Resources/views' => resource_path('views/vendor/coinpayment'),
+        ], 'coinpayment-views');
+
+        $this->publishes([
+            __DIR__ . '/../Jobs/CoinpaymentListener.php' => app_path('Jobs/CoinpaymentListener.php'),
+        ], 'coinpayment-job');
+    }
 }

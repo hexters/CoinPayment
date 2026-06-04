@@ -29,7 +29,7 @@ class IPNErrorMail extends Mailable
      */
     public function build() {
 
-        return $this->subject(env('APP_NAME') . date(' - Y/m/d - ') . ' CoinPayments IPN Error')
+        return $this->subject(config('app.name') . date(' - Y/m/d - ') . ' CoinPayments IPN Error')
             ->view('coinpayment::emails.error_reporting', [
                 'data' => $this->data
             ]);

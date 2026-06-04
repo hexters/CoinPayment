@@ -2,94 +2,140 @@
 
 namespace Hexters\CoinPayment\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Support\Str;
+
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\intro;
+use function Laravel\Prompts\note;
+use function Laravel\Prompts\outro;
+use function Laravel\Prompts\password;
+use function Laravel\Prompts\text;
+use function Laravel\Prompts\warning;
 
 class InstallationCommand extends Command
 {
     /**
-     * The console command name.
+     * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'coinpayment:install';
+    protected $signature = 'coinpayment:install';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Coinpayment instalation wizard';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct() {
-        parent::__construct();
-    }
+    protected $description = 'CoinPayment installation wizard';
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle() {
-        $env = '';
-        $path = base_path('.env');
-        $ipn_secret = Str::random(20);
+    public function handle(): int
+    {
+        intro('CoinPayment installation wizard');
+
+        $publicKey = text(
+            label: 'Your CoinPayments public key',
+            required: 'The public key is required.',
+        );
+
+        $privateKey = password(
+            label: 'Your CoinPayments private (secret) key',
+            required: 'The private key is required.',
+        );
+
+        $currency = text(
+            label: 'Default currency',
+            placeholder: 'USD',
+            default: 'USD',
+            hint: 'e.g. USD, IDR, EUR, CAD, AUD, SGD, JPY …',
+            validate: fn (string $value) => strlen(trim($value)) < 2
+                ? 'Please enter a valid currency code.'
+                : null,
+        );
+
+        $env = "COINPAYMENT_PUBLIC_KEY={$publicKey}" . PHP_EOL
+            . "COINPAYMENT_PRIVATE_KEY={$privateKey}" . PHP_EOL
+            . "COINPAYMENT_CURRENCY={$currency}" . PHP_EOL;
+
+        $ipnSecret = Str::random(20);
         $email = '';
-        $marchatid = '';
 
+        if (confirm(label: 'Enable IPN (Instant Payment Notification) mode?', default: true)) {
+            $merchantId = text(
+                label: 'Your merchant ID',
+                required: 'The merchant ID is required for IPN.',
+            );
 
-        $this->line(PHP_EOL);
-        $this->line('---------------------------------------------------------');
-        $this->line('         Wellcome to the coinpayment installation');
-        $this->line('---------------------------------------------------------');
-        $public_key = $this->ask('insert your public key ?');
-        $secret_key = $this->ask('insert your secret key ?');
+            $email = text(
+                label: 'Debug / log e-mail address',
+                placeholder: 'you@example.com',
+                validate: fn (string $value) => $value !== '' && ! filter_var($value, FILTER_VALIDATE_EMAIL)
+                    ? 'Please enter a valid e-mail address.'
+                    : null,
+            );
 
-        $this->line('for example: IDR, USD, CAD, EUR, ARS, AUD, AZN, BGN, BRL, BYN, CHF, CLP, CNY, COP, CZK');
-        $currency = $this->ask('insert default currency ?');
-
-        $env  .=  'COINPAYMENT_PUBLIC_KEY=' . $public_key . PHP_EOL
-                . 'COINPAYMENT_PRIVATE_KEY=' . $secret_key . PHP_EOL
-                . 'COINPAYMENT_CURRENCY=' . $currency . PHP_EOL;
-
-        $ipnconfirm = $this->confirm('Do you want to enable IPN mode ?');
-
-        if($ipnconfirm) {
-            $marchatid = $this->ask('insert your merchant ID ?');
-            $email = $this->ask('insert your debuging email address ?');
-
-            $env  .=  'COINPAYMENT_IPN_ACTIVATE=true' . PHP_EOL
-                    . 'COINPAYMENT_MARCHANT_ID=' . $marchatid . PHP_EOL
-                    . 'COINPAYMENT_IPN_SECRET=' . $ipn_secret . PHP_EOL
-                    . 'COINPAYMENT_IPN_DEBUG_EMAIL=' . $email;
+            $env .= 'COINPAYMENT_IPN_ACTIVATE=true' . PHP_EOL
+                . "COINPAYMENT_MARCHANT_ID={$merchantId}" . PHP_EOL
+                . "COINPAYMENT_IPN_SECRET={$ipnSecret}" . PHP_EOL
+                . "COINPAYMENT_IPN_DEBUG_EMAIL={$email}" . PHP_EOL;
         }
-            
-        $this->line($env);
-        if($this->confirm('your data is correct ?')){
-            if (file_exists($path)) {
-                $file = file_get_contents($path);
-                file_put_contents($path, $file . PHP_EOL . $env);
-            }
-            $this->line(PHP_EOL);
-            $this->line('---------------------------------------------------------');
-            $this->info('Go to this link https://www.coinpayments.net/acct-settings open tab Merchant Settings And insert data below !');
-            $this->line(PHP_EOL);
-            $this->line('IPN Secret         : ' . $ipn_secret);
-            $this->line('IPN URL            : ' . url('/coinpayment/ipn'));
-            $this->line('Status/Log Email   : ' . $email);
-            $this->line(PHP_EOL);
-            $this->call('migrate');
-            $this->info('Installation Finish');
-            $this->line('---------------------------------------------------------');
-          }else{
-            $this->error('Installation canceled!');
-          }
+
+        note($env, 'The following will be written to your .env');
+
+        if (! confirm('Is the data above correct?', default: true)) {
+            warning('Installation cancelled.');
+
+            return self::FAILURE;
+        }
+
+        $this->writeEnv($env);
+
+        note(
+            'IPN Secret  : ' . $ipnSecret . PHP_EOL
+            . 'IPN URL     : ' . url('/coinpayment/ipn') . PHP_EOL
+            . 'Log e-mail  : ' . ($email ?: '-'),
+            'Add these in CoinPayments → Account → Merchant Settings'
+        );
+
+        $this->callSilent('vendor:publish', ['--tag' => 'coinpayment-config']);
+        $this->callSilent('vendor:publish', ['--tag' => 'coinpayment-assets', '--force' => true]);
+        $this->call('migrate');
+
+        warning(
+            'The admin panel is gate protected. Define the gate to grant access:' . PHP_EOL
+            . "    Gate::define('coinpayment-admin', fn (\$user) => \$user->is_admin);"
+        );
+
+        outro('CoinPayment installed successfully 🎉');
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Append the generated keys to the .env file (skipping keys already present).
+     */
+    protected function writeEnv(string $env): void
+    {
+        $path = base_path('.env');
+
+        if (! file_exists($path)) {
+            warning('.env file not found — please add the keys above manually.');
+
+            return;
+        }
+
+        $current = file_get_contents($path);
+
+        $lines = collect(explode(PHP_EOL, $env))
+            ->filter(fn ($line) => trim($line) !== '')
+            ->reject(fn ($line) => str_contains($current, Str::before($line, '=') . '='))
+            ->implode(PHP_EOL);
+
+        if ($lines !== '') {
+            file_put_contents($path, rtrim($current) . PHP_EOL . $lines . PHP_EOL);
+        }
     }
 }

@@ -1,41 +1,52 @@
 <?php
 
+use Hexters\CoinPayment\Http\Controllers\IPNController;
+use Hexters\CoinPayment\Http\Middleware\CoinpaymentAuthMiddleware;
+use Hexters\CoinPayment\Livewire\Admin\Balances;
+use Hexters\CoinPayment\Livewire\Admin\Transactions;
+use Hexters\CoinPayment\Livewire\Admin\Withdrawals;
+use Hexters\CoinPayment\Livewire\FormTransaction;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| CoinPayment Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
-Route::as('coinpayment.')->prefix('coinpayment')
-    ->group(function() {
-        
-        Route::middleware(['web'])->group(function() {
-            /**
-             * Transaction created
-             */
-            Route::resource('/make', 'MakeTransactionController')->only(['show', 'store']);
 
-            /**
-             * Ajax section
-             */
-            Route::group([
-                'prefix' => 'ajax',
-            ], function() {
-                Route::get('/rates/{usd}', 'AjaxController@rates')->name('rates');
-                Route::post('/payload', 'AjaxController@encrypt_payload')->name('encrypt.payload');
-                Route::post('/create', 'AjaxController@create_transaction')->name('create.transaction');
-            });
+Route::as('coinpayment.')
+    ->prefix('coinpayment')
+    ->group(function () {
+
+        // Checkout page (full-page Livewire component).
+        Route::middleware(config('coinpayment.middleware', ['web']))->group(function () {
+            Route::get('/make/{payload}', FormTransaction::class)->name('make');
         });
 
         /**
-         * IPN handler
-         * Please except into csrf proccess /coinpayment/ipn
+         * IPN handler (server-to-server callback).
+         * Exclude this route from CSRF verification in the host app.
          */
-        Route::post('/ipn', 'IPNController')->name('ipn');
+        Route::post('/ipn', IPNController::class)
+            ->middleware('web')
+            ->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class)
+            ->name('ipn');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Admin panel (standalone, gate protected)
+|--------------------------------------------------------------------------
+*/
+
+Route::as('coinpayment.admin.')
+    ->prefix(config('coinpayment.admin.prefix', 'coinpayment/admin'))
+    ->middleware(array_merge(
+        (array) config('coinpayment.admin.middleware', ['web']),
+        [CoinpaymentAuthMiddleware::class]
+    ))
+    ->group(function () {
+        Route::get('/', Balances::class)->name('balances');
+        Route::get('/withdrawals', Withdrawals::class)->name('withdrawals');
+        Route::get('/transactions', Transactions::class)->name('transactions');
     });

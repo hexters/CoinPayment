@@ -1,14 +1,30 @@
 {
     "name": "hexters/coinpayment",
-    "description": "CoinPayment is a Laravel module for handling transactions from CoinPayment like a create transaction, history transaction, etc.",
-    "keywords": ["Coinpayment", "Payment Gateway", "Laravel", "Cryptocurrency", "Bitcoin"],
-    "license" : "MIT",
+    "description": "CoinPayment is a Laravel package for handling cryptocurrency transactions through CoinPayments.net (create transaction, transaction history, IPN, balances, withdrawals).",
+    "keywords": ["Coinpayment", "Payment Gateway", "Laravel", "Livewire", "Cryptocurrency", "Bitcoin"],
+    "license": "proprietary",
     "authors": [
         {
-            "name": "Saifullah Syahidin",
+            "name": "Asep SS",
             "email": "hexters@gmail.com"
         }
     ],
+    "require": {
+        "php": "^8.2",
+        "ext-json": "*",
+        "illuminate/support": "^11.0|^12.0|^13.0",
+        "illuminate/database": "^11.0|^12.0|^13.0",
+        "illuminate/http": "^11.0|^12.0|^13.0",
+        "illuminate/console": "^11.0|^12.0|^13.0",
+        "illuminate/bus": "^11.0|^12.0|^13.0",
+        "illuminate/mail": "^11.0|^12.0|^13.0",
+        "illuminate/contracts": "^11.0|^12.0|^13.0",
+        "livewire/livewire": "^3.5"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "phpunit/phpunit": "^10.5|^11.0|^12.0"
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -23,5 +39,18 @@
         "psr-4": {
             "Hexters\\CoinPayment\\": "src/"
         }
-    }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hexters\\CoinPayment\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

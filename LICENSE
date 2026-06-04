@@ -1,21 +1,34 @@
-MIT License
+CoinPayments for Laravel — License
 
-Copyright (c) 2018 Saifullah Syahidin, https://github.com/hexters <hexters@gmail.com>
+Copyright (c) 2018-2026 Saifullah Syahidin (hexters) <hexters@gmail.com>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This is a source-available, open-core package.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Free use (development)
+   You may install, use, modify, and self-host this package free of charge in
+   non-production environments (e.g. local and CI/testing) for the purpose of
+   evaluation and development.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Premium features (production / staging)
+   Certain features are reserved for holders of a valid paid license. On
+   production and staging environments these features are gated and require
+   activation with a license serial obtained from the author:
+     - the full list of accepted coins on the checkout page;
+     - the withdrawal and top-up actions in the admin panel;
+     - the transaction and withdrawal detail views.
+   The remaining functionality continues to work without a license.
+
+3. Restrictions
+   You may not remove, disable, or circumvent the licensing mechanism in order
+   to use the premium features in production/staging without a valid license,
+   nor redistribute license serials.
+
+4. Warranty
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE
+   USE OF THE SOFTWARE.
+
+Purchase a license: https://buymeacoffee.com/hexters/e/545129
+Support: https://github.com/hexters/CoinPayment/issues

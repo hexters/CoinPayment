@@ -4,18 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCoinpaymentTransactionItemsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('coinpayment_transaction_items', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('coinpayment_transaction_id');
+            $table->id();
+            $table->unsignedBigInteger('coinpayment_transaction_id')->index();
             $table->string('description');
             $table->decimal('price', 10, 2);
             $table->decimal('qty', 10, 2);
@@ -29,11 +27,9 @@ class CreateCoinpaymentTransactionItemsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('coinpayment_transaction_items');
     }
-}
+};

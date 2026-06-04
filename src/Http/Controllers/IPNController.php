@@ -2,95 +2,81 @@
 
 namespace Hexters\CoinPayment\Http\Controllers;
 
-use App\Jobs\CoinpaymentListener;
 use Hexters\CoinPayment\Emails\IPNErrorMail as SendEmail;
-
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
 use Hexters\CoinPayment\Entities\CoinpaymentTransaction;
 use Hexters\CoinPayment\Traits\ApiCallTrait;
+use Hexters\CoinPayment\Traits\InteractsWithListener;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Mail;
 
-class IPNController extends Controller {
-    
+class IPNController extends Controller
+{
     use ApiCallTrait;
+    use InteractsWithListener;
 
-    public function __invoke(Request $req){
-    /*
-        $txn_id = $_POST['txn_id'];
-        $item_name = $_POST['item_name'];
-        $item_number = $_POST['item_number'];
-        $amount1 = floatval($_POST['amount1']);
-        $amount2 = floatval($_POST['amount2']);
-        $currency1 = $_POST['currency1'];
-        $currency2 = $_POST['currency2'];
-        $status = intval($_POST['status']);
-        $status_text = $_POST['status_text'];
-    */
-    $cp_merchant_id   = config('coinpayment.ipn.config.coinpayment_merchant_id');
-    $cp_ipn_secret    = config('coinpayment.ipn.config.coinpayment_ipn_secret');
-    $cp_debug_email   = config('coinpayment.ipn.config.coinpayment_ipn_debug_email');
-    
-    /* Filtering */
-    if(!empty($req->merchant) && $req->merchant != trim($cp_merchant_id)){
-        if(!empty($cp_debug_email)) {
-            \Mail::to($cp_debug_email)->send(new SendEmail([
-                
-                'message' => 'No or incorrect Merchant ID passed'
-            ]));
+    public function __invoke(Request $request)
+    {
+        $merchantId = config('coinpayment.ipn.config.coinpayment_merchant_id');
+        $ipnSecret  = config('coinpayment.ipn.config.coinpayment_ipn_secret');
+        $debugEmail = config('coinpayment.ipn.config.coinpayment_ipn_debug_email');
+
+        // Validate merchant id.
+        if (! empty($request->merchant) && $request->merchant !== trim((string) $merchantId)) {
+            return $this->reject('No or incorrect Merchant ID passed', $debugEmail);
         }
-        return response('No or incorrect Merchant ID passed', 401);
-    }
-    $request = $req->getContent();
-    if ($request === FALSE || empty($request)) {
-        if(!empty($cp_debug_email)) {
-            \Mail::to($cp_debug_email)->send(new SendEmail([
-                
-                'message' => 'Error reading POST data'
-            ]));
+
+        $body = $request->getContent();
+        if (empty($body)) {
+            return $this->reject('Error reading POST data', $debugEmail);
         }
-        return response('Error reading POST data', 401);
-    }
-    $hmac = hash_hmac("sha512", $request, trim($cp_ipn_secret));
-    if (!hash_equals($hmac, $req->server('HTTP_HMAC'))) {
-        if(!empty($cp_debug_email)) {
-            \Mail::to($cp_debug_email)->send(new SendEmail([
-                'message' => 'HMAC signature does not match'
-            ]));
+
+        // Verify HMAC signature against the raw request body.
+        $hmac = hash_hmac('sha512', $body, trim((string) $ipnSecret));
+        if (! hash_equals($hmac, (string) $request->server('HTTP_HMAC'))) {
+            return $this->reject('HMAC signature does not match', $debugEmail);
         }
-        return response('HMAC signature does not match', 401);
+
+        $transaction = CoinpaymentTransaction::where('txn_id', $request->txn_id)->first();
+
+        if (! $transaction) {
+            $this->notify($debugEmail, 'Txn ID ' . $request->txn_id . ' not found in database');
+
+            return response('IPN OK (unknown txn)', 200);
+        }
+
+        $info = $this->api_call('get_tx_info', ['txid' => $request->txn_id]);
+
+        if (($info['error'] ?? null) !== 'ok') {
+            $this->notify($debugEmail, now()->toDateTimeString() . ' ' . ($info['error'] ?? 'API error'));
+
+            return response('IPN OK (api error)', 200);
+        }
+
+        try {
+            $transaction->update($info['result']);
+        } catch (\Exception $e) {
+            $this->notify($debugEmail, now()->toDateTimeString() . ' ' . $e->getMessage());
+        }
+
+        $this->dispatchListener(array_merge($transaction->fresh()->toArray(), [
+            'transaction_type' => 'old',
+        ]));
+
+        return response('IPN OK', 200);
     }
 
-    $transactions = CoinpaymentTransaction::where('txn_id', $req->txn_id)->first();
+    protected function reject(string $message, ?string $debugEmail)
+    {
+        $this->notify($debugEmail, $message);
 
-        if($transactions){
+        return response($message, 401);
+    }
 
-            $info = $this->api_call('get_tx_info', ['txid' => $req->txn_id]);
-
-            if($info['error'] != 'ok'){
-                \Mail::to($cp_debug_email)->send(new SendEmail([
-                    'message' => date('Y-m-d H:i:s ') . $info['error']
-                ]));
-            }
-
-            try {
-                $transactions->update($info['result']);
-            } catch (\Exception $e) {
-                \Mail::to($cp_debug_email)->send(new SendEmail([
-                    'message' => date('Y-m-d H:i:s ') . $e->getMessage()
-                ]));
-            }
-            
-            dispatch(new CoinpaymentListener(array_merge($transactions->toArray(), [
-                'transaction_type' => 'old'
-            ])));
-
-        } else {
-            if(!empty($cp_debug_email)) {
-                \Mail::to($cp_debug_email)->send(new SendEmail([
-                    'message' => 'Txn ID ' . $req->txn_id . ' not found from database ?'
-                ]));
-            }
+    protected function notify(?string $email, string $message): void
+    {
+        if (! empty($email)) {
+            Mail::to($email)->send(new SendEmail(['message' => $message]));
         }
     }
 }
