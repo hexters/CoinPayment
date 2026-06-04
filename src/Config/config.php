@@ -4,6 +4,25 @@ return [
     
     /*
     |--------------------------------------------------------------------------
+    | Checkout logo / header
+    |--------------------------------------------------------------------------
+    |
+    | The logo (or text) shown on the checkout summary card. Set "default" to
+    | "logo" and point "logo" at a public image path, or set it to "text" to
+    | show the "text" value instead.
+    |
+    */
+
+    'header' => [
+        'default' => 'logo', // 'logo' or 'text'
+        'type' => [
+            'logo' => '/vendor/coinpayment/coinpayment.logo.png', // public path to your image
+            'text' => 'Your payment summary',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | API Key settings
     |--------------------------------------------------------------------------
     |
@@ -131,20 +150,6 @@ return [
     */
 
     'fiat_exclude' => ['LTCT'],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Header setting
-    |--------------------------------------------------------------------------
-    */
-
-    'header' => [
-        'default' => 'logo',
-        'type' => [
-            'logo' => '/vendor/coinpayment/coinpayment.logo.png', // path assets file only
-            'text' => 'Your payment summary'
-        ]
-    ],
 
     /*
     |--------------------------------------------------------------------------

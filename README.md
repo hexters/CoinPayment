@@ -34,7 +34,7 @@ v4 is a full rewrite for Laravel 11, 12 and 13 on PHP 8.2+. The frontend runs on
 - An IPN endpoint plus a queued job you can hook into to fulfil orders.
 - A `coinpayment:sync` command for when IPN can't reach you. It also expires payments that ran out of time. Run it from the scheduler.
 - A gated admin panel: a wallet dashboard with fiat values, withdrawals (history, detail, cancel), and a transactions table you can search, filter, sort, and page through.
-- You can change the colors and nothing else. The pages don't load your app's CSS.
+- You can set your own colors and checkout logo, but the pages don't load your app's CSS.
 - It works on phones, with a bottom navigation bar.
 
 ### Version support
@@ -246,7 +246,7 @@ To change where guests are sent, point `redirect` at a route name or a URL:
 
 ## Theming (colors only)
 
-The pages do not inherit your application's styles. Colors are the only thing you can change, and they are injected as CSS variables:
+The pages do not inherit your application's styles. Colors are the only styling you can change (the checkout logo is configured separately), and they are injected as CSS variables:
 
 ```php
 // config/coinpayment.php
@@ -258,6 +258,21 @@ The pages do not inherit your application's styles. Colors are the only thing yo
     'primary_dark' => '#1f57c4',
     'danger'       => '#e02424',
     // Note: the "Pay" button is intentionally a fixed red and is NOT themeable.
+],
+```
+
+## Checkout logo
+
+The summary card on the checkout shows the CoinPayments logo by default. You can swap it for your own image, or show plain text instead, in the config:
+
+```php
+// config/coinpayment.php
+'header' => [
+    'default' => 'logo', // 'logo' or 'text'
+    'type' => [
+        'logo' => '/vendor/coinpayment/coinpayment.logo.png', // public path to your image
+        'text' => 'Your payment summary',                     // shown when default is 'text'
+    ],
 ],
 ```
 
