@@ -11,7 +11,7 @@ export default defineConfig({
   base: '/CoinPayment/',
   cleanUrls: true,
   lastUpdated: true,
-  sitemap: { hostname: site },
+  sitemap: { hostname: site + '/' },
 
   // Add a canonical URL to every page (good for SEO / duplicate-content).
   transformPageData(pageData) {
